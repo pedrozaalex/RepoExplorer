@@ -1,3 +1,4 @@
+import { redirect } from '@sveltejs/kit';
 import { authStore } from '../../lib/stores/authStore';
 import type { PageLoad } from './$types';
 
@@ -10,9 +11,9 @@ export const load: PageLoad = ({ url }) => {
 		return;
 	}
 
-	authStore.initialize(accessToken);
+	authStore.login(accessToken);
 
 	localStorage.setItem('access_token', accessToken);
 
-	window.location.href = '/';
+	throw redirect(302, '/');
 };

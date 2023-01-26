@@ -10,5 +10,5 @@ export const load: PageLoad = () => {
 		return;
 	}
 
-	authStore.initialize(accessToken);
+	authStore.login(accessToken);
 };

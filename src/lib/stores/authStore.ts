@@ -4,44 +4,35 @@ import { get, writable } from 'svelte/store';
 
 type UserData = Endpoints['GET /user']['response']['data'];
 
-type Unitialized = {
-	initialized: false;
+type LoggedOut = {
 	isLoggedIn: false;
 	user: null;
 	octokit: null;
 };
 
-type InitializedLoggedOut = {
-	initialized: true;
-	isLoggedIn: false;
-	user: null;
-	octokit: null;
-};
-
-type InitializedLoggedIn = {
-	initialized: true;
+type LoggedIn = {
 	isLoggedIn: true;
 	user: Promise<UserData>;
 	octokit: Octokit;
 };
 
-export type AuthStore = Unitialized | InitializedLoggedOut | InitializedLoggedIn;
+export type AuthStore = LoggedIn | LoggedOut;
+
+const initialState: LoggedOut = {
+	isLoggedIn: false,
+	user: null,
+	octokit: null
+};
 
 export const authStore = {
-	...writable<AuthStore>({
-		initialized: false,
-		isLoggedIn: false,
-		user: null,
-		octokit: null
-	}),
+	...writable<AuthStore>(initialState),
 
-	initialize(accessToken: string) {
-		if (get(this).initialized) return;
+	login(accessToken: string) {
+		if (get(this).isLoggedIn) return;
 
 		const octokit = new Octokit({ auth: accessToken });
 
 		authStore.set({
-			initialized: true,
 			isLoggedIn: true,
 			user: octokit.rest.users.getAuthenticated().then(({ data }) => data),
 			octokit
@@ -52,14 +43,8 @@ export const authStore = {
 		console.log('logging out');
 
 		localStorage.removeItem('access_token');
-		authStore.set({
-			initialized: true,
-			isLoggedIn: false,
-			user: null,
-			octokit: null
-		});
+		authStore.set(initialState);
 
-		history.replaceState(null, '', '/');
 		window.location.href = '/';
 	}
 };
