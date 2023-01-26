@@ -40,8 +40,6 @@ export const authStore = {
 	},
 
 	logout() {
-		console.log('logging out');
-
 		localStorage.removeItem('access_token');
 		authStore.set(initialState);
 
