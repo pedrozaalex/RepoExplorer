@@ -1,0 +1,49 @@
+* {
+	--background-color: rgb(22, 22, 25);
+	--on-background-color: white;
+
+	--primary-color: #dfb7ff;
+	--primary-color-container: #5d3282;
+	--on-primary-color: #451969;
+	--on-primary-color-container: #f1daff;
+
+	--secondary-color: #4dd8e7;
+	--secondary-color-container: #004f56;
+	--on-secondary-color: #00363b;
+	--on-secondary-color-container: #89f2ff;
+
+	--tertiary-color: #50dbcf;
+	--tertiary-color-container: #00504b;
+	--on-tertiary-color: #003733;
+	--on-tertiary-color-container: #72f7eb;
+
+	--error-color: #ffb4ab;
+	--error-color-container: #93000a;
+	--on-error-color: #690005;
+	--on-error-color-container: #ffdad6;
+
+	--outline-color: #50dbcf;
+	--surface-color: #390035;
+	--on-surface-color: #ffd7f2;
+	--surface-variant-color: #4b454d;
+	--on-surface-variant-color: #cdc4ce;
+	--inverse-surface-color: #ffd7f2;
+	--inverse-on-surface-color: #390035;
+	--inverse-primary-color: #764b9b;
+	--shadow-color: #000000;
+	--surface-tint-color: #dfb7ff;
+	--outline-variant-color: #4b454d;
+	--scrim-color: #000000;
+
+	--shadow: -4px 4px 0 0 var(--outline-color);
+	--shadow-small: -2px 2px 0 0 var(--outline-color);
+
+	--primary-gradient: linear-gradient(45deg, rgba(223, 183, 255, 1) 0%, rgba(77, 216, 231, 1) 100%);
+
+	--secondary-gradient: linear-gradient(
+		10deg,
+		rgba(80, 219, 207, 1) 0%,
+		rgba(79, 203, 215, 1) 59%,
+		rgba(77, 172, 231, 1) 100%
+	);
+}
