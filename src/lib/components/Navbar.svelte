@@ -4,6 +4,7 @@
 	import { github } from '$lib/github';
 	import { authStore } from '$lib/stores/authStore';
 	import SkeletonLoader from './SkeletonLoader.svelte';
+	import { assets } from '../../assets';
 
 	let showLogoutDropdown = false;
 
@@ -14,7 +15,10 @@
 
 <div class="navbar-root">
 	<h1>
-		<a href="/">Repo Explorer</a>
+		<a href="/">
+			<img src={assets.tinyOctopus} alt="cute octopus" height="36" />
+			Repo Explorer</a
+		>
 	</h1>
 
 	{#if $authStore.isLoggedIn}
@@ -57,6 +61,12 @@
 
 		&:hover {
 			text-decoration: none;
+		}
+
+		a {
+			display: flex;
+			align-items: center;
+			gap: 0.5em;
 		}
 	}
 
