@@ -3,8 +3,8 @@
 	import '@fontsource/inter/700.css';
 	import '@fontsource/space-mono/400.css';
 	import '@fontsource/space-mono/700.css';
-	import Footer from '$lib/components/Footer.svelte';
-	import Navbar from '$lib/components/Navbar.svelte';
+	import Footer from '$components/Footer.svelte';
+	import Navbar from '$components/Navbar.svelte';
 </script>
 
 <svelte:head>
@@ -14,7 +14,9 @@
 <div class="layout-root">
 	<Navbar />
 
-	<slot />
+	<main>
+		<slot />
+	</main>
 
 	<Footer />
 </div>

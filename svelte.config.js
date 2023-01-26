@@ -10,7 +10,8 @@ const config = {
 	kit: {
 		adapter: adapter(),
 		alias: {
-			$images: './src/lib/assets/images'
+			$images: './src/lib/assets/images',
+			$components: './src/lib/components'
 		}
 	}
 };

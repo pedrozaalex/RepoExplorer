@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { PUBLIC_GITHUB_CLIENT_ID as clientId } from '$env/static/public';
-	import Button from '$lib/components/Button.svelte';
+	import Button from '$components/Button.svelte';
 	import { github } from '$lib/github';
 	import { authStore } from '$lib/stores/authStore';
 	import SkeletonLoader from './SkeletonLoader.svelte';

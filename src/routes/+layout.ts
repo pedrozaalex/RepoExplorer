@@ -1,7 +1,7 @@
 import { authStore } from '$lib/stores/authStore';
-import type { PageLoad } from './$types';
+import type { LayoutLoad } from './$types';
 
-export const load: PageLoad = () => {
+export const load: LayoutLoad = () => {
 	if (typeof window === 'undefined') return;
 
 	const accessToken = localStorage.getItem('access_token');

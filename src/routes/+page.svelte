@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { assets } from '../assets';
-	import Button from '$lib/components/Button.svelte';
+	import Button from '$components/Button.svelte';
 	import { PUBLIC_GITHUB_CLIENT_ID as clientId } from '$env/static/public';
 	import { github } from '$lib/github';
 	import { authStore } from '../lib/stores/authStore';
