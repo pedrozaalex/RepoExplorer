@@ -15,5 +15,5 @@ export const load: PageLoad = ({ url }) => {
 
 	localStorage.setItem('access_token', accessToken);
 
-	throw redirect(302, '/');
+	throw redirect(302, '/search');
 };
