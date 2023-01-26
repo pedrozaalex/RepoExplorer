@@ -7,6 +7,10 @@
 	import Navbar from '$lib/components/Navbar.svelte';
 </script>
 
+<svelte:head>
+	<title>Repo Explorer</title>
+</svelte:head>
+
 <div class="layout-root">
 	<Navbar />
 
