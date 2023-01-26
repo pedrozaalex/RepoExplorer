@@ -1,5 +1,4 @@
 import { redirect } from '@sveltejs/kit';
-import { authStore } from '../../lib/stores/authStore';
 import type { PageLoad } from './$types';
 
 export const load: PageLoad = ({ url }) => {
@@ -10,8 +9,6 @@ export const load: PageLoad = ({ url }) => {
 	if (!accessToken) {
 		return;
 	}
-
-	authStore.login(accessToken);
 
 	localStorage.setItem('access_token', accessToken);
 
