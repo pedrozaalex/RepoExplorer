@@ -35,7 +35,7 @@ export const authStore = {
 
 		authStore.set({
 			isLoggedIn: true,
-			user: octokit.rest.users.getAuthenticated().then(({ data }) => data),
+			user: getUserData(octokit),
 			octokit
 		});
 	},
@@ -48,3 +48,15 @@ export const authStore = {
 		goto('/');
 	}
 };
+
+async function getUserData(octokit: Octokit) {
+	try {
+		const { data } = await octokit.rest.users.getAuthenticated();
+
+		return data;
+	} catch (e) {
+		authStore.logout();
+	}
+
+	throw new Error('Failed to get user data');
+}

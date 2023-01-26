@@ -6,6 +6,8 @@
 	import { authStore } from '../lib/stores/authStore';
 </script>
 
+{@debug $authStore}
+
 <div class="homepage-root">
 	<div class="hero">
 		<aside>

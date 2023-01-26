@@ -9,7 +9,7 @@
 		: 'middle';
 </script>
 
-<div class:top={searchBoxPos === 'top'} class:middle={searchBoxPos === 'middle'}>
+<div class:middle={searchBoxPos === 'middle'}>
 	<SearchBox searchTerm={data.searchTerm} />
 </div>
 
@@ -24,11 +24,9 @@
 
 		position: absolute;
 
-		&.top {
-			top: 1rem;
-			left: 50%;
-			transform: translateX(-50%);
-		}
+		top: 1rem;
+		left: 50%;
+		transform: translateX(-50%);
 
 		&.middle {
 			top: 50%;
