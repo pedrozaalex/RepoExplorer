@@ -1,3 +1,4 @@
+import { goto } from '$app/navigation';
 import type { Endpoints } from '@octokit/types';
 import { Octokit } from 'octokit';
 import { get, writable } from 'svelte/store';
@@ -44,5 +45,6 @@ export const authStore = {
 		authStore.set(initialState);
 
 		window.location.href = '/';
+		goto('/');
 	}
 };

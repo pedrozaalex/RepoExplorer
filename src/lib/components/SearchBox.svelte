@@ -1,10 +1,13 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { assets } from '../../assets';
 
-	let searchTerm = '';
+	export let searchTerm = '';
 
 	function search() {
-		console.log(searchTerm);
+		console.log('navigating to search page', searchTerm);
+
+		goto(`/search/${searchTerm}`);
 	}
 </script>
 
