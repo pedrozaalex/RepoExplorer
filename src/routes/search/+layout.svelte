@@ -6,17 +6,17 @@
 
 	$: searchBoxPos = data.searchTerm
 		? 'top' // if there is a search term, show the search box at the top
-		: 'middle';
+		: 'middle'; // otherwise, show it in the middle of the page
 </script>
 
-<div class:middle={searchBoxPos === 'middle'}>
+<div class="search-box-container" class:middle={searchBoxPos === 'middle'}>
 	<SearchBox searchTerm={data.searchTerm} />
 </div>
 
 <slot />
 
 <style lang="scss">
-	div {
+	.search-box-container {
 		$duration: 0.2s;
 
 		transition: top $duration ease-in-out, left $duration ease-in-out,
@@ -24,7 +24,7 @@
 
 		position: absolute;
 
-		top: 1rem;
+		top: 2rem;
 		left: 50%;
 		transform: translateX(-50%);
 

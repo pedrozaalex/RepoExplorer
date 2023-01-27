@@ -38,4 +38,9 @@
 		align-items: center;
 		justify-content: space-between;
 	}
+
+	main {
+		margin-top: 4rem;
+		margin-bottom: 4rem;
+	}
 </style>

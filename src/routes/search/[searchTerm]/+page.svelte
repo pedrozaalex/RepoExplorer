@@ -16,8 +16,6 @@
 		.then(({ data }) => data);
 </script>
 
-{@debug result}
-
 <div class="search-results">
 	{#if result}
 		{#await result}

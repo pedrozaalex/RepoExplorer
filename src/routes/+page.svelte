@@ -6,8 +6,6 @@
 	import { authStore } from '../lib/stores/authStore';
 </script>
 
-{@debug $authStore}
-
 <div class="homepage-root">
 	<div class="hero">
 		<aside>
@@ -53,6 +51,12 @@
 		margin: auto;
 		margin-bottom: 2rem;
 		gap: 2rem;
+
+		@media screen and (max-width: 720px) {
+			flex-direction: column-reverse;
+			gap: 1rem;
+			text-align: center;
+		}
 	}
 
 	.hero-title {
@@ -74,5 +78,6 @@
 		color: var(--on-background-color);
 		max-width: 25rem;
 		font-size: 0.4em;
+		margin: auto;
 	}
 </style>
