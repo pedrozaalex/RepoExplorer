@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { PUBLIC_GITHUB_CLIENT_ID as clientId } from '$env/static/public';
 	import Button from '$components/Button.svelte';
-	import { github } from '$lib/github';
 	import { authStore } from '$lib/stores/authStore';
 	import SkeletonLoader from './SkeletonLoader.svelte';
 	import { assets } from '../../assets';
+	import { getOauthAuthorizeURL } from '../api/github';
 
 	let showLogoutDropdown = false;
 
@@ -17,8 +17,8 @@
 	<h1>
 		<a href="/">
 			<img src={assets.tinyOctopus} alt="cute octopus" height="36" />
-			Repo Explorer</a
-		>
+			Repo Explorer
+		</a>
 	</h1>
 
 	{#if $authStore.isLoggedIn}
@@ -39,12 +39,12 @@
 			</div>
 		{:catch}
 			<Button>
-				<a href={github.getOauthURL(clientId)}>Sign in</a>
+				<a href={getOauthAuthorizeURL(clientId)}>Sign in</a>
 			</Button>
 		{/await}
 	{:else}
 		<Button>
-			<a href={github.getOauthURL(clientId)}>Sign in</a>
+			<a href={getOauthAuthorizeURL(clientId)}>Sign in</a>
 		</Button>
 	{/if}
 </div>

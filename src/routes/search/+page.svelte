@@ -1,7 +1,3 @@
-<script>
-	import SearchBox from '$components/SearchBox.svelte';
-</script>
-
 <h1>What are you looking for?</h1>
 
 <style lang="scss">

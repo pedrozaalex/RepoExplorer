@@ -2,8 +2,8 @@
 	import { assets } from '../assets';
 	import Button from '$components/Button.svelte';
 	import { PUBLIC_GITHUB_CLIENT_ID as clientId } from '$env/static/public';
-	import { github } from '$lib/github';
 	import { authStore } from '../lib/stores/authStore';
+	import { getOauthAuthorizeURL } from '../lib/api/github';
 </script>
 
 <div class="homepage-root">
@@ -28,7 +28,7 @@
 		</Button>
 	{:else}
 		<Button leftIcon={'github'} rightIcon={'continue'} --background="black" --color="white">
-			<a href={github.getOauthURL(clientId)}> Continue with GitHub </a>
+			<a href={getOauthAuthorizeURL(clientId)}> Continue with GitHub </a>
 		</Button>
 	{/if}
 </div>

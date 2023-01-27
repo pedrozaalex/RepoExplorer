@@ -7,8 +7,10 @@ specifiers:
   '@playwright/test': ^1.28.1
   '@sveltejs/adapter-auto': ^1.0.0
   '@sveltejs/kit': ^1.0.0
+  '@tanstack/svelte-query': ^4.22.4
   '@typescript-eslint/eslint-plugin': ^5.45.0
   '@typescript-eslint/parser': ^5.45.0
+  date-fns: ^2.29.3
   eslint: ^8.28.0
   eslint-config-prettier: ^8.5.0
   eslint-plugin-svelte3: ^4.0.0
@@ -28,6 +30,8 @@ specifiers:
 dependencies:
   '@fontsource/inter': 4.5.15
   '@fontsource/space-mono': 4.5.12
+  '@tanstack/svelte-query': 4.22.4_svelte@3.55.1
+  date-fns: 2.29.3
   isomorphic-fetch: 3.0.0
   octokit: 2.0.14
 
@@ -655,6 +659,19 @@ packages:
       - supports-color
     dev: true
 
+  /@tanstack/query-core/4.22.4:
+    resolution: {integrity: sha512-t79CMwlbBnj+yL82tEcmRN93bL4U3pae2ota4t5NN2z3cIeWw74pzdWrKRwOfTvLcd+b30tC+ciDlfYOKFPGUw==}
+    dev: false
+
+  /@tanstack/svelte-query/4.22.4_svelte@3.55.1:
+    resolution: {integrity: sha512-yVfwgN5tMf/Wap3cVAadRHQoqhX2rJJvC7aSIfE9PDbOZD0it7gvGuAql1Ut0DTPBb+b6Q1FMrXwnWP+SnFADQ==}
+    peerDependencies:
+      svelte: ^3.54.0
+    dependencies:
+      '@tanstack/query-core': 4.22.4
+      svelte: 3.55.1
+    dev: false
+
   /@types/aws-lambda/8.10.109:
     resolution: {integrity: sha512-/ME92FneNyXQzrAfcnQQlW1XkCZGPDlpi2ao1MJwecN+6SbeonKeggU8eybv1DfKli90FAVT1MlIZVXfwVuCyg==}
     dev: false
@@ -1034,6 +1051,11 @@ packages:
       shebang-command: 2.0.0
       which: 2.0.2
     dev: true
+
+  /date-fns/2.29.3:
+    resolution: {integrity: sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==}
+    engines: {node: '>=0.11'}
+    dev: false
 
   /debug/4.3.4:
     resolution: {integrity: sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==}
@@ -2140,7 +2162,6 @@ packages:
   /svelte/3.55.1:
     resolution: {integrity: sha512-S+87/P0Ve67HxKkEV23iCdAh/SX1xiSfjF1HOglno/YTbSTW7RniICMCofWGdJJbdjw3S+0PfFb1JtGfTXE0oQ==}
     engines: {node: '>= 8'}
-    dev: true
 
   /text-table/0.2.0:
     resolution: {integrity: sha512-N+8UisAXDGk8PFXP4HAzVR9nbfmVJ3zYLAWiTIoqC5v5isinhr+r5uaO8+7r3BMfuNIufIsA7RdpVgacC2cSpw==}

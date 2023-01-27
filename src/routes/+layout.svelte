@@ -5,21 +5,35 @@
 	import '@fontsource/space-mono/700.css';
 	import Footer from '$components/Footer.svelte';
 	import Navbar from '$components/Navbar.svelte';
+
+	import { browser } from '$app/environment';
+	import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query';
+
+	const queryClient = new QueryClient({
+		defaultOptions: {
+			queries: {
+				enabled: browser,
+				cacheTime: Infinity
+			}
+		}
+	});
 </script>
 
 <svelte:head>
 	<title>Repo Explorer</title>
 </svelte:head>
 
-<div class="layout-root">
-	<Navbar />
+<QueryClientProvider client={queryClient}>
+	<div class="layout-root">
+		<Navbar />
 
-	<main>
-		<slot />
-	</main>
+		<main>
+			<slot />
+		</main>
 
-	<Footer />
-</div>
+		<Footer />
+	</div>
+</QueryClientProvider>
 
 <style lang="scss">
 	:global(body) {
