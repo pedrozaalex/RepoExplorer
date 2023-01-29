@@ -1,46 +1,53 @@
 <script lang="ts">
 	import { searchRepos } from '../../../lib/api/github';
+	import Pagination from '../../../lib/components/Pagination.svelte';
 	import Repo from '../../../lib/components/Repo.svelte';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
 
+	const perPage = 10;
+
 	$: ({ searchTerm = '', page = 1 } = data);
 
 	$: query = searchRepos({
 		searchTerm,
-		page
+		page,
+		perPage
 	});
 </script>
 
-<div class="search-results">
+<div>
 	{#if $query.isLoading}
 		Searching...
 	{:else if $query.isError}
 		<p>Error: {$query.error}</p>
 	{:else if $query.isSuccess}
-		{#each $query.data.items as repo}
-			<Repo
-				data={{
-					url: repo.html_url,
-					fullName: repo.full_name,
-					description: repo.description || 'No description',
-					stars: repo.stargazers_count,
-					forks: repo.forks_count,
-					issues: repo.open_issues_count,
-					lastUpdated: repo.updated_at,
-					license: repo.license?.name || 'No license'
-				}}
-			/>
-		{/each}
+		{#if $query.data.totalCount === 0}
+			<p>No results found</p>
+		{:else}
+			<p>Found {$query.data.totalCount} results</p>
+
+			<br />
+		{/if}
+
+		<div class="search-results">
+			{#each $query.data.items as repoData}
+				<Repo data={repoData} />
+			{/each}
+		</div>
+
+		{#if $query.data.totalCount > perPage}
+			<Pagination {page} totalItems={$query.data.totalCount} itemsPerPage={perPage} />
+		{/if}
 	{/if}
 </div>
 
 <style lang="scss">
 	.search-results {
 		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
 		gap: 1.5rem;
+		flex-wrap: wrap;
+		justify-content: space-evenly;
 	}
 </style>

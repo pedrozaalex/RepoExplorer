@@ -1,9 +1,11 @@
 import { goto } from '$app/navigation';
-import type { Endpoints } from '@octokit/types';
 import { Octokit } from 'octokit';
 import { get, writable } from 'svelte/store';
 
-type UserData = Endpoints['GET /user']['response']['data'];
+export type User = {
+	username: string;
+	picture: string;
+};
 
 type LoggedOut = {
 	isLoggedIn: false;
@@ -13,7 +15,7 @@ type LoggedOut = {
 
 type LoggedIn = {
 	isLoggedIn: true;
-	user: Promise<UserData>;
+	user: Promise<User>;
 	octokit: Octokit;
 };
 
@@ -29,7 +31,11 @@ export const authStore = {
 	...writable<AuthStore>(initialState),
 
 	login(accessToken: string) {
+		console.log('authStore.login: begin');
+
 		if (get(this).isLoggedIn) return;
+
+		console.log('authStore.login: creating new Octokit instance');
 
 		const octokit = new Octokit({ auth: accessToken });
 
@@ -44,19 +50,23 @@ export const authStore = {
 		localStorage.removeItem('access_token');
 		authStore.set(initialState);
 
-		window.location.href = '/';
 		goto('/');
 	}
 };
 
 async function getUserData(octokit: Octokit) {
 	try {
-		const { data } = await octokit.rest.users.getAuthenticated();
+		const {
+			data: { login: username, avatar_url: picture }
+		} = await octokit.rest.users.getAuthenticated();
 
-		return data;
+		return {
+			username,
+			picture
+		};
 	} catch (e) {
 		authStore.logout();
+		console.error(e);
+		throw new Error('Failed to get user data');
 	}
-
-	throw new Error('Failed to get user data');
 }

@@ -5,6 +5,7 @@
 	import SkeletonLoader from './SkeletonLoader.svelte';
 	import { assets } from '../../assets';
 	import { getOauthAuthorizeURL } from '../api/github';
+	import Avatar from './Avatar.svelte';
 
 	let showLogoutDropdown = false;
 
@@ -24,11 +25,10 @@
 	{#if $authStore.isLoggedIn}
 		{#await $authStore.user}
 			<SkeletonLoader width="144px" height="48px" />
-		{:then user}
+		{:then { picture, username }}
 			<div class="user-details" class:active={showLogoutDropdown}>
 				<button on:click={toggleDropdown}>
-					<span>{user.login}</span>
-					<img src={user.avatar_url} alt={user.login} height="32" />
+					<Avatar {picture} {username} />
 				</button>
 
 				{#if showLogoutDropdown}
@@ -38,14 +38,14 @@
 				{/if}
 			</div>
 		{:catch}
-			<Button>
-				<a href={getOauthAuthorizeURL(clientId)}>Sign in</a>
-			</Button>
+			<a href={getOauthAuthorizeURL(clientId)}>
+				<Button>Sign in</Button>
+			</a>
 		{/await}
 	{:else}
-		<Button>
-			<a href={getOauthAuthorizeURL(clientId)}>Sign in</a>
-		</Button>
+		<a href={getOauthAuthorizeURL(clientId)}>
+			<Button>Sign in</Button>
+		</a>
 	{/if}
 </div>
 
@@ -76,10 +76,6 @@
 			align-items: center;
 			gap: 0.5em;
 			cursor: pointer;
-		}
-
-		img {
-			border-radius: 50%;
 		}
 
 		&.active > button {

@@ -1,8 +1,9 @@
+import { browser } from '$app/environment';
 import { authStore } from '$lib/stores/authStore';
 import type { LayoutLoad } from './$types';
 
 export const load: LayoutLoad = () => {
-	if (typeof window === 'undefined') return;
+	if (!browser) return;
 
 	const accessToken = localStorage.getItem('access_token');
 

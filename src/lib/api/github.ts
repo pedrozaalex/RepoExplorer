@@ -1,6 +1,8 @@
 import { browser } from '$app/environment';
+import type { Endpoints } from '@octokit/types';
 import { createQuery } from '@tanstack/svelte-query';
 import { get } from 'svelte/store';
+import type { StandardRepo } from '../components/Repo.svelte';
 import { authStore } from '../stores/authStore';
 
 export function getOauthAuthorizeURL(clientId: string) {
@@ -31,6 +33,21 @@ export async function getAccessToken(params: {
 	return access_token;
 }
 
+function convertToStandardRepo(
+	githubRepo: Endpoints['GET /search/repositories']['response']['data']['items'][number]
+): StandardRepo {
+	return {
+		fullName: githubRepo.full_name,
+		description: githubRepo.description ?? 'No description',
+		stars: githubRepo.stargazers_count,
+		issues: githubRepo.open_issues_count,
+		forks: githubRepo.forks_count,
+		url: githubRepo.html_url,
+		lastUpdated: githubRepo.updated_at,
+		license: githubRepo.license?.name ?? 'No license'
+	};
+}
+
 export function searchRepos({
 	searchTerm,
 	page = 1,
@@ -46,8 +63,12 @@ export function searchRepos({
 }) {
 	return createQuery({
 		queryKey: ['searchRepos', searchTerm, page],
-		queryFn: async () => {
-			if (!browser) return { items: [], total_count: 0, incomplete_results: false };
+		queryFn: async (): Promise<{
+			items: StandardRepo[];
+			totalCount: number;
+			incompleteResults: boolean;
+		}> => {
+			if (!browser) return { items: [], totalCount: 0, incompleteResults: false };
 
 			const octokit = get(authStore).octokit;
 
@@ -62,7 +83,12 @@ export function searchRepos({
 				per_page: perPage,
 				page
 			});
-			return data;
+
+			return {
+				items: data.items.map(convertToStandardRepo),
+				totalCount: data.total_count,
+				incompleteResults: data.incomplete_results
+			};
 		}
 	});
 }

@@ -23,13 +23,15 @@
 	</div>
 
 	{#if $authStore.isLoggedIn}
-		<Button>
-			<a href="/search">Start Exploring</a>
-		</Button>
+		<a href="/search">
+			<Button>Start Exploring</Button>
+		</a>
 	{:else}
-		<Button leftIcon={'github'} rightIcon={'continue'} --background="black" --color="white">
-			<a href={getOauthAuthorizeURL(clientId)}> Continue with GitHub </a>
-		</Button>
+		<a href={getOauthAuthorizeURL(clientId)}>
+			<Button leftIcon={'github'} rightIcon={'continue'} --background="black" --color="white">
+				Continue with GitHub
+			</Button>
+		</a>
 	{/if}
 </div>
 
@@ -78,6 +80,9 @@
 		color: var(--on-background-color);
 		max-width: 25rem;
 		font-size: 0.4em;
-		margin: auto;
+
+		@media screen and (max-width: 720px) {
+			margin: auto;
+		}
 	}
 </style>
