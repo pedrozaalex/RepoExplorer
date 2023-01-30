@@ -15,6 +15,6 @@
 		background-color: var(--bg-color, var(--primary-color));
 		$color: var(--text-color, var(--on-primary-color));
 		color: $color;
-		border: $color 2px solid;
+		// border: $color 2px solid;
 	}
 </style>

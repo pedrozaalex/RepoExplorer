@@ -51,4 +51,9 @@
 
 	--font-sans: 'Inter', sans-serif;
 	--font-mono: 'Space Mono', monospace;
+
+	--darker-gray: #767676;
+	--yellow: #f7d154;
+	--blue: #4dd8e7;
+	--red: #ff6b6b;
 }

@@ -2,6 +2,7 @@
 	import { assets, type Asset } from '../../assets';
 
 	export let onClick: () => void = () => {};
+	export let disabled = false;
 
 	export let leftIcon: Asset | null = null;
 	export let rightIcon: Asset | null = null;
@@ -17,7 +18,7 @@
 		- `--background` and `--color` are used to set the background and text color of the button.
 		- `--outline-color` is used to set the border color of the button.
  -->
-<button class="button-root" on:click={onClick}>
+<button class="button-root" on:click={onClick} {disabled}>
 	{#if leftIcon}
 		<img src={assets[leftIcon]} alt="" />
 	{/if}
@@ -55,6 +56,11 @@
 		&:active {
 			transform: translate(-4px, 4px);
 			box-shadow: 0 0 0 0;
+		}
+
+		&:disabled {
+			opacity: 0.5;
+			cursor: not-allowed;
 		}
 	}
 

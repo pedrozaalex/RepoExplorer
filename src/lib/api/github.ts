@@ -44,12 +44,15 @@ function convertToStandardRepo(
 	githubRepo: Endpoints['GET /search/repositories']['response']['data']['items'][number]
 ): StandardRepo {
 	return {
-		fullName: githubRepo.full_name,
 		description: githubRepo.description ?? 'No description',
+		forks: githubRepo.forks_count,
+		issues: githubRepo.open_issues_count,
+		license: githubRepo.license?.name ?? 'No license',
+		name: githubRepo.name,
+		owner: githubRepo.owner?.login ?? 'ghost',
 		stars: githubRepo.stargazers_count,
-		url: githubRepo.html_url,
 		updatedAt: githubRepo.updated_at,
-		license: githubRepo.license?.name ?? 'No license'
+		url: githubRepo.html_url
 	};
 }
 
@@ -114,12 +117,9 @@ const getOrderedLanguageList = (langs: { [key: string]: number }) =>
 		filter(isString)
 	);
 
-export function getRepoLanguagues(repoFullName: string) {
-	const owner = repoFullName.split('/')[0];
-	const repo = repoFullName.split('/')[1];
-
+export function getRepoLanguagues({ owner, name }: { owner: string; name: string }) {
 	return createQuery({
-		queryKey: ['languages', owner, repo],
+		queryKey: ['languages', owner, name],
 		queryFn: async (): Promise<string[]> => {
 			if (!browser) return [];
 
@@ -131,9 +131,36 @@ export function getRepoLanguagues(repoFullName: string) {
 				return [];
 			}
 
-			const { data: langs } = await octokit.rest.repos.listLanguages({ owner, repo });
+			const { data: langs } = await octokit.rest.repos.listLanguages({ owner, repo: name });
 
 			return getOrderedLanguageList(langs);
+		}
+	});
+}
+
+export function checkIfRepoIsStarred({ owner, name }: { owner: string; name: string }) {
+	return createQuery({
+		queryKey: ['starred', owner, name],
+		queryFn: async (): Promise<boolean> => {
+			if (!browser) return false;
+
+			const octokit = get(authStore).octokit;
+
+			if (!octokit) {
+				console.error('Octokit not initialized');
+
+				return false;
+			}
+
+			try {
+				await octokit.rest.activity.getRepoSubscription({ owner, repo: name });
+
+				return true;
+			} catch (error) {
+				console.log(`Repo ${owner}/${name} is not starred`);
+
+				return false;
+			}
 		}
 	});
 }
