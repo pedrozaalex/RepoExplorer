@@ -4,86 +4,106 @@
 		fullName: string;
 		description: string;
 		stars: number;
-		forks: number;
-		issues: number;
-		lastUpdated: string;
+		updatedAt: string;
 		license: string;
 	};
 </script>
 
 <script lang="ts">
-	import { browser } from '$app/environment';
-	import { createQuery } from '@tanstack/svelte-query';
-	import { formatDistance } from 'date-fns';
-	import { authStore } from '../stores/authStore';
+	import { formatDistance, parseISO } from 'date-fns';
+	import { getRepoLanguagues } from '../api/github';
+	import { pipe } from 'fp-ts/lib/function';
+	import Chip from './Chip.svelte';
+	import { lightenHSL, stringToColour } from '../utils';
 
-	export let data: StandardRepo;
+	export let description: StandardRepo['description'];
+	export let fullName: StandardRepo['fullName'];
+	export let license: StandardRepo['license'];
+	export let stars: StandardRepo['stars'];
+	export let updatedAt: StandardRepo['updatedAt'];
+	export let url: StandardRepo['url'];
 
-	$: formattedDate = formatDistance(new Date(data.lastUpdated), new Date(), {
-		addSuffix: true
-	});
+	const calculateLastUpdated = (updatedAt: string) =>
+		pipe(updatedAt, parseISO, (updatedAt) =>
+			formatDistance(updatedAt, new Date(), {
+				addSuffix: true
+			})
+		);
 
-	let langsQuery = createQuery({
-		queryKey: ['languages', data.fullName],
-		queryFn: async () => {
-			if (!browser) return {};
+	let langsQuery = getRepoLanguagues(fullName);
 
-			const octokit = $authStore.octokit;
-
-			if (!octokit) return {};
-
-			const { data: langs } = await octokit.rest.repos.listLanguages({
-				owner: data.fullName.split('/')[0],
-				repo: data.fullName.split('/')[1]
-			});
-
-			return langs;
-		}
-	});
+	const maxLanguages = 2;
 </script>
 
 <div class="repo">
-	<a href={data.url} target="_blank" rel="noreferrer">
-		<h2>{data.fullName}</h2>
+	<a href={url} target="_blank" rel="noreferrer">
+		<h2>{fullName}</h2>
 	</a>
 
-	<p>{data.description}</p>
+	<p>{description}</p>
 
 	<div class="repo-stats">
-		<p>{data.stars} ⭐</p>
-		<p>{data.forks} 🍴</p>
-		<p>{data.issues} ❓</p>
-		<p>Last updated {formattedDate}</p>
-		<p>{data.license}</p>
-
 		{#if $langsQuery.isLoading}
-			Searching...
+			<p>Loading...</p>
 		{:else if $langsQuery.isError}
 			<p>Error: {$langsQuery.error}</p>
 		{:else if $langsQuery.isSuccess}
-			{#each Object.keys($langsQuery.data) as lang}
-				<p>{lang}</p>
-			{/each}
+			<ul class="repo-languages">
+				{#each $langsQuery.data as lang, i}
+					{#if i < maxLanguages}
+						{@const color = stringToColour(lang)}
+
+						<li>
+							<Chip label={lang} --bg-color={color} --text-color={lightenHSL(color)} />
+						</li>
+					{:else if i === maxLanguages}
+						<li>
+							<Chip label={`+${$langsQuery.data.length - maxLanguages}`} />
+						</li>
+					{/if}
+				{/each}
+			</ul>
 		{/if}
+
+		<p>Last updated {calculateLastUpdated(updatedAt)}</p>
+		<p>{license}</p>
+		<p>{stars} ⭐</p>
 	</div>
 </div>
 
 <style lang="scss">
 	.repo {
-		width: 100%;
+		width: 80%;
+
+		background-color: white;
+		box-shadow: var(--shadow);
+		border: var(--primary-border);
+		border-radius: 1rem;
+		color: black;
+		padding: 1rem;
 
 		@media screen and (min-width: 768px) {
-			width: 40%;
+			width: 45%;
 		}
 
-		h2 {
-			white-space: nowrap;
-			overflow: hidden;
-			text-overflow: ellipsis;
+		@media screen and (min-width: 1024px) {
+			width: 30%;
 		}
+	}
 
-		p {
-			margin: 0;
-		}
+	h2 {
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		font-family: var(--font-mono);
+		text-align: center;
+	}
+
+	ul {
+		display: flex;
+		flex-wrap: nowrap;
+		overflow-x: hidden;
+		list-style: none;
+		gap: 0.3rem;
 	}
 </style>

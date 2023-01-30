@@ -1,6 +1,13 @@
 import { browser } from '$app/environment';
 import type { Endpoints } from '@octokit/types';
 import { createQuery } from '@tanstack/svelte-query';
+import { number } from 'fp-ts';
+import { filter, head, map, sort } from 'fp-ts/lib/Array';
+import { pipe } from 'fp-ts/lib/function';
+import { getOrElseW, isSome } from 'fp-ts/lib/Option';
+import { contramap, reverse } from 'fp-ts/lib/Ord';
+import { toEntries } from 'fp-ts/lib/Record';
+import { isString } from 'fp-ts/lib/string';
 import { get } from 'svelte/store';
 import type { StandardRepo } from '../components/Repo.svelte';
 import { authStore } from '../stores/authStore';
@@ -40,10 +47,8 @@ function convertToStandardRepo(
 		fullName: githubRepo.full_name,
 		description: githubRepo.description ?? 'No description',
 		stars: githubRepo.stargazers_count,
-		issues: githubRepo.open_issues_count,
-		forks: githubRepo.forks_count,
 		url: githubRepo.html_url,
-		lastUpdated: githubRepo.updated_at,
+		updatedAt: githubRepo.updated_at,
 		license: githubRepo.license?.name ?? 'No license'
 	};
 }
@@ -89,6 +94,46 @@ export function searchRepos({
 				totalCount: data.total_count,
 				incompleteResults: data.incomplete_results
 			};
+		}
+	});
+}
+
+const byLangUsage = pipe(
+	reverse(number.Ord),
+	contramap((lang: [string, number]) => lang[1])
+);
+
+const getOrderedLanguageList = (langs: { [key: string]: number }) =>
+	pipe(
+		langs,
+		toEntries, // [['TypeScript', 500], ['JavaScript', 1000]]
+		sort(byLangUsage), // [['JavaScript', 1000], ['TypeScript', 500]]
+		map(head), // [Some('JavaScript'), Some('TypeScript'), None]
+		filter(isSome), // [Some('JavaScript'), Some('TypeScript')]
+		map(getOrElseW(() => '')), // ['JavaScript', 'TypeScript']
+		filter(isString)
+	);
+
+export function getRepoLanguagues(repoFullName: string) {
+	const owner = repoFullName.split('/')[0];
+	const repo = repoFullName.split('/')[1];
+
+	return createQuery({
+		queryKey: ['languages', owner, repo],
+		queryFn: async (): Promise<string[]> => {
+			if (!browser) return [];
+
+			const octokit = get(authStore).octokit;
+
+			if (!octokit) {
+				console.error('Octokit not initialized');
+
+				return [];
+			}
+
+			const { data: langs } = await octokit.rest.repos.listLanguages({ owner, repo });
+
+			return getOrderedLanguageList(langs);
 		}
 	});
 }

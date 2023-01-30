@@ -37,7 +37,7 @@
 
 <style lang="scss">
 	:global(body) {
-		font-family: 'Inter', sans-serif;
+		font-family: var(--font-sans);
 		color: var(--on-background-color);
 	}
 
@@ -54,7 +54,6 @@
 	}
 
 	main {
-		margin-top: 4rem;
-		margin-bottom: 4rem;
+		margin: 4rem 5%;
 	}
 </style>

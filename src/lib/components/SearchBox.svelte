@@ -38,7 +38,8 @@
 		width: fit-content;
 		margin: 0 auto;
 		box-shadow: var(--shadow);
-		border: 4px solid var(--outline-color);
+		border: var(--primary-border);
+
 		input {
 			width: 100%;
 			padding: 0.5rem;

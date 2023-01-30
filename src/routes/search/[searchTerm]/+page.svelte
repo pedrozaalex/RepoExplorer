@@ -6,7 +6,7 @@
 
 	export let data: PageData;
 
-	const perPage = 10;
+	const perPage = 11;
 
 	$: ({ searchTerm = '', page = 1 } = data);
 
@@ -17,31 +17,29 @@
 	});
 </script>
 
-<div>
-	{#if $query.isLoading}
-		Searching...
-	{:else if $query.isError}
-		<p>Error: {$query.error}</p>
-	{:else if $query.isSuccess}
-		{#if $query.data.totalCount === 0}
-			<p>No results found</p>
-		{:else}
-			<p>Found {$query.data.totalCount} results</p>
+{#if $query.isLoading}
+	Searching...
+{:else if $query.isError}
+	<p>Error: {$query.error}</p>
+{:else if $query.isSuccess}
+	{#if $query.data.totalCount === 0}
+		<p>No results found</p>
+	{:else}
+		<p>Found {$query.data.totalCount} results</p>
 
-			<br />
-		{/if}
-
-		<div class="search-results">
-			{#each $query.data.items as repoData}
-				<Repo data={repoData} />
-			{/each}
-		</div>
-
-		{#if $query.data.totalCount > perPage}
-			<Pagination {page} totalItems={$query.data.totalCount} itemsPerPage={perPage} />
-		{/if}
+		<br />
 	{/if}
-</div>
+
+	<div class="search-results">
+		{#each $query.data.items as repoData}
+			<Repo {...repoData} />
+		{/each}
+	</div>
+
+	{#if $query.data.totalCount > perPage}
+		<Pagination {page} totalItems={$query.data.totalCount} itemsPerPage={perPage} />
+	{/if}
+{/if}
 
 <style lang="scss">
 	.search-results {
