@@ -1,43 +1,34 @@
 <script lang="ts">
 	import { searchRepos } from '../../../lib/api/github';
 	import Pagination from '../../../lib/components/Pagination.svelte';
-	import Repo from '../../../lib/components/Repo.svelte';
+	import Repository, { type StandardRepo } from '../../../lib/components/Repository.svelte';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
+	const perPage = 12;
 
-	const perPage = 11;
-
-	$: ({ searchTerm = '', page = 1 } = data);
-
-	$: query = searchRepos({
-		searchTerm,
-		page,
-		perPage
-	});
+	$: page = data.page;
+	$: searchTerm = data.searchTerm;
+	$: searchResult = searchRepos({ page, perPage, searchTerm });
 </script>
 
-{#if $query.isLoading}
+{#if $searchResult.isLoading}
 	Searching...
-{:else if $query.isError}
-	<p>Error: {$query.error}</p>
-{:else if $query.isSuccess}
-	{#if $query.data.totalCount === 0}
-		<p>No results found</p>
-	{:else}
-		<p>Found {$query.data.totalCount} results</p>
-
-		<br />
-	{/if}
+{:else if $searchResult.isError}
+	<p>Error: {$searchResult.error}</p>
+{:else}
+	{@const { totalCount, items } = $searchResult.data}
 
 	<div class="search-results">
-		{#each $query.data.items as repoData}
-			<Repo {...repoData} />
+		{#each items as repo}
+			<Repository data={repo} />
+		{:else}
+			<p>No results found</p>
 		{/each}
 	</div>
 
-	{#if $query.data.totalCount > perPage}
-		<Pagination {page} totalItems={$query.data.totalCount} itemsPerPage={perPage} />
+	{#if totalCount > perPage}
+		<Pagination {page} totalItems={totalCount} itemsPerPage={perPage} />
 	{/if}
 {/if}
 

@@ -4,12 +4,12 @@ import { createQuery } from '@tanstack/svelte-query';
 import { number } from 'fp-ts';
 import { filter, head, map, sort } from 'fp-ts/lib/Array';
 import { pipe } from 'fp-ts/lib/function';
-import { getOrElseW, isSome } from 'fp-ts/lib/Option';
+import { getOrElseW } from 'fp-ts/lib/Option';
 import { contramap, reverse } from 'fp-ts/lib/Ord';
 import { toEntries } from 'fp-ts/lib/Record';
 import { isString } from 'fp-ts/lib/string';
 import { get } from 'svelte/store';
-import type { StandardRepo } from '../components/Repo.svelte';
+import type { StandardRepo } from '../components/Repository.svelte';
 import { authStore } from '../stores/authStore';
 
 export function getOauthAuthorizeURL(clientId: string) {
@@ -57,20 +57,20 @@ function convertToStandardRepo(
 }
 
 export function searchRepos({
-	searchTerm,
+	searchTerm = '',
 	page = 1,
 	perPage = 10,
 	sort = 'stars',
 	order = 'desc'
 }: {
-	searchTerm: string;
+	searchTerm?: string;
 	page?: number;
 	perPage?: number;
 	sort?: 'stars' | 'recent';
 	order?: 'desc' | 'asc';
 }) {
 	return createQuery({
-		queryKey: ['searchRepos', searchTerm, page],
+		queryKey: ['searchRepos', searchTerm, page, perPage, sort, order],
 		queryFn: async (): Promise<{
 			items: StandardRepo[];
 			totalCount: number;
@@ -108,11 +108,10 @@ const byLangUsage = pipe(
 
 const getOrderedLanguageList = (langs: { [key: string]: number }) =>
 	pipe(
-		langs,
+		langs, // {TypeScript: 500, JavaScript: 1000}
 		toEntries, // [['TypeScript', 500], ['JavaScript', 1000]]
 		sort(byLangUsage), // [['JavaScript', 1000], ['TypeScript', 500]]
 		map(head), // [Some('JavaScript'), Some('TypeScript'), None]
-		filter(isSome), // [Some('JavaScript'), Some('TypeScript')]
 		map(getOrElseW(() => '')), // ['JavaScript', 'TypeScript']
 		filter(isString)
 	);

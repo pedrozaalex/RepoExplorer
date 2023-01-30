@@ -1,30 +1,49 @@
 <script lang="ts">
 	import { assets } from '../../assets';
-	import type { StandardRepo } from './Repo.svelte';
 
-	export let stars: StandardRepo['stars'];
-	export let forks: StandardRepo['forks'];
-	export let issues: StandardRepo['issues'];
+	export let stars: number;
+	export let forks: number;
+	export let issues: number;
 
 	function formatBigNumber(num: number) {
 		if (num < 1000) return num.toString();
 
 		return `${Math.floor(num / 1000)}K`;
 	}
+
+	function gradeStat(type: 'stars' | 'forks' | 'issues', value: number) {
+		if (type === 'stars') {
+			if (value < 100) return 'low';
+			if (value < 1000) return 'medium';
+			return 'high';
+		}
+
+		if (type === 'forks') {
+			if (value < 10) return 'low';
+			if (value < 100) return 'medium';
+			return 'high';
+		}
+
+		if (type === 'issues') {
+			if (value < 10) return 'low';
+			if (value < 100) return 'medium';
+			return 'high';
+		}
+	}
 </script>
 
 <div class="stats">
-	<div class="stat stars">
+	<div class="stat stars" title="Stars">
 		<img src={assets.star} alt="star" height="14" />
 		{formatBigNumber(stars)}
 	</div>
 
-	<div class="stat forks">
+	<div class="stat forks" title="Forks">
 		<img src={assets.fork} alt="fork" height="14" />
 		{formatBigNumber(forks)}
 	</div>
 
-	<div class="stat issues">
+	<div class="stat issues" title="Issues">
 		<img src={assets.warning} alt="issue" height="14" />
 		{formatBigNumber(issues)}
 	</div>

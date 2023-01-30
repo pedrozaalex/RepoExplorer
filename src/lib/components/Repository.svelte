@@ -15,23 +15,15 @@
 <script lang="ts">
 	import { formatDistance, parseISO } from 'date-fns';
 	import { pipe } from 'fp-ts/lib/function';
-	import { checkIfRepoIsStarred, getRepoLanguagues } from '../api/github';
-	import { lightenHSL, stringToColour } from '../utils';
-	import Chip from './Chip.svelte';
+	import { getRepoLanguagues } from '../api/github';
+	import LanguageList from './LanguageList.svelte';
 	import Stats from './Stats.svelte';
 
-	export let description: StandardRepo['description'];
-	export let forks: StandardRepo['forks'];
-	export let issues: StandardRepo['issues'];
-	export let name: StandardRepo['name'];
-	export let owner: StandardRepo['owner'];
-	export let stars: StandardRepo['stars'];
-	export let updatedAt: StandardRepo['updatedAt'];
-	export let url: StandardRepo['url'];
+	export let data: StandardRepo;
+
+	const { description, forks, issues, license, name, owner, stars, updatedAt, url } = data;
 
 	let langsQuery = getRepoLanguagues({ owner, name });
-
-	const maxLanguages = 2;
 
 	const calculateLastUpdated = (updatedAt: string) =>
 		pipe(updatedAt, parseISO, (updatedAt) =>
@@ -43,13 +35,13 @@
 
 <div class="repo">
 	<a href={url} target="_blank" rel="noreferrer">
-		<h2 class="repo-title">
+		<h2 class="repo-title" title={`${owner}/${name}`}>
 			<span class="repo-owner">{owner}/</span>
 			<span class="repo-name">{name}</span>
 		</h2>
 	</a>
 
-	<p class="repo-description">{description}</p>
+	<p class="repo-description" title={description}>{description}</p>
 
 	<div>
 		{#if $langsQuery.isLoading}
@@ -57,25 +49,17 @@
 		{:else if $langsQuery.isError}
 			<p>Error: {$langsQuery.error}</p>
 		{:else if $langsQuery.isSuccess}
-			<ul class="repo-languages">
-				{#each $langsQuery.data as lang, i}
-					{#if i < maxLanguages}
-						{@const color = stringToColour(lang)}
-
-						<li>
-							<Chip label={lang} --bg-color={color} --text-color={lightenHSL(color)} />
-						</li>
-					{:else if i === maxLanguages}
-						<li>
-							<Chip label={`+${$langsQuery.data.length - maxLanguages}`} />
-						</li>
-					{/if}
-				{/each}
-			</ul>
+			{@const langs = $langsQuery.data}
+			<LanguageList {langs} />
 		{/if}
 
 		<div class="repo-stats">
 			<aside>
+				<p>License:</p>
+				<p>{license}</p>
+
+				<br />
+
 				<p>Last update:</p>
 				<p>{calculateLastUpdated(updatedAt)}</p>
 			</aside>
@@ -86,6 +70,13 @@
 </div>
 
 <style lang="scss">
+	@mixin ellipsis {
+		overflow: hidden;
+		word-wrap: break-word;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
 	.repo {
 		width: 80%;
 
@@ -106,46 +97,45 @@
 	}
 
 	.repo-title {
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
 		font-family: var(--font-mono);
 		text-align: center;
-		line-height: 1.5rem;
 		display: flex;
 		flex-direction: column;
 		margin-bottom: 1rem;
 
 		.repo-owner {
-			font-size: 1rem;
+			font-size: 0.9rem;
+			line-height: 1em;
 			color: var(--darker-gray);
 			text-align: start;
 		}
 
 		.repo-name {
+			@include ellipsis;
 			font-style: italic;
 		}
 	}
 
 	.repo-description {
-		line-height: 1.5rem;
 		margin-bottom: 0.75rem;
+		font-size: 0.9rem;
+		line-height: 1.2em;
 		font-family: var(--font-mono);
-	}
+		display: block;
 
-	.repo-languages {
-		display: flex;
-		flex-wrap: nowrap;
-		overflow-x: hidden;
-		list-style: none;
-		gap: 0.3rem;
-		margin-bottom: 0.75rem;
+		$max-lines: 3;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-line-clamp: $max-lines; /* number of lines to show */
+		line-clamp: $max-lines;
+		-webkit-box-orient: vertical;
 	}
 
 	.repo-stats {
 		display: flex;
 		justify-content: space-between;
-		align-items: center;
+		align-items: flex-end;
 		font-size: 0.8rem;
 	}
 </style>
