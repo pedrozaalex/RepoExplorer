@@ -56,26 +56,30 @@ function convertToStandardRepo(
 	};
 }
 
+type SearchReposParams = {
+	searchTerm?: string;
+	page?: number;
+	perPage?: number;
+	sort?: 'stars' | 'recent';
+	order?: 'desc' | 'asc';
+};
+
+type SearchReposResult = {
+	items: StandardRepo[];
+	totalCount: number;
+	incompleteResults: boolean;
+};
+
 export function searchRepos({
 	searchTerm = '',
 	page = 1,
 	perPage = 10,
 	sort = 'stars',
 	order = 'desc'
-}: {
-	searchTerm?: string;
-	page?: number;
-	perPage?: number;
-	sort?: 'stars' | 'recent';
-	order?: 'desc' | 'asc';
-}) {
+}: SearchReposParams) {
 	return createQuery({
 		queryKey: ['searchRepos', searchTerm, page, perPage, sort, order],
-		queryFn: async (): Promise<{
-			items: StandardRepo[];
-			totalCount: number;
-			incompleteResults: boolean;
-		}> => {
+		queryFn: async (): Promise<SearchReposResult> => {
 			if (!browser) return { items: [], totalCount: 0, incompleteResults: false };
 
 			const octokit = get(authStore).octokit;
