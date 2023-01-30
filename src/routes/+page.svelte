@@ -2,8 +2,8 @@
 	import { assets } from '../assets';
 	import Button from '$components/Button.svelte';
 	import { PUBLIC_GITHUB_CLIENT_ID as clientId } from '$env/static/public';
-	import { github } from '$lib/github';
 	import { authStore } from '../lib/stores/authStore';
+	import { getOauthAuthorizeURL } from '../lib/api/github';
 </script>
 
 <div class="homepage-root">
@@ -23,13 +23,15 @@
 	</div>
 
 	{#if $authStore.isLoggedIn}
-		<Button>
-			<a href="/search">Start Exploring</a>
-		</Button>
+		<a href="/search">
+			<Button>Start Exploring</Button>
+		</a>
 	{:else}
-		<Button leftIcon={'github'} rightIcon={'continue'} --background="black" --color="white">
-			<a href={github.getOauthURL(clientId)}> Continue with GitHub </a>
-		</Button>
+		<a href={getOauthAuthorizeURL(clientId)}>
+			<Button leftIcon={'github'} rightIcon={'continue'} --background="black" --color="white">
+				Continue with GitHub
+			</Button>
+		</a>
 	{/if}
 </div>
 
@@ -51,6 +53,12 @@
 		margin: auto;
 		margin-bottom: 2rem;
 		gap: 2rem;
+
+		@media screen and (max-width: 720px) {
+			flex-direction: column-reverse;
+			gap: 1rem;
+			text-align: center;
+		}
 	}
 
 	.hero-title {
@@ -72,5 +80,9 @@
 		color: var(--on-background-color);
 		max-width: 25rem;
 		font-size: 0.4em;
+
+		@media screen and (max-width: 720px) {
+			margin: auto;
+		}
 	}
 </style>

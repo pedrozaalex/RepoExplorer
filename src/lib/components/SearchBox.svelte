@@ -1,10 +1,13 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { assets } from '../../assets';
 
-	let searchTerm = '';
+	export let searchTerm = '';
 
 	function search() {
-		console.log(searchTerm);
+		console.log('navigating to search page', searchTerm);
+
+		goto(`/search/${searchTerm}`);
 	}
 </script>
 
@@ -35,7 +38,8 @@
 		width: fit-content;
 		margin: 0 auto;
 		box-shadow: var(--shadow);
-		border: 4px solid var(--outline-color);
+		border: var(--primary-border);
+
 		input {
 			width: 100%;
 			padding: 0.5rem;
