@@ -1,3 +1,6 @@
+import { formatDistance, parseISO } from 'date-fns';
+import { pipe } from 'fp-ts/lib/function';
+
 export function stringToColour(str: string) {
 	if (str.length === 0) {
 		return 'hsl(0, 0, 100%)';
@@ -63,3 +66,15 @@ export function lightenHSL(hsl: string, percent = 60) {
 
 	return `hsl(${h}, ${s}%, ${newL}%)`;
 }
+
+const getDistanceFromNow = (date: Date) =>
+	formatDistance(date, new Date(), {
+		addSuffix: true
+	});
+
+export const calculateLastUpdated = (updatedAt: string) =>
+	pipe(
+		updatedAt, // '2020-10-01T00:00:00Z'
+		parseISO, // Date
+		getDistanceFromNow // '2 days ago'
+	);

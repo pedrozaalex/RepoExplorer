@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import Button from './Button.svelte';
+	import { assets } from '../../assets';
 
 	export let page: number;
 	export let totalItems: number;
@@ -27,7 +27,9 @@
 
 <nav class="pagination">
 	{#if page > 1}
-		<a class="pagination-link" href={`?page=${page - 1}`}> Previous </a>
+		<a class="pagination-link" href={`?page=${page - 1}`}>
+			<img src={assets.arrowLeft} alt="previous" />
+		</a>
 	{/if}
 
 	<form on:submit|preventDefault={goToPage} class="pagination-input">
@@ -36,13 +38,28 @@
 	</form>
 
 	{#if page < totalPages}
-		<a class="pagination-link" href={`?page=${page + 1}`}> Next </a>
+		<a class="pagination-link" href={`?page=${page + 1}`}>
+			<img src={assets.arrowRight} alt="next" />
+		</a>
 	{/if}
 </nav>
 
 <style lang="scss">
+	@mixin clickable {
+		cursor: pointer;
+		filter: brightness(1);
+		transition: filter 0.1s;
+
+		&:hover {
+			filter: brightness(0.9);
+		}
+
+		&:active {
+			filter: brightness(0.8);
+		}
+	}
+
 	.pagination-info {
-		margin-top: 3rem;
 		text-align: center;
 	}
 
@@ -55,11 +72,14 @@
 	}
 
 	.pagination-link {
-		text-decoration: underline;
-
-		&:hover {
-			text-decoration: none;
-		}
+		@include clickable;
+		background-color: var(--primary-color);
+		height: 2rem;
+		width: 2rem;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 
 	.pagination-input {
@@ -67,6 +87,7 @@
 		align-items: stretch;
 
 		input {
+			max-width: 7.5rem;
 			padding: 0.5rem;
 			background-color: white;
 			border: 0 none;
@@ -75,6 +96,7 @@
 		}
 
 		button {
+			@include clickable;
 			$radius: 2.5rem;
 			width: $radius;
 			height: $radius;

@@ -1,10 +1,10 @@
 <script lang="ts">
+	import Footer from '$components/Footer.svelte';
+	import Navbar from '$components/Navbar.svelte';
 	import '@fontsource/inter/400.css';
 	import '@fontsource/inter/700.css';
 	import '@fontsource/space-mono/400.css';
 	import '@fontsource/space-mono/700.css';
-	import Footer from '$components/Footer.svelte';
-	import Navbar from '$components/Navbar.svelte';
 
 	import { browser } from '$app/environment';
 	import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query';
@@ -13,7 +13,7 @@
 		defaultOptions: {
 			queries: {
 				enabled: browser,
-				cacheTime: Infinity
+				staleTime: 0
 			}
 		}
 	});
