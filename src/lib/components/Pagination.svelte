@@ -7,8 +7,6 @@
 	export let itemsPerPage: number;
 
 	$: totalPages = Math.ceil(totalItems / itemsPerPage);
-	$: start = (page - 1) * itemsPerPage + 1;
-	$: end = Math.min(page * itemsPerPage, totalItems);
 
 	let pageInput: HTMLInputElement;
 	const goToPage = () => {
@@ -22,22 +20,18 @@
 </script>
 
 <nav class="pagination">
-	{#if page > 1}
-		<a class="pagination-link" href={`?page=${page - 1}`}>
-			<img src={assets.arrowLeft} alt="previous" />
-		</a>
-	{/if}
+	<a class="pagination-link" class:disabled={page <= 1} href={`?page=${page - 1}`}>
+		<img src={assets.arrowLeft} alt="previous" />
+	</a>
 
 	<form on:submit|preventDefault={goToPage} class="pagination-input">
 		<input bind:this={pageInput} type="number" min="1" max={totalPages} value={page} />
-		<button type="submit">Go</button>
+		<button type="submit" class:disabled={page > totalPages || page < 1}>Go</button>
 	</form>
 
-	{#if page < totalPages}
-		<a class="pagination-link" href={`?page=${page + 1}`}>
-			<img src={assets.arrowRight} alt="next" />
-		</a>
-	{/if}
+	<a class="pagination-link" class:disabled={page >= totalPages} href={`?page=${page + 1}`}>
+		<img src={assets.arrowRight} alt="next" />
+	</a>
 </nav>
 
 <style lang="scss">
@@ -52,6 +46,12 @@
 
 		&:active {
 			filter: brightness(0.8);
+		}
+
+		&.disabled {
+			cursor: not-allowed;
+			filter: opacity(0.5);
+			pointer-events: none;
 		}
 	}
 
