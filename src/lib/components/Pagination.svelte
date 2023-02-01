@@ -21,10 +21,6 @@
 	};
 </script>
 
-<p class="pagination-info">
-	Showing {start}-{end} of {totalItems} results
-</p>
-
 <nav class="pagination">
 	{#if page > 1}
 		<a class="pagination-link" href={`?page=${page - 1}`}>
@@ -57,10 +53,6 @@
 		&:active {
 			filter: brightness(0.8);
 		}
-	}
-
-	.pagination-info {
-		text-align: center;
 	}
 
 	.pagination {

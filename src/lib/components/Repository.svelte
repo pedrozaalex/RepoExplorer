@@ -18,6 +18,7 @@
 	import autoAnimate from '@formkit/auto-animate';
 	import { getRepoLanguagues } from '../api/github';
 	import LanguageList from './LanguageList.svelte';
+	import SkeletonLoader from './SkeletonLoader.svelte';
 	import Stats from './Stats.svelte';
 
 	export let data: StandardRepo;
@@ -39,7 +40,7 @@
 
 	<div use:autoAnimate>
 		{#if $langsQuery.isLoading}
-			<p>Loading...</p>
+			<SkeletonLoader height="2rem" />
 		{:else if $langsQuery.isError}
 			<p>Error: {$langsQuery.error}</p>
 		{:else if $langsQuery.isSuccess}
@@ -49,13 +50,17 @@
 
 		<div class="repo-stats">
 			<aside>
-				<p>License:</p>
-				<p>{license}</p>
+				<p>
+					License:
+					<br />
+					<span title={license}>{license}</span>
+				</p>
 
-				<br />
-
-				<p>Last update:</p>
-				<p>{calculateLastUpdated(updatedAt)}</p>
+				<p>
+					Last update:
+					<br />
+					<span title={updatedAt}>{calculateLastUpdated(updatedAt)}</span>
+				</p>
 			</aside>
 
 			<Stats {stars} {forks} {issues} />
@@ -69,6 +74,17 @@
 		word-wrap: break-word;
 		text-overflow: ellipsis;
 		white-space: nowrap;
+	}
+
+	@mixin lines($lines) {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-line-clamp: $lines;
+		line-clamp: $lines;
+		-webkit-box-orient: vertical;
+		line-height: 1.2em;
+		height: 1.2em * $lines;
 	}
 
 	.repo {
@@ -115,21 +131,31 @@
 		font-size: 0.9rem;
 		line-height: 1.2em;
 		font-family: var(--font-mono);
-		display: block;
+		text-align: justify;
 
-		$max-lines: 3;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		display: -webkit-box;
-		-webkit-line-clamp: $max-lines; /* number of lines to show */
-		line-clamp: $max-lines;
-		-webkit-box-orient: vertical;
+		@include lines(3);
 	}
 
 	.repo-stats {
 		display: flex;
 		justify-content: space-between;
 		align-items: flex-end;
+		gap: 0.5rem;
 		font-size: 0.8rem;
+		margin-top: 1rem;
+
+		aside {
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			align-items: flex-start;
+			height: 100%;
+			gap: 1rem;
+			max-width: 60%;
+
+			p {
+				@include lines(2);
+			}
+		}
 	}
 </style>

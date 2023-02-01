@@ -37,6 +37,5 @@
 		overflow-x: hidden;
 		list-style: none;
 		gap: 0.3rem;
-		margin-bottom: 0.75rem;
 	}
 </style>
