@@ -56,49 +56,95 @@ function convertToStandardRepo(
 	};
 }
 
-export function searchRepos({
-	searchTerm = '',
-	page = 1,
-	perPage = 10,
-	sort = 'stars',
-	order = 'desc'
-}: {
+export type SearchReposParams = {
 	searchTerm?: string;
 	page?: number;
 	perPage?: number;
 	sort?: 'stars' | 'recent';
 	order?: 'desc' | 'asc';
-}) {
-	return createQuery({
-		queryKey: ['searchRepos', searchTerm, page, perPage, sort, order],
-		queryFn: async (): Promise<{
-			items: StandardRepo[];
-			totalCount: number;
-			incompleteResults: boolean;
-		}> => {
-			if (!browser) return { items: [], totalCount: 0, incompleteResults: false };
+};
 
-			const octokit = get(authStore).octokit;
+export type SearchReposResponse = {
+	items: StandardRepo[];
+	totalItems: number;
+	incompleteResults: boolean;
+};
 
-			if (!octokit) {
-				throw new Error('Octokit not initialized');
-			}
+// export function searchRepos({
+// 	searchTerm = '',
+// 	page = 1,
+// 	perPage = 10,
+// 	sort = 'stars',
+// 	order = 'desc'
+// }: {
+// 	searchTerm?: string;
+// 	page?: number;
+// 	perPage?: number;
+// 	sort?: 'stars' | 'recent';
+// 	order?: 'desc' | 'asc';
+// }) {
+// 	return createQuery({
+// 		queryKey: ['searchRepos', searchTerm, page, perPage, sort, order],
+// 		queryFn: async (): Promise<{
+// 			items: StandardRepo[];
+// 			totalItems: number;
+// 			incompleteResults: boolean;
+// 		}> => {
+// 			if (!browser) return { items: [], totalItems: 0, incompleteResults: false };
 
-			const { data } = await octokit.rest.search.repos({
-				q: searchTerm,
-				sort: sort === 'stars' ? 'stars' : 'updated',
-				order,
-				per_page: perPage,
-				page
-			});
+// 			const octokit = get(authStore).octokit;
 
-			return {
-				items: data.items.map(convertToStandardRepo),
-				totalCount: data.total_count,
-				incompleteResults: data.incomplete_results
-			};
-		}
+// 			if (!octokit) {
+// 				throw new Error('Octokit not initialized');
+// 			}
+
+// 			console.log('searchRepos', searchTerm, page, perPage, sort, order);
+
+// 			const { data } = await octokit.rest.search.repos({
+// 				q: searchTerm,
+// 				sort: sort === 'stars' ? 'stars' : 'updated',
+// 				order,
+// 				per_page: perPage,
+// 				page
+// 			});
+
+// 			return {
+// 				items: data.items.map(convertToStandardRepo),
+// 				totalItems: data.total_count,
+// 				incompleteResults: data.incomplete_results
+// 			};
+// 		}
+// 	});
+// }
+
+export async function searchRepos({
+	searchTerm = '',
+	page = 1,
+	perPage = 10,
+	sort = 'stars',
+	order = 'desc'
+}: SearchReposParams) {
+	if (!browser) return;
+
+	const octokit = get(authStore).octokit;
+
+	if (!octokit) {
+		throw new Error('Octokit not initialized');
+	}
+
+	const { data } = await octokit.rest.search.repos({
+		q: searchTerm,
+		sort: sort === 'stars' ? 'stars' : 'updated',
+		order,
+		per_page: perPage,
+		page
 	});
+
+	return {
+		items: data.items.map(convertToStandardRepo),
+		totalItems: data.total_count,
+		incompleteResults: data.incomplete_results
+	};
 }
 
 const byLangUsage = pipe(

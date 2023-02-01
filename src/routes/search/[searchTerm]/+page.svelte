@@ -1,4 +1,5 @@
 <script lang="ts">
+	import autoAnimate from '@formkit/auto-animate';
 	import { searchRepos } from '../../../lib/api/github';
 	import Pagination from '../../../lib/components/Pagination.svelte';
 	import Repository, { type StandardRepo } from '../../../lib/components/Repository.svelte';
@@ -12,25 +13,35 @@
 	$: searchResult = searchRepos({ page, perPage, searchTerm });
 </script>
 
-{#if $searchResult.isLoading}
-	Searching...
-{:else if $searchResult.isError}
-	<p>Error: {$searchResult.error}</p>
-{:else}
-	{@const { totalCount, items } = $searchResult.data}
+<div use:autoAnimate>
+	{#await searchResult}
+		<p>Searching...</p>
+	{:then results}
+		{#if results}
+			{#if results.totalItems > perPage}
+				<Pagination {page} totalItems={results.totalItems} itemsPerPage={perPage} />
+			{/if}
 
-	<div class="search-results">
-		{#each items as repo}
-			<Repository data={repo} />
-		{:else}
-			<p>No results found</p>
-		{/each}
-	</div>
+			<br />
 
-	{#if totalCount > perPage}
-		<Pagination {page} totalItems={totalCount} itemsPerPage={perPage} />
-	{/if}
-{/if}
+			<div class="search-results">
+				{#each results.items as repo}
+					<Repository data={repo} />
+				{:else}
+					<p>No results found</p>
+				{/each}
+			</div>
+
+			<br />
+
+			{#if results.totalItems > perPage}
+				<Pagination {page} totalItems={results.totalItems} itemsPerPage={perPage} />
+			{/if}
+		{/if}
+	{:catch error}
+		<p>Error: {error}</p>
+	{/await}
+</div>
 
 <style lang="scss">
 	.search-results {

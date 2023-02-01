@@ -13,8 +13,9 @@
 </script>
 
 <script lang="ts">
-	import { formatDistance, parseISO } from 'date-fns';
-	import { pipe } from 'fp-ts/lib/function';
+	import { calculateLastUpdated } from '$lib/utils';
+
+	import autoAnimate from '@formkit/auto-animate';
 	import { getRepoLanguagues } from '../api/github';
 	import LanguageList from './LanguageList.svelte';
 	import Stats from './Stats.svelte';
@@ -24,13 +25,6 @@
 	const { description, forks, issues, license, name, owner, stars, updatedAt, url } = data;
 
 	let langsQuery = getRepoLanguagues({ owner, name });
-
-	const calculateLastUpdated = (updatedAt: string) =>
-		pipe(updatedAt, parseISO, (updatedAt) =>
-			formatDistance(updatedAt, new Date(), {
-				addSuffix: true
-			})
-		);
 </script>
 
 <div class="repo">
@@ -43,7 +37,7 @@
 
 	<p class="repo-description" title={description}>{description}</p>
 
-	<div>
+	<div use:autoAnimate>
 		{#if $langsQuery.isLoading}
 			<p>Loading...</p>
 		{:else if $langsQuery.isError}

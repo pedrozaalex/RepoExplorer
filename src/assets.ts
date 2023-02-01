@@ -6,6 +6,8 @@ import magnifyingGlass from '$images/magnifying-glass.png';
 import star from '$images/star.png';
 import fork from '$images/fork.png';
 import warning from '$images/warning.png';
+import arrowRight from '$images/arrow-right.svg';
+import arrowLeft from '$images/arrow-left.svg';
 
 export const assets = {
 	bigOctopus,
@@ -15,7 +17,9 @@ export const assets = {
 	magnifyingGlass,
 	star,
 	tinyOctopus,
-	warning
+	warning,
+	arrowRight,
+	arrowLeft
 } as const;
 
 export type Asset = keyof typeof assets;
