@@ -35,7 +35,6 @@
 		display: flex;
 		flex-wrap: nowrap;
 		overflow-x: hidden;
-		list-style: none;
 		gap: 0.3rem;
 	}
 </style>

@@ -40,9 +40,21 @@ export async function getAccessToken(params: {
 	return access_token;
 }
 
-function convertToStandardRepo(
-	githubRepo: Endpoints['GET /search/repositories']['response']['data']['items'][number]
-): StandardRepo {
+type MinimalRepo = Pick<
+	Endpoints['GET /search/repositories']['response']['data']['items'][number],
+	| 'description'
+	| 'forks_count'
+	| 'open_issues_count'
+	| 'license'
+	| 'name'
+	| 'owner'
+	| 'stargazers_count'
+	| 'updated_at'
+	| 'html_url'
+	| 'homepage'
+>;
+
+function convertToStandardRepo(githubRepo: MinimalRepo): StandardRepo {
 	return {
 		description: githubRepo.description ?? 'No description',
 		forks: githubRepo.forks_count,
@@ -52,7 +64,8 @@ function convertToStandardRepo(
 		owner: githubRepo.owner?.login ?? 'ghost',
 		stars: githubRepo.stargazers_count,
 		updatedAt: githubRepo.updated_at,
-		url: githubRepo.html_url
+		url: githubRepo.html_url,
+		website: githubRepo.homepage
 	};
 }
 
@@ -206,6 +219,32 @@ export function checkIfRepoIsStarred({ owner, name }: { owner: string; name: str
 
 				return false;
 			}
+		}
+	});
+}
+
+type GetOneRepoParams = {
+	owner: string;
+	name: string;
+};
+
+export function getOneRepo({ owner, name }: GetOneRepoParams) {
+	return createQuery({
+		queryKey: ['repo', owner, name],
+		queryFn: async (): Promise<StandardRepo | undefined> => {
+			if (!browser) return;
+
+			const octokit = get(authStore).octokit;
+
+			if (!octokit) {
+				console.error('Octokit not initialized');
+
+				return;
+			}
+
+			const { data } = await octokit.rest.repos.get({ owner, repo: name });
+
+			return convertToStandardRepo(data);
 		}
 	});
 }

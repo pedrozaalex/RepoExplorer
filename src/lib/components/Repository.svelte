@@ -9,6 +9,7 @@
 		stars: number;
 		updatedAt: string;
 		url: string;
+		website: string | null;
 	};
 </script>
 
@@ -16,6 +17,7 @@
 	import { calculateLastUpdated } from '$lib/utils';
 
 	import autoAnimate from '@formkit/auto-animate';
+	import { assets } from '../../assets';
 	import { getRepoLanguagues } from '../api/github';
 	import LanguageList from './LanguageList.svelte';
 	import SkeletonLoader from './SkeletonLoader.svelte';
@@ -23,7 +25,7 @@
 
 	export let data: StandardRepo;
 
-	const { description, forks, issues, license, name, owner, stars, updatedAt, url } = data;
+	const { description, forks, issues, license, name, owner, stars, updatedAt, url, website } = data;
 
 	let langsQuery = getRepoLanguagues({ owner, name });
 </script>
@@ -64,6 +66,30 @@
 			</aside>
 
 			<Stats {stars} {forks} {issues} />
+		</div>
+
+		<div class="repo-actions">
+			<ul>
+				<li>
+					<a href={url} target="_blank" rel="noreferrer">
+						<img src={assets.github} alt="GitHub" height="16" />
+					</a>
+				</li>
+
+				{#if website}
+					<li>
+						<a href={website}>
+							<img src={assets.globe} alt="Website" height="16" />
+						</a>
+					</li>
+				{/if}
+
+				<li>
+					<a href={`/repo/${owner}/${name}`}>
+						<img src={assets.maximize} alt="Maximize" height="16" />
+					</a>
+				</li>
+			</ul>
 		</div>
 	</div>
 </div>
@@ -156,6 +182,21 @@
 			p {
 				@include lines(2);
 			}
+		}
+	}
+
+	.repo-actions {
+		display: flex;
+		justify-content: flex-end;
+		margin-top: 1rem;
+
+		ul {
+			display: flex;
+			gap: 1rem;
+		}
+
+		a {
+			color: var(--darker-gray);
 		}
 	}
 </style>
