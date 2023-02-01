@@ -28,47 +28,51 @@
 	const { description, forks, issues, license, name, owner, stars, updatedAt, url, website } = data;
 
 	let langsQuery = getRepoLanguagues({ owner, name });
+	let showActions = false;
+
+	function toggleActions() {
+		showActions = !showActions;
+	}
 </script>
 
-<div class="repo">
-	<a href={url} target="_blank" rel="noreferrer">
-		<h2 class="repo-title" title={`${owner}/${name}`}>
-			<span class="repo-owner">{owner}/</span>
-			<span class="repo-name">{name}</span>
-		</h2>
-	</a>
-
-	<p class="repo-description" title={description}>{description}</p>
-
-	<div use:autoAnimate>
-		{#if $langsQuery.isLoading}
-			<SkeletonLoader height="2rem" />
-		{:else if $langsQuery.isError}
-			<p>Error: {$langsQuery.error}</p>
-		{:else if $langsQuery.isSuccess}
-			{@const langs = $langsQuery.data}
-			<LanguageList {langs} />
-		{/if}
-
-		<div class="repo-stats">
-			<aside>
-				<p>
-					License:
-					<br />
-					<span title={license}>{license}</span>
-				</p>
-
-				<p>
-					Last update:
-					<br />
-					<span title={updatedAt}>{calculateLastUpdated(updatedAt)}</span>
-				</p>
-			</aside>
-
-			<Stats {stars} {forks} {issues} />
+<div class="repo" on:mouseenter={toggleActions} on:mouseleave={toggleActions} use:autoAnimate>
+	<div class="repo-main">
+		<a href={`/repo/${owner}/${name}`}>
+			<h2 class="repo-title" title={`${owner}/${name}`}>
+				<span class="repo-owner">{owner}/</span>
+				<span class="repo-name">{name}</span>
+			</h2>
+		</a>
+		<p class="repo-description" title={description}>{description}</p>
+		<div use:autoAnimate>
+			{#if $langsQuery.isLoading}
+				<SkeletonLoader height="2rem" />
+			{:else if $langsQuery.isError}
+				<p>Error: {$langsQuery.error}</p>
+			{:else if $langsQuery.isSuccess}
+				{@const langs = $langsQuery.data}
+				<LanguageList {langs} />
+			{/if}
+			<div class="repo-stats">
+				<aside>
+					<p>
+						License:
+						<br />
+						<span title={license}>{license}</span>
+					</p>
+					<p>
+						Last update:
+						<br />
+						<span title={updatedAt}>{calculateLastUpdated(updatedAt)}</span>
+					</p>
+				</aside>
+				<Stats {stars} {forks} {issues} />
+			</div>
 		</div>
+	</div>
 
-		<div class="repo-actions">
+	{#if showActions}
+		<div class="actions" class:show={showActions}>
 			<ul>
 				<li>
 					<a href={url} target="_blank" rel="noreferrer">
@@ -91,7 +95,7 @@
 				</li>
 			</ul>
 		</div>
-	</div>
+	{/if}
 </div>
 
 <style lang="scss">
@@ -121,7 +125,6 @@
 		border: var(--primary-border);
 		border-radius: 1rem;
 		color: black;
-		padding: 1rem;
 
 		@media screen and (min-width: 768px) {
 			width: 45%;
@@ -130,6 +133,10 @@
 		@media screen and (min-width: 1024px) {
 			width: 30%;
 		}
+	}
+
+	.repo-main {
+		padding: 1rem;
 	}
 
 	.repo-title {
@@ -185,10 +192,13 @@
 		}
 	}
 
-	.repo-actions {
+	.actions {
 		display: flex;
 		justify-content: flex-end;
-		margin-top: 1rem;
+		padding: 0.5rem;
+		border-top: 1px solid var(--darker-gray);
+		background-color: var(--primary-color);
+		border-radius: 0 0 0.8rem 0.8rem;
 
 		ul {
 			display: flex;
