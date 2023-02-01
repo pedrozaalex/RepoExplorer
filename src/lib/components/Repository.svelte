@@ -18,24 +18,22 @@
 
 	import autoAnimate from '@formkit/auto-animate';
 	import { assets } from '../../assets';
-	import { getRepoLanguagues } from '../api/github';
-	import LanguageList from './LanguageList.svelte';
-	import SkeletonLoader from './SkeletonLoader.svelte';
+	import RepoLanguages from './RepoLanguages.svelte';
 	import Stats from './Stats.svelte';
 
 	export let data: StandardRepo;
 
 	const { description, forks, issues, license, name, owner, stars, updatedAt, url, website } = data;
 
-	let langsQuery = getRepoLanguagues({ owner, name });
 	let showActions = false;
-
-	function toggleActions() {
-		showActions = !showActions;
-	}
 </script>
 
-<div class="repo" on:mouseenter={toggleActions} on:mouseleave={toggleActions} use:autoAnimate>
+<div
+	class="repo"
+	on:mouseenter={() => (showActions = true)}
+	on:mouseleave={() => (showActions = false)}
+	use:autoAnimate
+>
 	<div class="repo-main">
 		<a href={`/repo/${owner}/${name}`}>
 			<h2 class="repo-title" title={`${owner}/${name}`}>
@@ -43,29 +41,25 @@
 				<span class="repo-name">{name}</span>
 			</h2>
 		</a>
+
 		<p class="repo-description" title={description}>{description}</p>
+
 		<div use:autoAnimate>
-			{#if $langsQuery.isLoading}
-				<SkeletonLoader height="2rem" />
-			{:else if $langsQuery.isError}
-				<p>Error: {$langsQuery.error}</p>
-			{:else if $langsQuery.isSuccess}
-				{@const langs = $langsQuery.data}
-				<LanguageList {langs} />
-			{/if}
+			<RepoLanguages {owner} {name} />
+
 			<div class="repo-stats">
 				<aside>
 					<p>
-						License:
-						<br />
+						License:<br />
 						<span title={license}>{license}</span>
 					</p>
+
 					<p>
-						Last update:
-						<br />
+						Last update:<br />
 						<span title={updatedAt}>{calculateLastUpdated(updatedAt)}</span>
 					</p>
 				</aside>
+
 				<Stats {stars} {forks} {issues} />
 			</div>
 		</div>
@@ -82,7 +76,7 @@
 
 				{#if website}
 					<li>
-						<a href={website}>
+						<a href={website} target="_blank" rel="noreferrer">
 							<img src={assets.globe} alt="Website" height="16" />
 						</a>
 					</li>
@@ -99,23 +93,7 @@
 </div>
 
 <style lang="scss">
-	@mixin ellipsis {
-		overflow: hidden;
-		word-wrap: break-word;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-	}
-
-	@mixin lines($lines) {
-		overflow: hidden;
-		text-overflow: ellipsis;
-		display: -webkit-box;
-		-webkit-line-clamp: $lines;
-		line-clamp: $lines;
-		-webkit-box-orient: vertical;
-		line-height: 1.2em;
-		height: 1.2em * $lines;
-	}
+	@import '../mixins.scss';
 
 	.repo {
 		width: 80%;
@@ -193,12 +171,16 @@
 	}
 
 	.actions {
+		position: absolute;
+		right: 2px;
+		top: 2px;
+
 		display: flex;
 		justify-content: flex-end;
 		padding: 0.5rem;
 		border-top: 1px solid var(--darker-gray);
 		background-color: var(--primary-color);
-		border-radius: 0 0 0.8rem 0.8rem;
+		border-radius: 0.8rem;
 
 		ul {
 			display: flex;
@@ -207,6 +189,14 @@
 
 		a {
 			color: var(--darker-gray);
+			border-radius: 9999px;
+			background-color: var(--primary-color);
+			@include clickable;
 		}
+
+		&:hover {
+			transform: scale(1.3);
+		}
+		transition: transform 0.1s ease-in-out;
 	}
 </style>

@@ -55,7 +55,7 @@
 	<br />
 
 	{#if totalItems > perPage}
-		<Pagination {page} {totalItems} itemsPerPage={perPage} />
+		<Pagination {page} {totalItems} {perPage} />
 	{/if}
 </div>
 
@@ -65,5 +65,6 @@
 		gap: 2.5rem;
 		flex-wrap: wrap;
 		justify-content: space-evenly;
+		align-items: flex-start;
 	}
 </style>

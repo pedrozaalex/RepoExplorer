@@ -1,12 +1,12 @@
 <script lang="ts">
-	import Footer from '$components/Footer.svelte';
-	import Navbar from '$components/Navbar.svelte';
 	import '@fontsource/inter/400.css';
 	import '@fontsource/inter/700.css';
 	import '@fontsource/space-mono/400.css';
 	import '@fontsource/space-mono/700.css';
 
 	import { browser } from '$app/environment';
+	import Footer from '$components/Footer.svelte';
+	import Navbar from '$components/Navbar.svelte';
 	import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query';
 
 	const queryClient = new QueryClient({
@@ -44,7 +44,9 @@
 	.layout-root {
 		background-color: var(--background-color);
 		width: 100vw;
+		width: 100dvw;
 		min-height: 100vh;
+		min-height: 100dvh;
 		padding: 2em;
 
 		display: flex;

@@ -4,9 +4,9 @@
 
 	export let page: number;
 	export let totalItems: number;
-	export let itemsPerPage: number;
+	export let perPage: number;
 
-	$: totalPages = Math.ceil(totalItems / itemsPerPage);
+	$: totalPages = Math.ceil(totalItems / perPage);
 
 	let pageInput: HTMLInputElement;
 	const goToPage = () => {
@@ -35,25 +35,7 @@
 </nav>
 
 <style lang="scss">
-	@mixin clickable {
-		cursor: pointer;
-		filter: brightness(1);
-		transition: filter 0.1s;
-
-		&:hover {
-			filter: brightness(0.9);
-		}
-
-		&:active {
-			filter: brightness(0.8);
-		}
-
-		&.disabled {
-			cursor: not-allowed;
-			filter: opacity(0.5);
-			pointer-events: none;
-		}
-	}
+	@import '../mixins.scss';
 
 	.pagination {
 		margin: 1rem 0;
