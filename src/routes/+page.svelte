@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { assets } from '../assets';
 	import Button from '$components/Button.svelte';
 	import { PUBLIC_GITHUB_CLIENT_ID as clientId } from '$env/static/public';
 	import { authStore } from '../lib/stores/authStore';
 	import { getOauthAuthorizeURL } from '../lib/api/github';
+	import bigOctopus from '$images/big-octopus.png';
 </script>
 
 <div class="homepage-root">
@@ -19,7 +19,7 @@
 			</p>
 		</aside>
 
-		<img src={assets.bigOctopus} alt="cute octopus" height="300" />
+		<img src={bigOctopus} alt="cute octopus" height="300" />
 	</div>
 
 	{#if $authStore.isLoggedIn}

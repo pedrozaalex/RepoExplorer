@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
-	import { assets } from '../../assets';
+	import Icon from './Icon.svelte';
 
 	export let searchTerm = '';
 
@@ -12,13 +12,13 @@
 	let input: HTMLInputElement;
 	onMount(() => {
 		input.focus();
-	})
+	});
 </script>
 
 <form class="search-box" on:submit|preventDefault={search}>
 	<input bind:value={searchTerm} placeholder="Your search term..." bind:this={input} />
 	<button type="submit">
-		<img src={assets.magnifyingGlass} alt="Search" width="36" />
+		<Icon name="magnifyingGlass" color="black" />
 	</button>
 </form>
 
@@ -40,7 +40,7 @@
 		}
 
 		button {
-			margin-left: -3.5rem;
+			margin-left: -3rem;
 			padding: 0.5rem;
 			background: none;
 			cursor: pointer;
