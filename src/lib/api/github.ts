@@ -1,4 +1,6 @@
 import { browser } from '$app/environment';
+import { VERCEL_URL } from '$env/static/public';
+import { ensureHttps } from '$lib/utils';
 import type { Endpoints } from '@octokit/types';
 import { createQuery } from '@tanstack/svelte-query';
 import { number } from 'fp-ts';
@@ -13,7 +15,8 @@ import type { StandardRepo } from '../components/RepositoryCard.svelte';
 import { authStore } from '../stores/authStore';
 
 export function getOauthAuthorizeURL(clientId: string) {
-	return `https://github.com/login/oauth/authorize?client_id=${clientId}`;
+	const url = ensureHttps(VERCEL_URL);
+	return `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${url}/login/github/callback`;
 }
 
 export async function getAccessToken(params: {
@@ -121,7 +124,7 @@ const byLangUsage = pipe(
 	contramap((lang: [string, number]) => lang[1])
 );
 
-const getOrderedLanguageList = (langs: { [key: string]: number }) =>
+const orderLanguageList = (langs: { [key: string]: number }) =>
 	pipe(
 		langs, // {TypeScript: 500, JavaScript: 1000}
 		toEntries, // [['TypeScript', 500], ['JavaScript', 1000]]
@@ -147,7 +150,7 @@ export function getRepoLanguagues({ owner, name }: { owner: string; name: string
 
 			const { data: langs } = await octokit.rest.repos.listLanguages({ owner, repo: name });
 
-			return getOrderedLanguageList(langs);
+			return orderLanguageList(langs);
 		}
 	});
 }

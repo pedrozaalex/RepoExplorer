@@ -12,6 +12,10 @@ const config = {
 		alias: {
 			$images: './src/lib/assets/images',
 			$components: './src/lib/components'
+		},
+		env: {
+			// This is needed so we can access VERCEL_URL in the build stage
+			publicPrefix: "VERCEL_"
 		}
 	}
 };

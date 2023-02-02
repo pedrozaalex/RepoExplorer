@@ -15,9 +15,6 @@
 <style lang="scss">
 	a {
 		display: inline-block;
-		border: 3px solid white;
-		border-radius: 50%;
-		padding: 0.1rem;
 		vertical-align: middle;
 		margin-left: 0.5rem;
 	}
