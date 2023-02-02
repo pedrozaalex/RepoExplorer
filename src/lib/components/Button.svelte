@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Icon, { type IconName } from './Icon.svelte';
 
-	export let onClick: () => void = () => {};
+	export let onClick: (() => void) | null = null;
 	export let disabled = false;
 
 	export let leftIcon: IconName | null = null;

@@ -16,6 +16,7 @@
 <script lang="ts">
 	import { calculateLastUpdated } from '$lib/utils';
 	import autoAnimate from '@formkit/auto-animate';
+	import { fade } from 'svelte/transition';
 	import Icon from './Icon.svelte';
 	import RepoLanguages from './RepoLangs.svelte';
 	import Stats from './Stats.svelte';
@@ -30,7 +31,6 @@
 	class="repo"
 	on:mouseenter={() => (showActions = true)}
 	on:mouseleave={() => (showActions = false)}
-	use:autoAnimate
 >
 	<div class="repo-main">
 		<a href={`/repo/${owner}/${name}`}>
@@ -64,20 +64,20 @@
 	</div>
 
 	{#if showActions}
-		<ul class="actions" class:show={showActions}>
-			<li>
+		<ul class="actions" class:show={showActions} transition:fade={{ duration: 100 }}>
+			<li class="action">
 				<a href={url} target="_blank" rel="noreferrer">
 					<Icon name="github" size={16} />
 				</a>
 			</li>
 
-			<li>
+			<li class="action">
 				<a href={website} target="_blank" rel="noreferrer" class:disabled={!website}>
 					<Icon name="globe" size={16} />
 				</a>
 			</li>
 
-			<li>
+			<li class="action">
 				<a href={`/repo/${owner}/${name}`}>
 					<Icon name="maximize" size={16} />
 				</a>
@@ -95,6 +95,7 @@
 		border: var(--primary-border);
 		border-radius: 1rem;
 		color: black;
+		position: relative;
 	}
 
 	.repo-main {
@@ -156,15 +157,15 @@
 
 	.actions {
 		position: absolute;
-		right: 2px;
-		top: 2px;
+		right: 4px;
+		top: 4px;
 
 		display: flex;
 		justify-content: flex-end;
 		gap: 0.5rem;
 		background-color: var(--primary-color);
 		border-radius: 0.8rem;
-		padding: 0.5rem;
+		padding: 0.2rem;
 
 		transform: scale(1);
 		transition: transform 0.1s ease-in-out;
@@ -173,13 +174,8 @@
 			transform: scale(1.2);
 		}
 
-		a {
-			color: black;
-
-			&:hover {
-				background-color: gray;
-				opacity: 0.5;
-			}
+		.action {
+			padding: 0.3rem;
 		}
 	}
 </style>
