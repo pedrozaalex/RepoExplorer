@@ -3,9 +3,9 @@
 	export let title: string | undefined = undefined;
 </script>
 
-<div class="chip" {title}>
-	<p>{label}</p>
-</div>
+<li class="chip" {title}>
+	{label}
+</li>
 
 <style lang="scss">
 	.chip {

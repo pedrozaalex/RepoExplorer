@@ -31,11 +31,7 @@ export const authStore = {
 	...writable<AuthStore>(initialState),
 
 	login(accessToken: string) {
-		console.log('authStore.login: begin');
-
 		if (get(this).isLoggedIn) return;
-
-		console.log('authStore.login: creating new Octokit instance');
 
 		const octokit = new Octokit({ auth: accessToken });
 

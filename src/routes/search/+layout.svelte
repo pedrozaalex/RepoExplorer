@@ -4,12 +4,12 @@
 
 	export let data: PageData;
 
-	$: searchBoxPos = data.searchTerm
-		? 'top' // if there is a search term, show the search box at the top
-		: 'middle'; // otherwise, show it in the middle of the page
+	$: showInMiddle = data.searchTerm
+		? false // if there is a search term, show the search box at the top
+		: true; // otherwise, show it in the middle of the page
 </script>
 
-<div class="search-box-container" class:middle={searchBoxPos === 'middle'}>
+<div class="search-box-container" class:middle={showInMiddle}>
 	<SearchBox searchTerm={data.searchTerm} />
 </div>
 

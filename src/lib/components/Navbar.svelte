@@ -3,9 +3,9 @@
 	import Button from '$components/Button.svelte';
 	import { authStore } from '$lib/stores/authStore';
 	import SkeletonLoader from './SkeletonLoader.svelte';
-	import { assets } from '../../assets';
 	import { getOauthAuthorizeURL } from '../api/github';
 	import Avatar from './Avatar.svelte';
+	import tinyOctopus from '$images/tiny-octopus.png';
 
 	let showLogoutDropdown = false;
 
@@ -17,7 +17,7 @@
 <div class="navbar-root">
 	<h1>
 		<a href="/">
-			<img src={assets.tinyOctopus} alt="cute octopus" height="36" />
+			<img src={tinyOctopus} alt="cute octopus" height="36" />
 			Repo Explorer
 		</a>
 	</h1>

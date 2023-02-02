@@ -1,58 +1,50 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { assets } from '../../assets';
+	import { onMount } from 'svelte';
+	import Icon from './Icon.svelte';
 
 	export let searchTerm = '';
 
 	function search() {
-		console.log('navigating to search page', searchTerm);
-
 		goto(`/search/${searchTerm}`);
 	}
+
+	let input: HTMLInputElement;
+	onMount(() => {
+		input.focus();
+	});
 </script>
 
-<div class="search-box">
-	<input
-		bind:value={searchTerm}
-		placeholder="Your search term..."
-		on:keydown={(e) => {
-			if (e.key === 'Enter') {
-				search();
-			}
-		}}
-	/>
-	<button on:click={search}>
-		<img src={assets.magnifyingGlass} alt="Search" width="36" />
+<form class="search-box" on:submit|preventDefault={search}>
+	<input bind:value={searchTerm} placeholder="Your search term..." bind:this={input} />
+	<button type="submit">
+		<Icon name="magnifyingGlass" color="black" />
 	</button>
-</div>
+</form>
 
 <style lang="scss">
 	.search-box {
 		display: flex;
-		align-items: center;
 		justify-content: center;
-		margin: 1rem 0;
-		padding: 0.25rem;
-		background-color: white;
-		border-radius: 9999px;
-		width: fit-content;
-		margin: 0 auto;
-		box-shadow: var(--shadow);
-		border: var(--primary-border);
 
 		input {
+			background-color: white;
+			border-radius: 9999px;
 			width: 100%;
 			padding: 0.5rem;
+			padding-left: 1rem;
+			padding-right: 3rem;
 			font-size: 1rem;
-			background-color: transparent;
-			border: 0 none;
+			box-shadow: var(--shadow);
+			border: var(--primary-border);
 		}
 
 		button {
-			margin-left: 0.5rem;
+			margin-left: -3rem;
 			padding: 0.5rem;
 			background: none;
 			cursor: pointer;
+			border-radius: 9999px;
 		}
 	}
 </style>

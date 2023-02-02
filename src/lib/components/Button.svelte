@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { assets, type Asset } from '../../assets';
+	import Icon, { type IconName } from './Icon.svelte';
 
 	export let onClick: () => void = () => {};
 	export let disabled = false;
 
-	export let leftIcon: Asset | null = null;
-	export let rightIcon: Asset | null = null;
+	export let leftIcon: IconName | null = null;
+	export let rightIcon: IconName | null = null;
 </script>
 
 <!-- 
@@ -19,14 +19,16 @@
 		- `--outline-color` is used to set the border color of the button.
  -->
 <button class="button-root" on:click={onClick} {disabled}>
-	{#if leftIcon}
-		<img src={assets[leftIcon]} alt="" />
+	{#if leftIcon !== null}
+		<Icon name={leftIcon} size={16} />
 	{/if}
 
-	<slot />
+	<div class="button-content">
+		<slot />
+	</div>
 
-	{#if rightIcon}
-		<img src={assets[rightIcon]} alt="" />
+	{#if rightIcon !== null}
+		<Icon name={rightIcon} size={16} />
 	{/if}
 </button>
 
@@ -64,15 +66,7 @@
 		}
 	}
 
-	.button-root > img {
-		height: 24px;
-	}
-
-	.button-root > img:first-child {
-		margin-right: 8px;
-	}
-
-	.button-root > img:last-child {
-		margin-left: 8px;
+	.button-content {
+		margin: 0 0.5rem;
 	}
 </style>

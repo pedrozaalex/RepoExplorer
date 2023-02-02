@@ -1,10 +1,14 @@
 <!-- Component for displaying fancy skeleton loading animation -->
-<script>
+<script lang="ts">
 	export let width = '100%';
 	export let height = '1em';
+
+	export let isLoading: boolean | undefined = undefined;
 </script>
 
-<div class="skeleton-box" style="width: {width}; height: {height}" />
+{#if isLoading === undefined || isLoading === true}
+	<div class="skeleton-box" style="width: {width}; height: {height};" />
+{/if}
 
 <style lang="scss">
 	.skeleton-box {

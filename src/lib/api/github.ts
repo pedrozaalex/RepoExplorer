@@ -9,7 +9,7 @@ import { contramap, reverse } from 'fp-ts/lib/Ord';
 import { toEntries } from 'fp-ts/lib/Record';
 import { isString } from 'fp-ts/lib/string';
 import { get } from 'svelte/store';
-import type { StandardRepo } from '../components/Repository.svelte';
+import type { StandardRepo } from '../components/RepositoryCard.svelte';
 import { authStore } from '../stores/authStore';
 
 export function getOauthAuthorizeURL(clientId: string) {
@@ -40,9 +40,21 @@ export async function getAccessToken(params: {
 	return access_token;
 }
 
-function convertToStandardRepo(
-	githubRepo: Endpoints['GET /search/repositories']['response']['data']['items'][number]
-): StandardRepo {
+type MinimalRepo = Pick<
+	Endpoints['GET /search/repositories']['response']['data']['items'][number],
+	| 'description'
+	| 'forks_count'
+	| 'open_issues_count'
+	| 'license'
+	| 'name'
+	| 'owner'
+	| 'stargazers_count'
+	| 'updated_at'
+	| 'html_url'
+	| 'homepage'
+>;
+
+function convertToStandardRepo(githubRepo: MinimalRepo): StandardRepo {
 	return {
 		description: githubRepo.description ?? 'No description',
 		forks: githubRepo.forks_count,
@@ -52,7 +64,8 @@ function convertToStandardRepo(
 		owner: githubRepo.owner?.login ?? 'ghost',
 		stars: githubRepo.stargazers_count,
 		updatedAt: githubRepo.updated_at,
-		url: githubRepo.html_url
+		url: githubRepo.html_url,
+		website: githubRepo.homepage
 	};
 }
 
@@ -64,87 +77,43 @@ export type SearchReposParams = {
 	order?: 'desc' | 'asc';
 };
 
-export type SearchReposResponse = {
+export type SearchReposResponse = Promise<{
 	items: StandardRepo[];
 	totalItems: number;
 	incompleteResults: boolean;
-};
+}>;
 
-// export function searchRepos({
-// 	searchTerm = '',
-// 	page = 1,
-// 	perPage = 10,
-// 	sort = 'stars',
-// 	order = 'desc'
-// }: {
-// 	searchTerm?: string;
-// 	page?: number;
-// 	perPage?: number;
-// 	sort?: 'stars' | 'recent';
-// 	order?: 'desc' | 'asc';
-// }) {
-// 	return createQuery({
-// 		queryKey: ['searchRepos', searchTerm, page, perPage, sort, order],
-// 		queryFn: async (): Promise<{
-// 			items: StandardRepo[];
-// 			totalItems: number;
-// 			incompleteResults: boolean;
-// 		}> => {
-// 			if (!browser) return { items: [], totalItems: 0, incompleteResults: false };
-
-// 			const octokit = get(authStore).octokit;
-
-// 			if (!octokit) {
-// 				throw new Error('Octokit not initialized');
-// 			}
-
-// 			console.log('searchRepos', searchTerm, page, perPage, sort, order);
-
-// 			const { data } = await octokit.rest.search.repos({
-// 				q: searchTerm,
-// 				sort: sort === 'stars' ? 'stars' : 'updated',
-// 				order,
-// 				per_page: perPage,
-// 				page
-// 			});
-
-// 			return {
-// 				items: data.items.map(convertToStandardRepo),
-// 				totalItems: data.total_count,
-// 				incompleteResults: data.incomplete_results
-// 			};
-// 		}
-// 	});
-// }
-
-export async function searchRepos({
+export function searchRepos({
 	searchTerm = '',
 	page = 1,
 	perPage = 10,
 	sort = 'stars',
 	order = 'desc'
 }: SearchReposParams) {
-	if (!browser) return;
+	return createQuery({
+		queryKey: ['searchRepos', searchTerm, page, perPage, sort, order],
+		queryFn: async (): SearchReposResponse => {
+			if (!browser) return { items: [], totalItems: 0, incompleteResults: false };
 
-	const octokit = get(authStore).octokit;
+			const octokit = get(authStore).octokit;
 
-	if (!octokit) {
-		throw new Error('Octokit not initialized');
-	}
+			if (!octokit) throw new Error('Octokit not initialized');
 
-	const { data } = await octokit.rest.search.repos({
-		q: searchTerm,
-		sort: sort === 'stars' ? 'stars' : 'updated',
-		order,
-		per_page: perPage,
-		page
+			const { data } = await octokit.rest.search.repos({
+				q: searchTerm,
+				sort: sort === 'stars' ? 'stars' : 'updated',
+				order,
+				per_page: perPage,
+				page
+			});
+
+			return {
+				items: data.items.map(convertToStandardRepo),
+				totalItems: data.total_count,
+				incompleteResults: data.incomplete_results
+			};
+		}
 	});
-
-	return {
-		items: data.items.map(convertToStandardRepo),
-		totalItems: data.total_count,
-		incompleteResults: data.incomplete_results
-	};
 }
 
 const byLangUsage = pipe(
@@ -158,7 +127,7 @@ const getOrderedLanguageList = (langs: { [key: string]: number }) =>
 		toEntries, // [['TypeScript', 500], ['JavaScript', 1000]]
 		sort(byLangUsage), // [['JavaScript', 1000], ['TypeScript', 500]]
 		map(head), // [Some('JavaScript'), Some('TypeScript'), None]
-		map(getOrElseW(() => '')), // ['JavaScript', 'TypeScript']
+		map(getOrElseW(() => null)), // ['JavaScript', 'TypeScript']
 		filter(isString)
 	);
 
@@ -202,10 +171,34 @@ export function checkIfRepoIsStarred({ owner, name }: { owner: string; name: str
 
 				return true;
 			} catch (error) {
-				console.log(`Repo ${owner}/${name} is not starred`);
-
 				return false;
 			}
+		}
+	});
+}
+
+type GetOneRepoParams = {
+	owner: string;
+	name: string;
+};
+
+export function getOneRepo({ owner, name }: GetOneRepoParams) {
+	return createQuery({
+		queryKey: ['repo', owner, name],
+		queryFn: async (): Promise<StandardRepo | undefined> => {
+			if (!browser) return;
+
+			const octokit = get(authStore).octokit;
+
+			if (!octokit) {
+				console.error('Octokit not initialized');
+
+				return;
+			}
+
+			const { data } = await octokit.rest.repos.get({ owner, repo: name });
+
+			return convertToStandardRepo(data);
 		}
 	});
 }

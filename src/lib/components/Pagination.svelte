@@ -1,14 +1,12 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { assets } from '../../assets';
+	import Icon from './Icon.svelte';
 
 	export let page: number;
 	export let totalItems: number;
-	export let itemsPerPage: number;
+	export let perPage: number;
 
-	$: totalPages = Math.ceil(totalItems / itemsPerPage);
-	$: start = (page - 1) * itemsPerPage + 1;
-	$: end = Math.min(page * itemsPerPage, totalItems);
+	$: totalPages = Math.ceil(totalItems / perPage);
 
 	let pageInput: HTMLInputElement;
 	const goToPage = () => {
@@ -21,50 +19,26 @@
 	};
 </script>
 
-<p class="pagination-info">
-	Showing {start}-{end} of {totalItems} results
-</p>
-
 <nav class="pagination">
-	{#if page > 1}
-		<a class="pagination-link" href={`?page=${page - 1}`}>
-			<img src={assets.arrowLeft} alt="previous" />
-		</a>
-	{/if}
+	<a class="pagination-link" class:disabled={page <= 1} href={`?page=${page - 1}`}>
+		<Icon name="arrowLeft" />
+	</a>
 
 	<form on:submit|preventDefault={goToPage} class="pagination-input">
 		<input bind:this={pageInput} type="number" min="1" max={totalPages} value={page} />
-		<button type="submit">Go</button>
+		<button type="submit" class:disabled={page > totalPages || page < 1}>Go</button>
 	</form>
 
-	{#if page < totalPages}
-		<a class="pagination-link" href={`?page=${page + 1}`}>
-			<img src={assets.arrowRight} alt="next" />
-		</a>
-	{/if}
+	<a class="pagination-link" class:disabled={page >= totalPages} href={`?page=${page + 1}`}>
+		<Icon name="arrowRight" />
+	</a>
 </nav>
 
 <style lang="scss">
-	@mixin clickable {
-		cursor: pointer;
-		filter: brightness(1);
-		transition: filter 0.1s;
-
-		&:hover {
-			filter: brightness(0.9);
-		}
-
-		&:active {
-			filter: brightness(0.8);
-		}
-	}
-
-	.pagination-info {
-		text-align: center;
-	}
+	@import '../mixins.scss';
 
 	.pagination {
-		margin: 1rem 0;
+		margin: 2rem 0;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -74,6 +48,7 @@
 	.pagination-link {
 		@include clickable;
 		background-color: var(--primary-color);
+		color: var(--on-primary-color);
 		height: 2rem;
 		width: 2rem;
 		border-radius: 50%;

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { assets } from '../../assets';
+	import Icon from './Icon.svelte';
 
 	export let stars: number;
 	export let forks: number;
@@ -10,41 +10,21 @@
 
 		return `${Math.floor(num / 1000)}K`;
 	}
-
-	function gradeStat(type: 'stars' | 'forks' | 'issues', value: number) {
-		if (type === 'stars') {
-			if (value < 100) return 'low';
-			if (value < 1000) return 'medium';
-			return 'high';
-		}
-
-		if (type === 'forks') {
-			if (value < 10) return 'low';
-			if (value < 100) return 'medium';
-			return 'high';
-		}
-
-		if (type === 'issues') {
-			if (value < 10) return 'low';
-			if (value < 100) return 'medium';
-			return 'high';
-		}
-	}
 </script>
 
 <div class="stats">
 	<div class="stat stars" title="Stars">
-		<img src={assets.star} alt="star" height="14" />
+		<Icon name="star" size={16} />
 		{formatBigNumber(stars)}
 	</div>
 
 	<div class="stat forks" title="Forks">
-		<img src={assets.fork} alt="fork" height="14" />
+		<Icon name="fork" size={16} />
 		{formatBigNumber(forks)}
 	</div>
 
 	<div class="stat issues" title="Issues">
-		<img src={assets.warning} alt="issue" height="14" />
+		<Icon name="warning" size={16} />
 		{formatBigNumber(issues)}
 	</div>
 </div>
