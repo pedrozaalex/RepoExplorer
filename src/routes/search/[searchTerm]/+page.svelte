@@ -3,7 +3,7 @@
 	import { fly } from 'svelte/transition';
 	import { searchRepos } from '../../../lib/api/github';
 	import Pagination from '../../../lib/components/Pagination.svelte';
-	import Repository from '../../../lib/components/Repository.svelte';
+	import Repository from '../../../lib/components/RepositoryCard.svelte';
 	import type { PageData } from './$types';
 
 	const PER_PAGE = 12;

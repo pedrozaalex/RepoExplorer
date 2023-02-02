@@ -9,7 +9,7 @@ import { contramap, reverse } from 'fp-ts/lib/Ord';
 import { toEntries } from 'fp-ts/lib/Record';
 import { isString } from 'fp-ts/lib/string';
 import { get } from 'svelte/store';
-import type { StandardRepo } from '../components/Repository.svelte';
+import type { StandardRepo } from '../components/RepositoryCard.svelte';
 import { authStore } from '../stores/authStore';
 
 export function getOauthAuthorizeURL(clientId: string) {

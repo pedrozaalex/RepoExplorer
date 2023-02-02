@@ -15,23 +15,21 @@
 
 <script lang="ts">
 	import { calculateLastUpdated } from '$lib/utils';
-
 	import autoAnimate from '@formkit/auto-animate';
 	import Icon from './Icon.svelte';
-	import RepoLanguages from './RepoLanguages.svelte';
+	import RepoLanguages from './RepoLangs.svelte';
 	import Stats from './Stats.svelte';
 
 	export let data: StandardRepo;
-
 	$: ({ description, forks, issues, license, name, owner, stars, updatedAt, url, website } = data);
 
-	let showActions = true;
+	let showActions = false;
 </script>
 
 <div
 	class="repo"
 	on:mouseenter={() => (showActions = true)}
-	on:mouseleave={() => (showActions = true)}
+	on:mouseleave={() => (showActions = false)}
 	use:autoAnimate
 >
 	<div class="repo-main">
@@ -163,9 +161,10 @@
 
 		display: flex;
 		justify-content: flex-end;
+		gap: 0.5rem;
 		background-color: var(--primary-color);
-		padding: 0.2rem;
 		border-radius: 0.8rem;
+		padding: 0.5rem;
 
 		transform: scale(1);
 		transition: transform 0.1s ease-in-out;
@@ -175,7 +174,6 @@
 		}
 
 		a {
-			padding: 0.5rem;
 			color: black;
 
 			&:hover {
