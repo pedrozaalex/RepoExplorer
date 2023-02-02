@@ -12,6 +12,9 @@ const config = {
 		alias: {
 			$images: './src/lib/assets/images',
 			$components: './src/lib/components'
+		},
+		env: {
+			publicPrefix: "VERCEL_"
 		}
 	}
 };

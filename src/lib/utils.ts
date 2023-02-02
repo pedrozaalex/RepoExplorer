@@ -78,3 +78,15 @@ export const calculateLastUpdated = (updatedAt: string) =>
 		parseISO, // Date
 		getDistanceFromNow // '2 days ago'
 	);
+
+export function ensureHttps(url: string) {
+	if (url.startsWith('http://')) {
+		return `https://${url.slice(7)}`;
+	}
+
+	if (!url.startsWith('https://')) {
+		return `https://${url}`;
+	}
+
+	return url;
+}

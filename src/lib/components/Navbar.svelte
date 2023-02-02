@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { PUBLIC_GITHUB_CLIENT_ID as clientId } from '$env/static/public';
+	import { VERCEL_GITHUB_CLIENT_ID as clientId } from '$env/static/public';
 	import Button from '$components/Button.svelte';
 	import { authStore } from '$lib/stores/authStore';
 	import SkeletonLoader from './SkeletonLoader.svelte';

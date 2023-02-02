@@ -1,4 +1,6 @@
 import { browser } from '$app/environment';
+import { VERCEL_URL } from '$env/static/public';
+import { ensureHttps } from '$lib/utils';
 import type { Endpoints } from '@octokit/types';
 import { createQuery } from '@tanstack/svelte-query';
 import { number } from 'fp-ts';
@@ -13,7 +15,8 @@ import type { StandardRepo } from '../components/RepositoryCard.svelte';
 import { authStore } from '../stores/authStore';
 
 export function getOauthAuthorizeURL(clientId: string) {
-	return `https://github.com/login/oauth/authorize?client_id=${clientId}`;
+	const url = ensureHttps(VERCEL_URL);
+	return `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${url}/login/github/callback`;
 }
 
 export async function getAccessToken(params: {
