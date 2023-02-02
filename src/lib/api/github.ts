@@ -77,87 +77,43 @@ export type SearchReposParams = {
 	order?: 'desc' | 'asc';
 };
 
-export type SearchReposResponse = {
+export type SearchReposResponse = Promise<{
 	items: StandardRepo[];
 	totalItems: number;
 	incompleteResults: boolean;
-};
+}>;
 
-// export function searchRepos({
-// 	searchTerm = '',
-// 	page = 1,
-// 	perPage = 10,
-// 	sort = 'stars',
-// 	order = 'desc'
-// }: {
-// 	searchTerm?: string;
-// 	page?: number;
-// 	perPage?: number;
-// 	sort?: 'stars' | 'recent';
-// 	order?: 'desc' | 'asc';
-// }) {
-// 	return createQuery({
-// 		queryKey: ['searchRepos', searchTerm, page, perPage, sort, order],
-// 		queryFn: async (): Promise<{
-// 			items: StandardRepo[];
-// 			totalItems: number;
-// 			incompleteResults: boolean;
-// 		}> => {
-// 			if (!browser) return { items: [], totalItems: 0, incompleteResults: false };
-
-// 			const octokit = get(authStore).octokit;
-
-// 			if (!octokit) {
-// 				throw new Error('Octokit not initialized');
-// 			}
-
-// 			console.log('searchRepos', searchTerm, page, perPage, sort, order);
-
-// 			const { data } = await octokit.rest.search.repos({
-// 				q: searchTerm,
-// 				sort: sort === 'stars' ? 'stars' : 'updated',
-// 				order,
-// 				per_page: perPage,
-// 				page
-// 			});
-
-// 			return {
-// 				items: data.items.map(convertToStandardRepo),
-// 				totalItems: data.total_count,
-// 				incompleteResults: data.incomplete_results
-// 			};
-// 		}
-// 	});
-// }
-
-export async function searchRepos({
+export function searchRepos({
 	searchTerm = '',
 	page = 1,
 	perPage = 10,
 	sort = 'stars',
 	order = 'desc'
 }: SearchReposParams) {
-	if (!browser) return;
+	return createQuery({
+		queryKey: ['searchRepos', searchTerm, page, perPage, sort, order],
+		queryFn: async (): SearchReposResponse => {
+			if (!browser) return { items: [], totalItems: 0, incompleteResults: false };
 
-	const octokit = get(authStore).octokit;
+			const octokit = get(authStore).octokit;
 
-	if (!octokit) {
-		throw new Error('Octokit not initialized');
-	}
+			if (!octokit) throw new Error('Octokit not initialized');
 
-	const { data } = await octokit.rest.search.repos({
-		q: searchTerm,
-		sort: sort === 'stars' ? 'stars' : 'updated',
-		order,
-		per_page: perPage,
-		page
+			const { data } = await octokit.rest.search.repos({
+				q: searchTerm,
+				sort: sort === 'stars' ? 'stars' : 'updated',
+				order,
+				per_page: perPage,
+				page
+			});
+
+			return {
+				items: data.items.map(convertToStandardRepo),
+				totalItems: data.total_count,
+				incompleteResults: data.incomplete_results
+			};
+		}
 	});
-
-	return {
-		items: data.items.map(convertToStandardRepo),
-		totalItems: data.total_count,
-		incompleteResults: data.incomplete_results
-	};
 }
 
 const byLangUsage = pipe(
@@ -171,7 +127,7 @@ const getOrderedLanguageList = (langs: { [key: string]: number }) =>
 		toEntries, // [['TypeScript', 500], ['JavaScript', 1000]]
 		sort(byLangUsage), // [['JavaScript', 1000], ['TypeScript', 500]]
 		map(head), // [Some('JavaScript'), Some('TypeScript'), None]
-		map(getOrElseW(() => '')), // ['JavaScript', 'TypeScript']
+		map(getOrElseW(() => null)), // ['JavaScript', 'TypeScript']
 		filter(isString)
 	);
 
@@ -215,8 +171,6 @@ export function checkIfRepoIsStarred({ owner, name }: { owner: string; name: str
 
 				return true;
 			} catch (error) {
-				console.log(`Repo ${owner}/${name} is not starred`);
-
 				return false;
 			}
 		}

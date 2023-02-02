@@ -38,7 +38,7 @@
 	@import '../mixins.scss';
 
 	.pagination {
-		margin: 1rem 0;
+		margin: 2rem 0;
 		display: flex;
 		align-items: center;
 		justify-content: center;

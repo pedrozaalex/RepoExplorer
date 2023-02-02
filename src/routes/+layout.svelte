@@ -13,7 +13,8 @@
 		defaultOptions: {
 			queries: {
 				enabled: browser,
-				staleTime: 0
+				staleTime: Infinity,
+				cacheTime: Infinity
 			}
 		}
 	});

@@ -23,7 +23,7 @@
 
 	export let data: StandardRepo;
 
-	const { description, forks, issues, license, name, owner, stars, updatedAt, url, website } = data;
+	$: ({ description, forks, issues, license, name, owner, stars, updatedAt, url, website } = data);
 
 	let showActions = false;
 </script>
@@ -96,21 +96,11 @@
 	@import '../mixins.scss';
 
 	.repo {
-		width: 80%;
-
 		background-color: white;
 		box-shadow: var(--shadow);
 		border: var(--primary-border);
 		border-radius: 1rem;
 		color: black;
-
-		@media screen and (min-width: 768px) {
-			width: 45%;
-		}
-
-		@media screen and (min-width: 1024px) {
-			width: 30%;
-		}
 	}
 
 	.repo-main {
