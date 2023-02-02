@@ -1,8 +1,8 @@
 <script lang="ts">
 	import Button from '$components/Button.svelte';
 	import { PUBLIC_GITHUB_CLIENT_ID as clientId } from '$env/static/public';
-	import { authStore } from '../lib/stores/authStore';
-	import { getOauthAuthorizeURL } from '../lib/api/github';
+	import { authStore } from '$lib/stores/authStore';
+	import { getOauthAuthorizeURL } from '$lib/api/github';
 	import bigOctopus from '$images/big-octopus.png';
 </script>
 

@@ -1,9 +1,9 @@
 <script lang="ts">
 	import Error from '$components/Error.svelte';
 	import { fly } from 'svelte/transition';
-	import { searchRepos } from '../../../lib/api/github';
-	import Pagination from '../../../lib/components/Pagination.svelte';
-	import Repository from '../../../lib/components/RepositoryCard.svelte';
+	import { searchRepos } from '$lib/api/github';
+	import Pagination from '$lib/components/Pagination.svelte';
+	import RepositoryCard from '$lib/components/RepositoryCard.svelte';
 	import type { PageData } from './$types';
 
 	const PER_PAGE = 12;
@@ -34,7 +34,7 @@
 		<div class="search-results">
 			{#each repositories as repo}
 				<div transition:fly={{ y: 200, duration: 200 }}>
-					<Repository data={repo} />
+					<RepositoryCard data={repo} />
 				</div>
 			{:else}
 				<p>No results found</p>
