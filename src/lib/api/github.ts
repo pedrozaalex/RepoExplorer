@@ -124,7 +124,7 @@ const byLangUsage = pipe(
 	contramap((lang: [string, number]) => lang[1])
 );
 
-const getOrderedLanguageList = (langs: { [key: string]: number }) =>
+const orderLanguageList = (langs: { [key: string]: number }) =>
 	pipe(
 		langs, // {TypeScript: 500, JavaScript: 1000}
 		toEntries, // [['TypeScript', 500], ['JavaScript', 1000]]
@@ -150,7 +150,7 @@ export function getRepoLanguagues({ owner, name }: { owner: string; name: string
 
 			const { data: langs } = await octokit.rest.repos.listLanguages({ owner, repo: name });
 
-			return getOrderedLanguageList(langs);
+			return orderLanguageList(langs);
 		}
 	});
 }
