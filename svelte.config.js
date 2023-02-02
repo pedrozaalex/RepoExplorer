@@ -14,6 +14,7 @@ const config = {
 			$components: './src/lib/components'
 		},
 		env: {
+			// This is needed so we can access VERCEL_URL in the build stage
 			publicPrefix: "VERCEL_"
 		}
 	}
