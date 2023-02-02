@@ -17,7 +17,7 @@
 	import { calculateLastUpdated } from '$lib/utils';
 
 	import autoAnimate from '@formkit/auto-animate';
-	import { assets } from '../../assets';
+	import Icon from './Icon.svelte';
 	import RepoLanguages from './RepoLanguages.svelte';
 	import Stats from './Stats.svelte';
 
@@ -25,13 +25,13 @@
 
 	$: ({ description, forks, issues, license, name, owner, stars, updatedAt, url, website } = data);
 
-	let showActions = false;
+	let showActions = true;
 </script>
 
 <div
 	class="repo"
 	on:mouseenter={() => (showActions = true)}
-	on:mouseleave={() => (showActions = false)}
+	on:mouseleave={() => (showActions = true)}
 	use:autoAnimate
 >
 	<div class="repo-main">
@@ -66,29 +66,25 @@
 	</div>
 
 	{#if showActions}
-		<div class="actions" class:show={showActions}>
-			<ul>
-				<li>
-					<a href={url} target="_blank" rel="noreferrer">
-						<img src={assets.github} alt="GitHub" height="16" />
-					</a>
-				</li>
+		<ul class="actions" class:show={showActions}>
+			<li>
+				<a href={url} target="_blank" rel="noreferrer">
+					<Icon name="github" size={16} />
+				</a>
+			</li>
 
-				{#if website}
-					<li>
-						<a href={website} target="_blank" rel="noreferrer">
-							<img src={assets.globe} alt="Website" height="16" />
-						</a>
-					</li>
-				{/if}
+			<li>
+				<a href={website} target="_blank" rel="noreferrer" class:disabled={!website}>
+					<Icon name="globe" size={16} />
+				</a>
+			</li>
 
-				<li>
-					<a href={`/repo/${owner}/${name}`}>
-						<img src={assets.maximize} alt="Maximize" height="16" />
-					</a>
-				</li>
-			</ul>
-		</div>
+			<li>
+				<a href={`/repo/${owner}/${name}`}>
+					<Icon name="maximize" size={16} />
+				</a>
+			</li>
+		</ul>
 	{/if}
 </div>
 
@@ -167,26 +163,25 @@
 
 		display: flex;
 		justify-content: flex-end;
-		padding: 0.5rem;
-		border-top: 1px solid var(--darker-gray);
 		background-color: var(--primary-color);
+		padding: 0.2rem;
 		border-radius: 0.8rem;
 
-		ul {
-			display: flex;
-			gap: 1rem;
+		transform: scale(1);
+		transition: transform 0.1s ease-in-out;
+
+		&:hover {
+			transform: scale(1.2);
 		}
 
 		a {
-			color: var(--darker-gray);
-			border-radius: 9999px;
-			background-color: var(--primary-color);
-			@include clickable;
-		}
+			padding: 0.5rem;
+			color: black;
 
-		&:hover {
-			transform: scale(1.3);
+			&:hover {
+				background-color: gray;
+				opacity: 0.5;
+			}
 		}
-		transition: transform 0.1s ease-in-out;
 	}
 </style>

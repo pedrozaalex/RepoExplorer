@@ -28,7 +28,7 @@
 		</a>
 	{:else}
 		<a href={getOauthAuthorizeURL(clientId)}>
-			<Button leftIcon={'github'} rightIcon={'continue'} --background="black" --color="white">
+			<Button leftIcon={'github'} rightIcon={'arrowRight'} --background="black" --color="white">
 				Continue with GitHub
 			</Button>
 		</a>

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { assets } from '../../assets';
+	import Icon from './Icon.svelte';
 
 	export let page: number;
 	export let totalItems: number;
@@ -21,7 +21,7 @@
 
 <nav class="pagination">
 	<a class="pagination-link" class:disabled={page <= 1} href={`?page=${page - 1}`}>
-		<img src={assets.arrowLeft} alt="previous" />
+		<Icon name="arrowLeft" />
 	</a>
 
 	<form on:submit|preventDefault={goToPage} class="pagination-input">
@@ -30,7 +30,7 @@
 	</form>
 
 	<a class="pagination-link" class:disabled={page >= totalPages} href={`?page=${page + 1}`}>
-		<img src={assets.arrowRight} alt="next" />
+		<Icon name="arrowRight" />
 	</a>
 </nav>
 
@@ -48,6 +48,7 @@
 	.pagination-link {
 		@include clickable;
 		background-color: var(--primary-color);
+		color: var(--on-primary-color);
 		height: 2rem;
 		width: 2rem;
 		border-radius: 50%;
