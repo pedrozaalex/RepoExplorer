@@ -18,7 +18,7 @@ export function stringToColour(str: string) {
 			}
 		}
 
-		hue = hue % 360;
+		hue = (hue + 250) % 360;
 
 		//Determine the saturation
 		const vowels = ['A', 'a', 'E', 'e', 'I', 'i', 'O', 'o', 'U', 'u'];
@@ -72,21 +72,25 @@ const getDistanceFromNow = (date: Date) =>
 		addSuffix: true
 	});
 
-export const calculateLastUpdated = (updatedAt: string) =>
+/**
+ * Calculates the last updated time from an ISO string
+ * @param updatedAt ISO string
+ * @returns string
+ *
+ * @example
+ * calculateLastUpdatedFromISO('2020-10-01T00:00:00Z') // '2 days ago'
+ */
+export const calculateLastUpdatedFromISO = (updatedAt: string) =>
 	pipe(
 		updatedAt, // '2020-10-01T00:00:00Z'
 		parseISO, // Date
 		getDistanceFromNow // '2 days ago'
 	);
 
-export function ensureHttps(url: string) {
-	if (url.startsWith('http://')) {
-		return `https://${url.slice(7)}`;
+export function ensureHasProtocol(url: string) {
+	if (url.startsWith('https://') || url.startsWith('http://')) {
+		return url;
 	}
 
-	if (!url.startsWith('https://')) {
-		return `https://${url}`;
-	}
-
-	return url;
+	return `https://${url}`;
 }

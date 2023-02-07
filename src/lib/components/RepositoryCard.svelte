@@ -14,7 +14,7 @@
 </script>
 
 <script lang="ts">
-	import { calculateLastUpdated } from '$lib/utils';
+	import { calculateLastUpdatedFromISO } from '$lib/utils';
 	import autoAnimate from '@formkit/auto-animate';
 	import { fade } from 'svelte/transition';
 	import Icon from './Icon.svelte';
@@ -23,22 +23,20 @@
 
 	export let data: StandardRepo;
 	$: ({ description, forks, issues, license, name, owner, stars, updatedAt, url, website } = data);
+	$: lastUpdate = calculateLastUpdatedFromISO(updatedAt);
 
 	let showActions = false;
+	const hideActions = () => (showActions = false);
+	const displayActions = () => (showActions = true);
 </script>
 
-<div
-	class="repo"
-	on:mouseenter={() => (showActions = true)}
-	on:mouseleave={() => (showActions = false)}
->
+<div class="repo" on:mouseenter={displayActions} on:mouseleave={hideActions}>
 	<div class="repo-main">
-		<a href={`/repo/${owner}/${name}`}>
-			<h2 class="repo-title" title={`${owner}/${name}`}>
-				<span class="repo-owner">{owner}/</span>
-				<span class="repo-name">{name}</span>
-			</h2>
-		</a>
+		<h2 class="repo-title">
+			<a href={`https://github.com/${owner}`} class="repo-owner">{owner}</a>
+			<span class="slash">/</span>
+			<a href={`/repo/${owner}/${name}`} class="repo-name">{name}</a>
+		</h2>
 
 		<p class="repo-description" title={description}>{description}</p>
 
@@ -54,7 +52,7 @@
 
 					<p>
 						Last update:<br />
-						<span title={updatedAt}>{calculateLastUpdated(updatedAt)}</span>
+						<span title={updatedAt}>{lastUpdate}</span>
 					</p>
 				</aside>
 
@@ -104,21 +102,26 @@
 
 	.repo-title {
 		font-family: var(--font-mono);
-		text-align: center;
 		display: flex;
-		flex-direction: column;
 		margin-bottom: 1rem;
+		align-items: baseline;
+		justify-content: center;
+		gap: 0.25rem;
 
-		.repo-owner {
-			font-size: 0.9rem;
-			line-height: 1em;
-			color: var(--darker-gray);
-			text-align: start;
+		& > * {
+			@include ellipsis;
 		}
 
-		.repo-name {
-			@include ellipsis;
-			font-style: italic;
+		a {
+			text-decoration: underline;
+
+			&:hover {
+				text-decoration: none;
+			}
+		}
+
+		.slash {
+			color: var(--darker-gray);
 		}
 	}
 
@@ -128,8 +131,6 @@
 		line-height: 1.2em;
 		font-family: var(--font-mono);
 		text-align: justify;
-
-		@include lines(3);
 	}
 
 	.repo-stats {
@@ -157,8 +158,8 @@
 
 	.actions {
 		position: absolute;
-		right: 4px;
-		top: 4px;
+		right: 0.25rem;
+		top: 0.25rem;
 
 		display: flex;
 		justify-content: flex-end;

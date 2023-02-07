@@ -47,7 +47,7 @@
 
 		<div class="search-results">
 			{#each repositories as repo}
-				<div transition:fly={{ y: 200, duration: 200 }}>
+				<div transition:fly={{ y: 200, duration: 200 }} class="repo-card-wrapper">
 					<RepositoryCard data={repo} />
 				</div>
 			{:else}
@@ -73,22 +73,16 @@
 
 	.search-results {
 		display: flex;
+		flex-direction: column;
 		gap: 2.5rem;
 		flex-wrap: wrap;
 		justify-content: space-evenly;
 		align-items: flex-start;
 		max-width: 100%;
+	}
 
-		& > div {
-			width: 80%;
-
-			@media screen and (min-width: 768px) {
-				width: 45%;
-			}
-
-			@media screen and (min-width: 1024px) {
-				width: 30%;
-			}
-		}
+	.repo-card-wrapper {
+		width: 100%;
+		max-width: 600px;
 	}
 </style>

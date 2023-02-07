@@ -1,8 +1,6 @@
+import { redirect } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 
-export const load = (({ params }) => {
-	return {
-		owner: params.owner,
-		name: params.name
-	};
-}) satisfies PageLoad;
+export const load: PageLoad = ({ url }) => {
+	throw redirect(302, `${url.pathname}/about`);
+};
