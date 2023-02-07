@@ -33,5 +33,6 @@
 <style lang="scss">
 	.root {
 		padding: 0;
+		position: relative;
 	}
 </style>

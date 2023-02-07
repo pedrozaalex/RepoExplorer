@@ -257,14 +257,15 @@ export function getRepoContents({ owner, name, path }: GetRepoContentsParams) {
 					path
 				});
 
+				console.log('getRepoContents', data);
+
 				switch (typeof data) {
 					case 'object':
 						if (Array.isArray(data)) {
 							return data.map((item) => ({
 								name: item.name,
 								path: item.path,
-								type: item.type,
-								content: item.type === 'file' ? item.content : undefined
+								type: item.type
 							}));
 						}
 
@@ -272,7 +273,8 @@ export function getRepoContents({ owner, name, path }: GetRepoContentsParams) {
 							{
 								name: data.name,
 								path: data.path,
-								type: data.type
+								type: data.type,
+								content: window.atob(data.content)
 							}
 						];
 					default:
