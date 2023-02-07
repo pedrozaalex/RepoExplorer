@@ -8,19 +8,15 @@
 
 <script lang="ts">
 	import { onMount } from 'svelte';
-
 	import { slide } from 'svelte/transition';
-	import { getRepoContents } from '../api/github';
-	import CodeViewer from './CodeViewer.svelte';
 	import Icon from './Icon.svelte';
-	import Modal from './Modal.svelte';
+	import InspectFileDialog from './InspectFileDialog.svelte';
 
 	export let owner: string;
 	export let name: string;
 	export let file: { name: string; path: string };
 
 	let expanded = false;
-	$: fetchContentsResult = getRepoContents({ owner, name, path: file.path });
 
 	function openFile() {
 		collapseAllFiles();
@@ -50,17 +46,7 @@
 	</button>
 
 	{#if expanded}
-		<Modal on:close={closeFile} header={file.name}>
-			{#if $fetchContentsResult.isLoading}
-				<p>Loading...</p>
-			{:else if $fetchContentsResult.error}
-				<p>Error: {$fetchContentsResult.error}</p>
-			{:else if $fetchContentsResult.data}
-				{@const code = $fetchContentsResult.data[0].content ?? ''}
-
-				<CodeViewer {code} />
-			{/if}
-		</Modal>
+		<InspectFileDialog {owner} {name} {file} on:close={closeFile} />
 	{/if}
 </li>
 

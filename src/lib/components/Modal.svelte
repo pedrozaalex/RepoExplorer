@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher, onMount } from 'svelte';
-	import { fly } from 'svelte/transition';
+	import { fade, fly } from 'svelte/transition';
 
 	export let header: string | null = null;
 
@@ -24,10 +24,15 @@
 	});
 </script>
 
-<div class="modal-root" transition:fly={{ duration: 100, y: 100 }}>
-	<div class="modal-overlay" on:click={close} on:keypress={handleKeyPress} />
+<div class="modal-root">
+	<div
+		class="modal-overlay"
+		on:click={close}
+		on:keypress={handleKeyPress}
+		transition:fade={{ duration: 100 }}
+	/>
 
-	<div class="modal-body">
+	<div class="modal-body" transition:fly={{ duration: 100, delay: 100, y: 100 }}>
 		{#if header}
 			<h2 class="modal-header">{header}</h2>
 		{/if}
@@ -78,6 +83,7 @@
 		font-size: 1.5rem;
 		font-weight: 600;
 		border-bottom: 1px solid #eee;
+		margin-right: 4rem;
 	}
 
 	.modal-content {
