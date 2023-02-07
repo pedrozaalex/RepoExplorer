@@ -1,4 +1,4 @@
-import adapter from '@sveltejs/adapter-auto';
+import adapter from '@sveltejs/adapter-vercel';
 import { vitePreprocess } from '@sveltejs/kit/vite';
 
 /** @type {import('@sveltejs/kit').Config} */
@@ -8,14 +8,16 @@ const config = {
 	preprocess: vitePreprocess(),
 
 	kit: {
-		adapter: adapter(),
+		adapter: adapter({
+			runtime: 'nodejs18.x'
+		}),
 		alias: {
 			$images: './src/lib/assets/images',
 			$components: './src/lib/components'
 		},
 		env: {
 			// This is needed so we can access VERCEL_URL in the build stage
-			publicPrefix: "VERCEL_"
+			publicPrefix: 'VERCEL_'
 		}
 	}
 };

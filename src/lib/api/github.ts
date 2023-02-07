@@ -1,6 +1,6 @@
 import { browser } from '$app/environment';
 import { VERCEL_URL } from '$env/static/public';
-import { ensureHttps } from '$lib/utils';
+import { ensureHasProtocol } from '$lib/utils';
 import type { Endpoints } from '@octokit/types';
 import { createQuery } from '@tanstack/svelte-query';
 import { number } from 'fp-ts';
@@ -14,8 +14,16 @@ import { get } from 'svelte/store';
 import type { StandardRepo } from '../components/RepositoryCard.svelte';
 import { authStore } from '../stores/authStore';
 
+function getOctokitInstance() {
+	const { octokit } = get(authStore);
+
+	if (!octokit) throw new Error('Octokit not initialized');
+
+	return octokit;
+}
+
 export function getOauthAuthorizeURL(clientId: string) {
-	const url = ensureHttps(VERCEL_URL);
+	const url = ensureHasProtocol(VERCEL_URL);
 	return `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${url}/login/github/callback`;
 }
 
@@ -57,7 +65,7 @@ type MinimalRepo = Pick<
 	| 'homepage'
 >;
 
-function convertToStandardRepo(githubRepo: MinimalRepo): StandardRepo {
+export function convertToStandardRepo(githubRepo: MinimalRepo): StandardRepo {
 	return {
 		description: githubRepo.description ?? 'No description',
 		forks: githubRepo.forks_count,
@@ -98,9 +106,7 @@ export function searchRepos({
 		queryFn: async (): SearchReposResponse => {
 			if (!browser) return { items: [], totalItems: 0, incompleteResults: false };
 
-			const octokit = get(authStore).octokit;
-
-			if (!octokit) throw new Error('Octokit not initialized');
+			const octokit = getOctokitInstance();
 
 			const { data } = await octokit.rest.search.repos({
 				q: searchTerm,
@@ -134,19 +140,21 @@ const orderLanguageList = (langs: { [key: string]: number }) =>
 		filter(isString)
 	);
 
-export function getRepoLanguagues({ owner, name }: { owner: string; name: string }) {
+type BaseRepoParams = {
+	owner: string;
+	name: string;
+};
+
+type GetRepoLanguagesParams = BaseRepoParams;
+type GetRepoLanguagesResponse = Promise<string[]>;
+
+export function getRepoLanguagues({ owner, name }: GetRepoLanguagesParams) {
 	return createQuery({
 		queryKey: ['languages', owner, name],
-		queryFn: async (): Promise<string[]> => {
+		queryFn: async (): GetRepoLanguagesResponse => {
 			if (!browser) return [];
 
-			const octokit = get(authStore).octokit;
-
-			if (!octokit) {
-				console.error('Octokit not initialized');
-
-				return [];
-			}
+			const octokit = getOctokitInstance();
 
 			const { data: langs } = await octokit.rest.repos.listLanguages({ owner, repo: name });
 
@@ -155,19 +163,16 @@ export function getRepoLanguagues({ owner, name }: { owner: string; name: string
 	});
 }
 
-export function checkIfRepoIsStarred({ owner, name }: { owner: string; name: string }) {
+type CheckIfRepoIsStarredParams = BaseRepoParams;
+type CheckIfRepoIsStarredResponse = Promise<boolean>;
+
+export function checkIfRepoIsStarred({ owner, name }: CheckIfRepoIsStarredParams) {
 	return createQuery({
 		queryKey: ['starred', owner, name],
-		queryFn: async (): Promise<boolean> => {
+		queryFn: async (): CheckIfRepoIsStarredResponse => {
 			if (!browser) return false;
 
-			const octokit = get(authStore).octokit;
-
-			if (!octokit) {
-				console.error('Octokit not initialized');
-
-				return false;
-			}
+			const octokit = getOctokitInstance();
 
 			try {
 				await octokit.rest.activity.getRepoSubscription({ owner, repo: name });
@@ -180,28 +185,103 @@ export function checkIfRepoIsStarred({ owner, name }: { owner: string; name: str
 	});
 }
 
-type GetOneRepoParams = {
-	owner: string;
-	name: string;
-};
+type GetOneRepoParams = BaseRepoParams;
+
+type GetOneRepoResponse = Promise<StandardRepo | undefined>;
 
 export function getOneRepo({ owner, name }: GetOneRepoParams) {
 	return createQuery({
 		queryKey: ['repo', owner, name],
-		queryFn: async (): Promise<StandardRepo | undefined> => {
-			if (!browser) return;
+		queryFn: async (): GetOneRepoResponse => {
+			if (!browser) return undefined;
 
-			const octokit = get(authStore).octokit;
-
-			if (!octokit) {
-				console.error('Octokit not initialized');
-
-				return;
-			}
+			const octokit = getOctokitInstance();
 
 			const { data } = await octokit.rest.repos.get({ owner, repo: name });
 
 			return convertToStandardRepo(data);
+		}
+	});
+}
+
+type GetRepoReadmeParams = BaseRepoParams;
+type GetRepoReadmeResponse = Promise<string | null>;
+
+export function getRepoReadme({ owner, name }: GetRepoReadmeParams) {
+	return createQuery({
+		queryKey: ['readme', owner, name],
+		queryFn: async (): GetRepoReadmeResponse => {
+			if (!browser) return null;
+
+			const octokit = getOctokitInstance();
+
+			try {
+				const { data } = await octokit.rest.repos.getReadme({
+					owner,
+					repo: name,
+					mediaType: { format: 'html' }
+				});
+
+				return data as unknown as string;
+			} catch (error) {
+				console.error('Error getting readme', error);
+				return null;
+			}
+		}
+	});
+}
+
+type GetRepoContentsParams = BaseRepoParams & {
+	path: string;
+};
+type StandardRepoContents = {
+	name: string;
+	path: string;
+	type: 'file' | 'dir' | 'symlink' | 'submodule';
+	content?: string;
+};
+type GetRepoContentsResponse = Promise<StandardRepoContents[]>;
+
+export function getRepoContents({ owner, name, path }: GetRepoContentsParams) {
+	return createQuery({
+		queryKey: ['contents', owner, name, path],
+		queryFn: async (): GetRepoContentsResponse => {
+			if (!browser) return [];
+
+			const octokit = getOctokitInstance();
+
+			try {
+				const { data } = await octokit.rest.repos.getContent({
+					owner,
+					repo: name,
+					path
+				});
+
+				switch (typeof data) {
+					case 'object':
+						if (Array.isArray(data)) {
+							return data.map((item) => ({
+								name: item.name,
+								path: item.path,
+								type: item.type,
+								content: item.type === 'file' ? item.content : undefined
+							}));
+						}
+
+						return [
+							{
+								name: data.name,
+								path: data.path,
+								type: data.type
+							}
+						];
+					default:
+						return [];
+				}
+			} catch (error) {
+				console.error('Error getting contents', error);
+				return [];
+			}
 		}
 	});
 }

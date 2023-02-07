@@ -40,6 +40,7 @@
 	:global(body) {
 		font-family: var(--font-sans);
 		color: var(--on-background-color);
+		overflow-x: hidden;
 	}
 
 	.layout-root {
