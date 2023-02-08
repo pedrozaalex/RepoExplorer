@@ -21,7 +21,7 @@
 
 <nav class="pagination">
 	<a class="pagination-link" class:disabled={page <= 1} href={`?page=${page - 1}`}>
-		<Icon name="arrowLeft" />
+		<iconify-icon icon="material-symbols:arrow-back-rounded" height="24" />
 	</a>
 
 	<form on:submit|preventDefault={goToPage} class="pagination-input">
@@ -30,7 +30,7 @@
 	</form>
 
 	<a class="pagination-link" class:disabled={page >= totalPages} href={`?page=${page + 1}`}>
-		<Icon name="arrowRight" />
+		<iconify-icon icon="material-symbols:arrow-forward-rounded" height="24" />
 	</a>
 </nav>
 

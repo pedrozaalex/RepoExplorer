@@ -73,6 +73,7 @@
 		max-height: 80vh;
 		background-color: #fff;
 		border-radius: 8px;
+		overflow: hidden;
 	}
 
 	$headerHeight: 4rem;
@@ -87,8 +88,8 @@
 	}
 
 	.modal-content {
-		padding: 1rem;
-		max-height: calc(80vh - $headerHeight);
-		overflow: scroll;
+		margin: 1rem;
+		max-height: calc(80vh - ($headerHeight + 2rem));
+		overflow: auto;
 	}
 </style>

@@ -12,7 +12,7 @@
 
 	export let owner: string;
 	export let name: string;
-	export let file: { name: string; path: string; downloadUrl: string | undefined };
+	export let file: { name: string; path: string; downloadUrl?: string | undefined };
 
 	const fetchContentsResult = getRepoContents({ owner, name, path: file.path });
 </script>

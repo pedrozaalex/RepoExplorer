@@ -4,6 +4,8 @@
 	import '@fontsource/space-mono/400.css';
 	import '@fontsource/space-mono/700.css';
 
+	import 'iconify-icon';
+
 	import { browser } from '$app/environment';
 	import Footer from '$components/Footer.svelte';
 	import Navbar from '$components/Navbar.svelte';

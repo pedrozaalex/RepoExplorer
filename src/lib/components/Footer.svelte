@@ -1,13 +1,9 @@
-<script>
-	import Icon from './Icon.svelte';
-</script>
-
 <footer>
 	<p>
 		Copyright © 2022 - All right reserved by ACME Industries Ltd
 
 		<a href="https://github.com/pedrozaalex/RepoExplorer" target="_blank" rel="noopener noreferrer">
-			<Icon name="github" />
+			<iconify-icon icon="mdi:github" style="color: white" height="24" />
 		</a>
 	</p>
 </footer>

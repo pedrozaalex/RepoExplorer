@@ -18,7 +18,7 @@
 <form class="search-box" on:submit|preventDefault={search}>
 	<input bind:value={searchTerm} placeholder="Your search term..." bind:this={input} />
 	<button type="submit">
-		<Icon name="magnifyingGlass" color="black" />
+		<iconify-icon icon="fa6-solid:magnifying-glass" style="color: black;" height="20" />
 	</button>
 </form>
 
