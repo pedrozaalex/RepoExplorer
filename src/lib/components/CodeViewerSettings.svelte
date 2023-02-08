@@ -16,13 +16,6 @@
 	let themeSelect: HTMLSelectElement;
 
 	$: toggleMenu = () => (isOpen = !isOpen);
-
-	function handleSave() {
-		setFontSize(fontSizeInput.value);
-		setLineHeight(lineHeightInput.value);
-		setTheme(themeSelect.value as CodeViewerTheme);
-		isOpen = false;
-	}
 </script>
 
 <button on:click={toggleMenu} class="toggle-button" class:open={isOpen}>

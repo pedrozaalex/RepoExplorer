@@ -79,9 +79,18 @@
 	{#await highlightedCode}
 		<p>Highlighting code...</p>
 	{:then highlighted}
+		{@const numberOfLines = highlighted.split('\n').length - 2}
+
 		<div
+			class="code-viewer-content"
 			style="font-size: {$codeViewerSettingsStore.fontSize}px; line-height: {$codeViewerSettingsStore.lineHeight}em;"
 		>
+			<aside>
+				{#each Array(numberOfLines) as _, i}
+					<span>{i + 1}</span>
+				{/each}
+			</aside>
+
 			{@html sanitize(highlighted, {
 				allowedTags: ['pre', 'span'],
 				allowedAttributes: {
@@ -117,6 +126,31 @@
 
 		&:hover {
 			text-decoration: none;
+		}
+	}
+
+	.code-viewer-content {
+		display: flex;
+		flex-direction: row;
+		white-space: pre-wrap;
+		overflow: auto;
+
+		aside {
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+			align-items: flex-end;
+			padding-right: 0.5rem;
+			color: gray;
+			font-size: 0.75rem;
+			letter-spacing: 0.05rem;
+			user-select: none;
+		}
+
+		span {
+			display: inline-block;
+			width: 1.5rem;
+			text-align: right;
 		}
 	}
 </style>
