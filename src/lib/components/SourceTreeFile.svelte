@@ -41,7 +41,7 @@
 
 <li transition:slide={{ duration: 100 }}>
 	<button class="file" on:click={openFile}>
-		<Icon name="file" />
+		<iconify-icon icon="mdi:file-document-outline" height="20" />
 		{file.name}
 	</button>
 

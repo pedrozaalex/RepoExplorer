@@ -65,19 +65,21 @@
 		<ul class="actions" class:show={showActions} transition:fade={{ duration: 100 }}>
 			<li class="action">
 				<a href={url} target="_blank" rel="noreferrer">
-					<Icon name="github" size={16} />
+					<iconify-icon icon="mdi:github" height="20" />
 				</a>
 			</li>
 
-			<li class="action">
-				<a href={website} target="_blank" rel="noreferrer" class:disabled={!website}>
-					<Icon name="globe" size={16} />
-				</a>
-			</li>
+			{#if website && typeof website === 'string'}
+				<li class="action">
+					<a href={website} target="_blank" rel="noreferrer" class:disabled={!website}>
+						<iconify-icon icon="mdi:web" height="20" />
+					</a>
+				</li>
+			{/if}
 
 			<li class="action">
 				<a href={`/repo/${owner}/${name}`}>
-					<Icon name="maximize" size={16} />
+					<iconify-icon icon="mdi:arrow-expand" height="20" />
 				</a>
 			</li>
 		</ul>
@@ -101,7 +103,7 @@
 	}
 
 	.repo-title {
-		font-family: var(--font-mono);
+		font-family: var(--font-sans);
 		display: flex;
 		margin-bottom: 1rem;
 		align-items: baseline;
@@ -129,7 +131,7 @@
 		margin-bottom: 0.75rem;
 		font-size: 0.9rem;
 		line-height: 1.2em;
-		font-family: var(--font-mono);
+		font-family: var(--font-sans);
 		text-align: justify;
 	}
 
@@ -162,11 +164,12 @@
 		top: 0.25rem;
 
 		display: flex;
-		justify-content: flex-end;
+		justify-content: space-between;
+		align-items: center;
 		gap: 0.5rem;
 		background-color: var(--primary-color);
 		border-radius: 0.8rem;
-		padding: 0.2rem;
+		padding: 0.3rem;
 
 		transform: scale(1);
 		transition: transform 0.1s ease-in-out;
@@ -175,8 +178,8 @@
 			transform: scale(1.2);
 		}
 
-		.action {
-			padding: 0.3rem;
+		a {
+			display: flex;
 		}
 	}
 </style>

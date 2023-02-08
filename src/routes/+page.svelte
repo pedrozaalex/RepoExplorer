@@ -28,8 +28,15 @@
 		</a>
 	{:else}
 		<a href={getOauthAuthorizeURL(clientId)}>
-			<Button leftIcon={'github'} rightIcon={'arrowRight'} --background="black" --color="white">
+			<Button --background="black" --color="white">
+				<iconify-icon slot="leftIcon" icon="mdi:github" style="color: white" height="24" />
 				Continue with GitHub
+				<iconify-icon
+					slot="rightIcon"
+					icon="material-symbols:arrow-forward-rounded"
+					style="color: white"
+					height="24"
+				/>
 			</Button>
 		</a>
 	{/if}

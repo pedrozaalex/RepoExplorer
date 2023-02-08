@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { clickOutside } from '$lib/utils';
 	import {
 		codeViewerSettingsStore,
 		CodeViewerTheme,
@@ -7,54 +6,70 @@
 		setLineHeight,
 		setTheme
 	} from './CodeViewer.svelte';
-	import Icon from './Icon.svelte';
 
 	let isOpen = false;
 
-	let fontSizeInput: HTMLInputElement;
-	let lineHeightInput: HTMLInputElement;
-	let themeSelect: HTMLSelectElement;
-
 	$: toggleMenu = () => (isOpen = !isOpen);
+
+	function handleFontSizeChange(e: { currentTarget: HTMLInputElement }) {
+		setFontSize(e.currentTarget.value);
+	}
+
+	function handleLineHeightChange(e: { currentTarget: HTMLInputElement }) {
+		setLineHeight(e.currentTarget.value);
+	}
+
+	function handleThemeChange(e: { currentTarget: HTMLSelectElement }) {
+		setTheme(e.currentTarget.value as CodeViewerTheme);
+	}
+
+	function windowClickHandler() {
+		if (isOpen) {
+			toggleMenu();
+		}
+	}
 </script>
 
-<button on:click={toggleMenu} class="toggle-button" class:open={isOpen}>
-	<Icon name="settings" />
+<button
+	on:click|stopPropagation={toggleMenu}
+	class="toggle-button"
+	class:open={isOpen}
+	class:disabled={false}
+>
+	<iconify-icon icon="ic:baseline-settings" height="24" />
 </button>
 
+<svelte:window on:click={windowClickHandler} />
+
 {#if isOpen}
-	<form class="menu" use:clickOutside on:click_outside={() => (isOpen = false)}>
+	<form class="menu" on:click|stopPropagation on:keypress={() => {}}>
 		<div class="menu-item">
-			<label for="font-size">Font Size</label>
+			<iconify-icon icon="radix-icons:font-size" height="24" />
 			<input
 				type="range"
 				id="font-size"
-				min="4"
+				min="12"
 				max="24"
 				step="1"
 				value={$codeViewerSettingsStore.fontSize}
-				on:change={(e) => setFontSize(e.target.value)}
+				on:change={handleFontSizeChange}
 			/>
 		</div>
 		<div class="menu-item">
-			<label for="line-height">Line Height</label>
+			<iconify-icon icon="radix-icons:line-height" height="24" />
 			<input
 				type="range"
 				id="line-height"
-				min="1"
+				min="1.5"
 				max="3"
 				step="0.1"
 				value={$codeViewerSettingsStore.lineHeight}
-				on:change={(e) => setLineHeight(e.target.value)}
+				on:change={handleLineHeightChange}
 			/>
 		</div>
 		<div class="menu-item">
-			<label for="theme">Theme</label>
-			<select
-				id="theme"
-				value={$codeViewerSettingsStore.theme}
-				on:change={(e) => setTheme(e.target.value)}
-			>
+			<iconify-icon icon="ic:baseline-color-lens" height="24" />
+			<select id="theme" value={$codeViewerSettingsStore.theme} on:change={handleThemeChange}>
 				<option value={CodeViewerTheme.EightiesDark}>Eighties Dark</option>
 				<option value={CodeViewerTheme.InspiredGitHub}>Inspired GitHub</option>
 				<option value={CodeViewerTheme.MochaDark}>Mocha Dark</option>
@@ -72,6 +87,8 @@
 
 	.toggle-button {
 		background: var(--primary-color);
+		width: 2.5rem;
+		height: 2.5rem;
 		border: none;
 		cursor: pointer;
 		padding: 0.5rem;
@@ -90,7 +107,7 @@
 		border-radius: 0.5rem;
 		padding: 1rem;
 		position: absolute;
-		top: 2.5rem;
+		top: 3rem;
 		right: 0;
 		width: 15rem;
 	}
@@ -100,30 +117,7 @@
 		align-items: center;
 		justify-content: space-between;
 		margin-bottom: 0.5rem;
-	}
-
-	.menu-actions {
-		margin: 0 1rem;
-		display: flex;
-		align-items: center;
-		justify-content: space-evenly;
-		margin-top: 1rem;
-
-		button {
-			@include clickable;
-			cursor: pointer;
-			background-color: var(--primary-color);
-			border-radius: 9999px;
-			padding: 0.5rem 1rem;
-
-			&[type='submit'] {
-				background-color: var(--secondary-color);
-			}
-		}
-	}
-
-	label {
-		margin-right: 0.5rem;
+		gap: 0.5rem;
 	}
 
 	input[type='range'] {

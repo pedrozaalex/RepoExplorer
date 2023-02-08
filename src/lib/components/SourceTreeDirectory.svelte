@@ -14,7 +14,10 @@
 
 <li class="root" transition:slide={{ duration: 100 }}>
 	<button class="folder" on:click={() => (expanded = !expanded)}>
-		<Icon name={expanded ? 'folderCollapse' : 'folderExpand'} />
+		<iconify-icon
+			icon={expanded ? 'material-symbols:folder-open-rounded' : 'material-symbols:folder'}
+			height="20"
+		/>
 		{folder.name}
 	</button>
 

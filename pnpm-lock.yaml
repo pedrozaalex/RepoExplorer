@@ -19,6 +19,7 @@ specifiers:
   eslint-plugin-svelte3: ^4.0.0
   fp-ts: ^2.13.1
   highlight.js: ^11.7.0
+  iconify-icon: ^1.0.4
   isomorphic-fetch: ^3.0.0
   octokit: ^2.0.14
   prettier: ^2.8.0
@@ -44,6 +45,7 @@ dependencies:
   '@tanstack/svelte-query': 4.22.4_svelte@3.55.1
   date-fns: 2.29.3
   fp-ts: 2.13.1
+  iconify-icon: 1.0.4
   isomorphic-fetch: 3.0.0
   octokit: 2.0.14
   sanitize-html: 2.9.0
@@ -322,6 +324,10 @@ packages:
   /@humanwhocodes/object-schema/1.2.1:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
     dev: true
+
+  /@iconify/types/2.0.0:
+    resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
+    dev: false
 
   /@jridgewell/resolve-uri/3.1.0:
     resolution: {integrity: sha512-F2msla3tad+Mfht5cJq7LSXcdudKTWCVYUgw6pLFOOHSTtZlj6SWNYAp+AhuqLmWdBO2X5hPrLcu8cVP8fy28w==}
@@ -1704,6 +1710,12 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /iconify-icon/1.0.4:
+    resolution: {integrity: sha512-VWx4aiYOlrf2PRZewBUtXdouuvkbqBm6Nt/06GO/Ofz4LHfB3e4U01EWRwOddy1QVZFZ2/jghwInXG6XerfW4Q==}
+    dependencies:
+      '@iconify/types': 2.0.0
+    dev: false
 
   /ignore/5.2.4:
     resolution: {integrity: sha512-MAb38BcSbH0eHNBxn7ql2NH/kX33OkB3lZ1BNdh7ENeRChHTYsTvWrMubiIAMNS2llXEEgZ1MUOBtXChP3kaFQ==}

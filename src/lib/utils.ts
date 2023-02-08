@@ -95,19 +95,74 @@ export function ensureHasProtocol(url: string) {
 	return `https://${url}`;
 }
 
-/** Dispatch event on click outside of node */
-export function clickOutside(node: Node) {
-	const handleClick = (event: MouseEvent) => {
-		if (node && !node.contains(event.target) && !event.defaultPrevented) {
-			node.dispatchEvent(new CustomEvent('click_outside', node));
-		}
-	};
+export const EXT_TO_LANGUAGE = {
+	js: 'javascript',
+	jsx: 'javascript',
+	ts: 'javascript',
+	tsx: 'javascript',
+	vue: 'javascript',
+	css: 'css',
+	scss: 'scss',
+	sass: 'sass',
+	html: 'html',
+	json: 'json',
+	md: 'txt',
+	mdx: 'txt',
+	yml: 'yaml',
+	yaml: 'yaml',
+	graphql: 'graphql',
+	gql: 'graphql',
+	txt: 'txt',
+	sh: 'bash',
+	py: 'python',
+	rb: 'ruby',
+	rs: 'rust',
+	go: 'go',
+	java: 'java',
+	c: 'c',
+	cpp: 'cpp',
+	h: 'c',
+	hpp: 'cpp',
+	cs: 'csharp',
+	swift: 'swift',
+	kt: 'kotlin',
+	php: 'php',
+	lua: 'lua',
+	r: 'r',
+	dart: 'dart',
+	sql: 'sql',
+	hbs: 'handlebars',
+	toml: 'toml',
+	less: 'less',
+	styl: 'stylus',
+	svelte: 'svelte',
+	elm: 'elm',
+	pug: 'pug',
+	diff: 'diff',
+	config: 'txt',
+	conf: 'txt',
+	properties: 'txt',
+	ini: 'txt',
+	log: 'txt',
+	lock: 'txt',
+	markdown: 'markdown',
+	csv: 'txt',
+	tsv: 'txt',
+	env: 'txt'
+};
 
-	document.addEventListener('click', handleClick, true);
+export function isBinaryData(data: string) {
+	// eslint-disable-next-line no-control-regex
+	const binaryRegex = /[\x00-\x08\x0E-\x1F\x7F-\x9F\uFFF0-\uFFFF]/;
+	return binaryRegex.test(data);
+}
 
-	return {
-		destroy() {
-			document.removeEventListener('click', handleClick, true);
-		}
-	};
+export function extractPreTagStyle(html: string): string {
+	const preTagRegex = /<pre.*?style="(.*?)".*?>/;
+	const match = preTagRegex.exec(html);
+	if (match) {
+		return match[1];
+	}
+
+	return '';
 }

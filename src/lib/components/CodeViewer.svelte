@@ -57,18 +57,35 @@
 </script>
 
 <script lang="ts">
-	import init, { highlight } from '@pedrozaalex/highlight-rs';
-	import CodeViewerSettings from './CodeViewerSettings.svelte';
-	import sanitize from 'sanitize-html';
 	import { browser } from '$app/environment';
+	import init, { highlight } from '@pedrozaalex/highlight-rs';
+	import sanitize from 'sanitize-html';
+	import { extractPreTagStyle, EXT_TO_LANGUAGE, isBinaryData } from '../utils';
+	import CodeViewerSettings from './CodeViewerSettings.svelte';
 
 	export let code: string;
 	export let filename: string;
 	export let downloadUrl: string | undefined;
 
-	$: language = filename.split('.').pop() ?? 'text';
+	$: fileExtension = filename.split('.').pop() ?? '';
+	$: language =
+		fileExtension in EXT_TO_LANGUAGE
+			? EXT_TO_LANGUAGE[fileExtension as keyof typeof EXT_TO_LANGUAGE]
+			: 'txt';
 	$: theme = $codeViewerSettingsStore.theme;
-	$: highlightedCode = init().then(() => highlight(code, language, theme));
+	$: highlightedCode = new Promise<string>((resolve, reject) => {
+		if (isBinaryData(code)) {
+			reject();
+		}
+
+		init()
+			.then(() => {
+				resolve(highlight(code, language, theme));
+			})
+			.catch((e) => {
+				reject(e);
+			});
+	});
 </script>
 
 <div class="code-viewer-root">
@@ -79,25 +96,28 @@
 	{#await highlightedCode}
 		<p>Highlighting code...</p>
 	{:then highlighted}
-		{@const numberOfLines = highlighted.split('\n').length - 2}
+		{@const lines = sanitize(highlighted, {
+			allowedTags: ['span'],
+			allowedAttributes: { span: ['style'] }
+		})
+			.split('\n')
+			.slice(1, -1)}
+		{@const heightVars = `
+				--code-viewer-font-size: ${$codeViewerSettingsStore.fontSize}px;
+				--code-viewer-line-height: ${$codeViewerSettingsStore.lineHeight};
+			`}
 
-		<div
-			class="code-viewer-content"
-			style="font-size: {$codeViewerSettingsStore.fontSize}px; line-height: {$codeViewerSettingsStore.lineHeight}em;"
-		>
-			<aside>
-				{#each Array(numberOfLines) as _, i}
-					<span>{i + 1}</span>
+		<div class="code-viewer-content-container" style={heightVars}>
+			<div class="code-viewer-line-numbers-container">
+				{#each lines as _, i}
+					<div class="code-viewer-line-number">{i + 1}</div>
 				{/each}
-			</aside>
-
-			{@html sanitize(highlighted, {
-				allowedTags: ['pre', 'span'],
-				allowedAttributes: {
-					pre: ['style'],
-					span: ['style']
-				}
-			})}
+			</div>
+			<pre
+				class="code-viewer-content"
+				style={extractPreTagStyle(highlighted)}>{#each lines as line}<div class="code-line"><code
+							>{@html line}</code
+						></div>{/each}</pre>
 		</div>
 	{:catch}
 		<p>
@@ -111,8 +131,8 @@
 
 <style lang="scss">
 	.code-viewer-root {
-		overflow: auto;
 		position: relative;
+		max-height: 100%;
 	}
 
 	.settings-overlay {
@@ -129,28 +149,45 @@
 		}
 	}
 
-	.code-viewer-content {
+	.code-viewer-content-container {
 		display: flex;
 		flex-direction: row;
-		white-space: pre-wrap;
-		overflow: auto;
+		overflow-x: auto;
+	}
 
-		aside {
-			display: flex;
-			flex-direction: column;
-			justify-content: flex-start;
-			align-items: flex-end;
-			padding-right: 0.5rem;
-			color: gray;
-			font-size: 0.75rem;
-			letter-spacing: 0.05rem;
-			user-select: none;
+	.code-viewer-line-numbers-container {
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+		align-items: flex-end;
+		padding-right: 0.5rem;
+	}
+
+	.code-viewer-line-number {
+		color: gray;
+		user-select: none;
+		text-align: right;
+		display: inline-block;
+		font-family: var(--font-mono);
+		font-size: var(--code-viewer-font-size);
+		height: calc(var(--code-viewer-line-height) * var(--code-viewer-font-size));
+	}
+
+	.code-viewer-content {
+		.code-line {
+			user-select: text;
+			font-size: var(--code-viewer-font-size);
+			height: calc(var(--code-viewer-line-height) * var(--code-viewer-font-size));
+
+			&:hover {
+				background-color: rgba(0, 0, 0, 0.2);
+			}
 		}
 
-		span {
+		code {
+			height: calc(var(--code-viewer-line-height) * var(--code-viewer-font-size));
+			font-family: var(--font-mono);
 			display: inline-block;
-			width: 1.5rem;
-			text-align: right;
 		}
 	}
 </style>

@@ -1,11 +1,6 @@
 <script lang="ts">
-	import Icon, { type IconName } from './Icon.svelte';
-
 	export let onClick: (() => void) | null = null;
 	export let disabled = false;
-
-	export let leftIcon: IconName | null = null;
-	export let rightIcon: IconName | null = null;
 </script>
 
 <!-- 
@@ -19,17 +14,13 @@
 		- `--outline-color` is used to set the border color of the button.
  -->
 <button class="button-root" on:click={onClick} {disabled}>
-	{#if leftIcon !== null}
-		<Icon name={leftIcon} size={16} />
-	{/if}
+	<slot name="leftIcon" />
 
 	<div class="button-content">
 		<slot />
 	</div>
 
-	{#if rightIcon !== null}
-		<Icon name={rightIcon} size={16} />
-	{/if}
+	<slot name="rightIcon" />
 </button>
 
 <style lang="scss">
@@ -45,7 +36,7 @@
 		cursor: pointer;
 		box-shadow: var(--shadow);
 		border: var(--primary-border);
-		font-family: var(--font-mono);
+		font-family: var(--font-sans);
 		font-weight: 700;
 
 		transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;

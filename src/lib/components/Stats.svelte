@@ -14,17 +14,17 @@
 
 <div class="stats">
 	<div class="stat stars" title="Stars">
-		<Icon name="star" size={16} />
+		<iconify-icon icon="ic:round-star" height="20" />
 		{formatBigNumber(stars)}
 	</div>
 
 	<div class="stat forks" title="Forks">
-		<Icon name="fork" size={16} />
+		<iconify-icon icon="gg:git-fork" height="20" />
 		{formatBigNumber(forks)}
 	</div>
 
 	<div class="stat issues" title="Issues">
-		<Icon name="warning" size={16} />
+		<iconify-icon icon="mdi:git-issue" style="color: black; font-size: 20px;" />
 		{formatBigNumber(issues)}
 	</div>
 </div>
@@ -43,7 +43,7 @@
 		gap: 0.2rem;
 
 		font-size: 1rem;
-		font-family: var(--font-mono);
+		font-family: var(--font-sans);
 		font-weight: 700;
 
 		border-radius: 9999px;
