@@ -1,7 +1,5 @@
 <script lang="ts">
 	import { clickOutside } from '$lib/utils';
-	import { get } from 'svelte/store';
-	import Button from './Button.svelte';
 	import {
 		codeViewerSettingsStore,
 		CodeViewerTheme,

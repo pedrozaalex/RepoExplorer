@@ -57,7 +57,7 @@
 </script>
 
 <script lang="ts">
-	import init, { highlight } from 'highlight-rs';
+	import init, { highlight } from '@pedrozaalex/highlight-rs';
 	import CodeViewerSettings from './CodeViewerSettings.svelte';
 	import sanitize from 'sanitize-html';
 	import { browser } from '$app/environment';
