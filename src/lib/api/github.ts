@@ -239,6 +239,7 @@ type StandardRepoContents = {
 	path: string;
 	type: 'file' | 'dir' | 'symlink' | 'submodule';
 	content?: string;
+	downloadUrl?: string;
 };
 type GetRepoContentsResponse = Promise<StandardRepoContents[]>;
 
@@ -264,7 +265,7 @@ export function getRepoContents({ owner, name, path }: GetRepoContentsParams) {
 								name: item.name,
 								path: item.path,
 								type: item.type,
-								content: item.type === 'file' ? item.content : undefined
+								downloadUrl: item.download_url ?? undefined
 							}));
 						}
 
@@ -272,7 +273,9 @@ export function getRepoContents({ owner, name, path }: GetRepoContentsParams) {
 							{
 								name: data.name,
 								path: data.path,
-								type: data.type
+								type: data.type,
+								content: data.type === 'file' ? window.atob(data.content) : undefined,
+								downloadUrl: data.download_url ?? undefined
 							}
 						];
 					default:

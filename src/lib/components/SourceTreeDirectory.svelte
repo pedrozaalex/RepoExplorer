@@ -44,7 +44,7 @@
 	li {
 		display: flex;
 		flex-direction: column;
-		align-items: flex-start;
+		align-items: stretch;
 		gap: 0.5rem;
 
 		button {
@@ -62,5 +62,11 @@
 
 	.folder {
 		font-weight: bold;
+
+		&:hover {
+			cursor: pointer;
+			background-color: rgba($color: rgb(186, 170, 255), $alpha: 0.3);
+			text-decoration: underline;
+		}
 	}
 </style>
