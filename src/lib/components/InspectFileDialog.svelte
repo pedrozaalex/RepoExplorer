@@ -1,5 +1,4 @@
 <script lang="ts">
-	import autoAnimate from '@formkit/auto-animate';
 	import { createEventDispatcher } from 'svelte';
 	import { getRepoContents } from '../api/github';
 	import CodeViewer from './CodeViewer.svelte';
@@ -13,19 +12,19 @@
 
 	export let owner: string;
 	export let name: string;
-	export let file: { name: string; path: string };
+	export let file: { name: string; path: string; downloadUrl: string | undefined };
 
 	const fetchContentsResult = getRepoContents({ owner, name, path: file.path });
 </script>
 
 <Modal on:close={close} header={file.name}>
 	{#if $fetchContentsResult.isLoading}
-		<p>Loading...</p>
+		<p>Loading file contents...</p>
 	{:else if $fetchContentsResult.error}
 		<p>Error: {$fetchContentsResult.error}</p>
 	{:else if $fetchContentsResult.data}
 		{@const code = $fetchContentsResult.data[0].content ?? ''}
 
-		<CodeViewer {code} />
+		<CodeViewer {code} filename={file.name} downloadUrl={file.downloadUrl} />
 	{/if}
 </Modal>

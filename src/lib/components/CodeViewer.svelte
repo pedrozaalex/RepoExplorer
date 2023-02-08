@@ -1,52 +1,103 @@
 <script lang="ts" context="module">
+	// load settings from local storage
+	import { writable } from 'svelte/store';
+
 	export enum CodeViewerTheme {
-		GitHub = 'github',
-		AtomOneLight = 'atom-one-light',
-		AtomOneDark = 'atom-one-dark',
-		Dracula = 'dracula',
-		Outrun = 'outrun-dark'
+		OceanDark = 'base16-ocean.dark',
+		EightiesDark = 'base16-eighties.dark',
+		MochaDark = 'base16-mocha.dark',
+		OceanLight = 'base16-ocean.light',
+		InspiredGitHub = 'InspiredGitHub',
+		SolarizedDark = 'Solarized (dark)',
+		SolarizedLight = 'Solarized (light)'
 	}
 
-	let selectedTheme = CodeViewerTheme.GitHub;
+	function getThemeFromLocalStorage(): CodeViewerTheme {
+		const theme = localStorage.getItem('code-viewer-theme');
 
-	const getThemeData = (theme: CodeViewerTheme) => {
-		switch (theme) {
-			case CodeViewerTheme.GitHub:
-				return import('svelte-highlight/styles/github');
-			case CodeViewerTheme.AtomOneLight:
-				return import('svelte-highlight/styles/atom-one-light');
-			case CodeViewerTheme.AtomOneDark:
-				return import('svelte-highlight/styles/atom-one-dark');
-			case CodeViewerTheme.Dracula:
-				return import('svelte-highlight/styles/dracula');
-			case CodeViewerTheme.Outrun:
-				return import('svelte-highlight/styles/outrun-dark');
+		if (theme) {
+			return theme as CodeViewerTheme;
 		}
-	};
+
+		return CodeViewerTheme.OceanDark;
+	}
+
+	export const codeViewerSettingsStore = writable<{
+		fontSize: string;
+		lineHeight: string;
+		theme: CodeViewerTheme;
+	}>(
+		browser
+			? {
+					fontSize: localStorage.getItem('code-viewer-font-size') ?? '12',
+					lineHeight: localStorage.getItem('code-viewer-line-height') ?? '1',
+					theme: getThemeFromLocalStorage()
+			  }
+			: {
+					fontSize: '12',
+					lineHeight: '1',
+					theme: CodeViewerTheme.OceanDark
+			  }
+	);
+
+	export function setFontSize(fontSize: string) {
+		localStorage.setItem('code-viewer-font-size', fontSize);
+		codeViewerSettingsStore.update((s) => ({ ...s, fontSize }));
+	}
+
+	export function setLineHeight(lineHeight: string) {
+		localStorage.setItem('code-viewer-line-height', lineHeight);
+		codeViewerSettingsStore.update((s) => ({ ...s, lineHeight }));
+	}
 
 	export function setTheme(theme: CodeViewerTheme) {
-		selectedTheme = theme;
+		localStorage.setItem('code-viewer-theme', theme);
+		codeViewerSettingsStore.update((s) => ({ ...s, theme }));
 	}
-
 </script>
 
 <script lang="ts">
-	import { HighlightAuto } from 'svelte-highlight';
+	import init, { highlight } from 'highlight-rs';
 	import CodeViewerSettings from './CodeViewerSettings.svelte';
+	import sanitize from 'sanitize-html';
+	import { browser } from '$app/environment';
 
 	export let code: string;
-</script>
+	export let filename: string;
+	export let downloadUrl: string | undefined;
 
-<svelte:head>
-	{@html getThemeData(selectedTheme)}
-</svelte:head>
+	$: language = filename.split('.').pop() ?? 'text';
+	$: theme = $codeViewerSettingsStore.theme;
+	$: highlightedCode = init().then(() => highlight(code, language, theme));
+</script>
 
 <div class="code-viewer-root">
 	<div class="settings-overlay">
 		<CodeViewerSettings />
 	</div>
 
-	<HighlightAuto {code} />
+	{#await highlightedCode}
+		<p>Highlighting code...</p>
+	{:then highlighted}
+		<div
+			style="font-size: {$codeViewerSettingsStore.fontSize}px; line-height: {$codeViewerSettingsStore.lineHeight}em;"
+		>
+			{@html sanitize(highlighted, {
+				allowedTags: ['pre', 'span'],
+				allowedAttributes: {
+					pre: ['style'],
+					span: ['style']
+				}
+			})}
+		</div>
+	{:catch}
+		<p>
+			Can't display this file.
+			{#if downloadUrl}
+				<a href={downloadUrl} download={filename}>Download</a> it instead.
+			{/if}
+		</p>
+	{/await}
 </div>
 
 <style lang="scss">
@@ -59,5 +110,13 @@
 		position: fixed;
 		top: 1rem;
 		right: 1rem;
+	}
+
+	a {
+		text-decoration: underline;
+
+		&:hover {
+			text-decoration: none;
+		}
 	}
 </style>
