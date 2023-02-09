@@ -33,7 +33,9 @@
 <div class="repo" on:mouseenter={displayActions} on:mouseleave={hideActions}>
 	<div class="repo-main">
 		<h2 class="repo-title">
-			<a href={`https://github.com/${owner}`} class="repo-owner">{owner}</a>
+			<a href={`https://github.com/${owner}`} class="repo-owner" target="_blank" rel="noreferrer">
+				{owner}
+			</a>
 			<span class="slash">/</span>
 			<a href={`/repo/${owner}/${name}`} class="repo-name">{name}</a>
 		</h2>
@@ -56,7 +58,7 @@
 					</p>
 				</aside>
 
-				<Stats {stars} {forks} {issues} />
+				<Stats {owner} {name} {stars} {forks} {issues} />
 			</div>
 		</div>
 	</div>

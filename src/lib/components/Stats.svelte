@@ -1,4 +1,6 @@
 <script lang="ts">
+	export let owner: string;
+	export let name: string;
 	export let stars: number;
 	export let forks: number;
 	export let issues: number;
@@ -11,26 +13,43 @@
 </script>
 
 <div class="stats">
-	<div class="stat stars" title="Stars">
+	<a
+		class="stat"
+		title="Stars"
+		href="https://github.com/{owner}/{name}/stargazers"
+		target="_blank"
+		rel="noopener noreferrer"
+	>
 		<iconify-icon icon="ic:round-star" height="20" />
 		{formatBigNumber(stars)}
-	</div>
+	</a>
 
-	<div class="stat forks" title="Forks">
+	<a
+		class="stat"
+		title="Forks"
+		href="https://github.com/{owner}/{name}/network/members"
+		target="_blank"
+		rel="noopener noreferrer"
+	>
 		<iconify-icon icon="gg:git-fork" height="20" />
 		{formatBigNumber(forks)}
-	</div>
+	</a>
 
-	<div class="stat issues" title="Issues">
+	<a
+		class="stat"
+		title="Issues"
+		href="https://github.com/{owner}/{name}/issues"
+		target="_blank"
+		rel="noopener noreferrer"
+	>
 		<iconify-icon icon="mdi:git-issue" style="color: black; font-size: 20px;" />
 		{formatBigNumber(issues)}
-	</div>
+	</a>
 </div>
 
 <style lang="scss">
 	.stats {
 		display: flex;
-		flex-direction: column;
 		gap: 0.5rem;
 	}
 
@@ -45,20 +64,5 @@
 		font-weight: 700;
 
 		border-radius: 9999px;
-	}
-
-	.stars {
-		background-color: var(--yellow);
-		border: 2px solid black;
-	}
-
-	.forks {
-		background-color: var(--blue);
-		border: 2px solid black;
-	}
-
-	.issues {
-		background-color: var(--red);
-		border: 2px solid black;
 	}
 </style>
