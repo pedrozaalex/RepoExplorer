@@ -70,15 +70,11 @@
 	}
 
 	.modal-body {
-		// --modal-height: 80vh;
-		// --modal-header-height: 4rem;
-
 		position: absolute;
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
 		width: 45rem;
-		// height: var(--modal-height);
 		height: 80vh;
 		background-color: #fff;
 		border-radius: 8px;
@@ -86,7 +82,6 @@
 	}
 
 	.modal-header {
-		// height: var(--modal-header-height);
 		height: 10%;
 		padding: 1rem;
 		font-size: 1.5rem;
@@ -99,9 +94,6 @@
 		padding: 1rem;
 		height: 90%;
 		width: 100%;
-		// height: calc(var(--modal-height) - var(--modal-header-height));
 		overflow: hidden;
-		// display: flex;
-		// align-items: stretch;
 	}
 </style>

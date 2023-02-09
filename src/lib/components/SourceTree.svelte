@@ -5,7 +5,6 @@
 
 	export let owner: string;
 	export let name: string;
-	export let path: string | null = null; // path of the opened file, if any
 
 	const fetchTreeResult = getRepoContents({ owner, name, path: '' });
 </script>
@@ -21,11 +20,11 @@
 
 		<ul>
 			{#each folders as folder}
-				<SourceTreeDirectory {owner} {name} {path} {folder} />
+				<SourceTreeDirectory {owner} {name} {folder} />
 			{/each}
 
 			{#each files as file}
-				<SourceTreeFile {owner} {name} {path} {file} />
+				<SourceTreeFile {owner} {name} {file} />
 			{/each}
 		</ul>
 	{/if}

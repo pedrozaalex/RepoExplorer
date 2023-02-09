@@ -1,8 +1,7 @@
 import type { PageLoad } from './$types';
 
-export const load = (({ url }) => {
+export const load = (() => {
 	return {
-		selectedRepoTab: 'files',
-		openFilePath: url.searchParams.get('path')
+		selectedRepoTab: 'files'
 	};
 }) satisfies PageLoad;

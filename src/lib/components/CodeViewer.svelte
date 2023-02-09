@@ -109,14 +109,14 @@
 		.slice(1, -1)}
 	{@const containerStyles = `
 			${extractPreTagStyle(highlighted)}
-			--line-number-container-width: ${lines.length.toString().length + 2}ch;
+			--line-number-container-width: ${lines.length.toString().length + 1}ch;
 			--code-viewer-font-size: ${$codeViewerSettingsStore.fontSize}px;
 			--code-viewer-line-height: ${$codeViewerSettingsStore.lineHeight};
 		`}
 
 	<div class="code-viewer-content-container" style={containerStyles}>
 		<div class="code-viewer-line-numbers-container" bind:this={lineNumbersContainer}>
-			{#each lines as _, i}
+			{#each lines as line, i}
 				<div class="code-viewer-line-number" class:accentuated={i === lineBeingHovered}>
 					{i + 1}
 				</div>
@@ -127,11 +127,7 @@
 			<pre on:scroll={syncLineNumbersContainerScroll}>{#each lines as line, i}<code
 						on:mouseenter={makeMouseEnterHandlerForLine(i)}
 						on:mouseleave={mouseLeaveHandler}>{@html line}</code
-					><!-- <button
-						class="copy-button"
-						style:display={isLineNotEmpty(line) && lineBeingHovered === i ? 'block' : 'none'}
-						><iconify-icon icon="material-symbols:content-copy" /></button
-					> -->{/each}</pre>
+					>{/each}</pre>
 		</div>
 	</div>
 {:catch}
@@ -167,20 +163,16 @@
 		position: relative;
 		height: 100%;
 		width: 100%;
-		// display: flex;
 	}
 
 	.code-viewer-line-numbers-container {
 		overflow-y: auto;
-		// @include hide-scrollbar;
 		height: 100%;
-		// width: 7.5%;
 		width: 100%;
-		// padding-right: 1rem;
-		// transform: translateX(-95%);
 	}
 
 	.code-viewer-line-number {
+		position: relative;
 		color: gray;
 		user-select: none;
 		font-family: var(--font-mono);
@@ -196,7 +188,7 @@
 	.code-viewer-content {
 		overflow: hidden;
 		height: 100%;
-		width: 100%;
+		width: calc(100% - var(--line-number-container-width));
 		position: absolute;
 		top: 0;
 		left: var(--line-number-container-width);
@@ -208,28 +200,9 @@
 		}
 	}
 
-	// .code-line {
-	// 	position: relative;
-	// 	font-size: var(--code-viewer-font-size);
-	// 	height: calc(var(--code-viewer-line-height) * var(--code-viewer-font-size));
-
-	// 	&:hover {
-	// 		background-color: rgba(0, 0, 0, 0.2);
-	// 	}
-	// }
-
 	code {
 		height: calc(var(--code-viewer-line-height) * var(--code-viewer-font-size));
 		font-family: var(--font-mono);
 		display: block;
-	}
-
-	.copy-button {
-		position: absolute;
-		width: 1.5rem;
-		top: 50%;
-		right: 0;
-		transform: translateY(-50%);
-		cursor: pointer;
 	}
 </style>

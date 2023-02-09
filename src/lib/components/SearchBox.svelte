@@ -5,7 +5,11 @@
 	export let searchTerm = '';
 
 	function search() {
-		goto(`/search/${searchTerm}`);
+		const encoded = encodeURIComponent(searchTerm);
+
+		console.log('encoded', encoded);
+
+		goto(`/search/${encoded}`);
 	}
 
 	let input: HTMLInputElement;

@@ -1,12 +1,10 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition';
 	import { getRepoContents } from '../api/github';
-
 	import SourceTreeFile from './SourceTreeFile.svelte';
 
 	export let owner: string;
 	export let name: string;
-	export let path: string | null = null; // path of the opened file, if any
 	export let folder: { name: string; path: string };
 
 	$: fetchTreeResult = getRepoContents({ owner, name, path: folder.path });
@@ -37,11 +35,11 @@
 
 			<ul>
 				{#each folders as folder}
-					<svelte:self {owner} {name} {path} {folder} />
+					<svelte:self {owner} {name} {folder} />
 				{/each}
 
 				{#each files as file}
-					<SourceTreeFile {owner} {name} {path} {file} />
+					<SourceTreeFile {owner} {name} {file} />
 				{/each}
 			</ul>
 		{/if}

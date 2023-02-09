@@ -1,24 +1,16 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-	import { onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
+	import { onMount } from 'svelte';
 
 	import InspectFileDialog from './InspectFileDialog.svelte';
 
 	export let owner: string;
 	export let name: string;
-	export let path: string | null = null; // path of the opened file, if any
 	export let file: { name: string; path: string };
 
-	$: isExpanded = file.path === path;
-
-	function openFile() {
-		goto('?path=' + encodeURI(file.path));
-	}
-
-	function closeFile() {
-		goto('?path=');
-	}
+	let isOpen = false;
+	const openFile = () => (isOpen = true);
+	const closeFile = () => (isOpen = false);
 </script>
 
 <li transition:slide={{ duration: 100 }}>
@@ -27,7 +19,7 @@
 		{file.name}
 	</button>
 
-	<InspectFileDialog {owner} {name} {file} isOpen={isExpanded} on:close={closeFile} />
+	<InspectFileDialog {owner} {name} {file} {isOpen} on:close={closeFile} />
 </li>
 
 <style lang="scss">
