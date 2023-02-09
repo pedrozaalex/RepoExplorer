@@ -6,8 +6,10 @@ import md5 from 'md5';
 import GitHubLanguageColors from 'github-colors';
 
 export function getLanguageHSLColor(language: string) {
-	if (language in GitHubLanguageColors) {
-		return darkenHSL(hexToHSL(GitHubLanguageColors[language].color), 10);
+	const ghColor = GitHubLanguageColors[language]?.color;
+
+	if (ghColor) {
+		return darkenHSL(hexToHSL(ghColor), 10);
 	}
 
 	return stringToHSLColor(language);
@@ -60,7 +62,7 @@ export function stringToHSLColor(str: string) {
 	return hexToHSL(hex);
 }
 
-export function lightenHSL(hsl: string, percent = 60) {
+export function lightenHSL(hsl: string, percent = 40) {
 	const [h, s, l] = hsl
 		.replace('hsl(', '')
 		.replace(')', '')

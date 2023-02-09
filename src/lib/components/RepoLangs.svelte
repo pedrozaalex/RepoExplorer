@@ -19,8 +19,7 @@
 {#if isSuccess && langs}
 	<ul class="language-list">
 		{#each langs as lang}
-			{@const color = getLanguageHSLColor(lang)}
-			<LangChip label={lang} --bg-color={color} --text-color={lightenHSL(color)} />
+			<LangChip {lang} />
 		{:else}
 			<p>No languages in repo</p>
 		{/each}
