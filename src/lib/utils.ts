@@ -1,4 +1,4 @@
-import initHighlighter, { highlight } from '@pedrozaalex/highlight-rs';
+import * as wasm from '@pedrozaalex/highlight-rs';
 import { formatDistance, parseISO } from 'date-fns';
 import { pipe } from 'fp-ts/lib/function';
 import md5 from 'md5';
@@ -185,14 +185,12 @@ export function tryHighlightStringAsHTML(code: string, language: string, theme: 
 			reject("Can't display binary data");
 		}
 
-		initHighlighter()
-			.then(() => {
-				resolve(highlight(code, language, theme));
-			})
-			.catch((e) => {
+			try {
+				resolve(wasm.highlight(code, language, theme));
+			} catch(e) {
 				console.error('Error occurred during syntax highlighting', e);
 				reject(e);
-			});
+			};
 	});
 }
 
