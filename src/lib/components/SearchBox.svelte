@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
-	import Icon from './Icon.svelte';
 
 	export let searchTerm = '';
 
 	function search() {
-		goto(`/search/${searchTerm}`);
+		const encoded = encodeURIComponent(searchTerm);
+		goto(`/search/${encoded}`);
 	}
 
 	let input: HTMLInputElement;

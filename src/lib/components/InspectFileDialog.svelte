@@ -13,18 +13,21 @@
 	export let owner: string;
 	export let name: string;
 	export let file: { name: string; path: string; downloadUrl?: string | undefined };
+	export let isOpen: boolean;
 
 	const fetchContentsResult = getRepoContents({ owner, name, path: file.path });
 </script>
 
-<Modal on:close={close} header={file.name}>
-	{#if $fetchContentsResult.isLoading}
-		<p>Loading file contents...</p>
-	{:else if $fetchContentsResult.error}
-		<p>Error: {$fetchContentsResult.error}</p>
-	{:else if $fetchContentsResult.data}
-		{@const code = $fetchContentsResult.data[0].content ?? ''}
+{#if isOpen}
+	<Modal on:close={close} header={file.name}>
+		{#if $fetchContentsResult.isLoading}
+			<p>Loading file contents...</p>
+		{:else if $fetchContentsResult.error}
+			<p>Error: {$fetchContentsResult.error}</p>
+		{:else if $fetchContentsResult.data}
+			{@const code = $fetchContentsResult.data[0].content ?? ''}
 
-		<CodeViewer {code} filename={file.name} downloadUrl={file.downloadUrl} />
-	{/if}
-</Modal>
+			<CodeViewer {code} filename={file.name} downloadUrl={file.downloadUrl} />
+		{/if}
+	</Modal>
+{/if}

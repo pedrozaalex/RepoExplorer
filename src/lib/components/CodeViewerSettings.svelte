@@ -42,7 +42,7 @@
 <svelte:window on:click={windowClickHandler} />
 
 {#if isOpen}
-	<form class="menu" on:click|stopPropagation on:keypress={() => {}}>
+	<div class="menu" on:click|stopPropagation on:keypress={() => {}}>
 		<div class="menu-item">
 			<iconify-icon icon="radix-icons:font-size" height="24" />
 			<input
@@ -79,7 +79,7 @@
 				<option value={CodeViewerTheme.SolarizedLight}>Solarized Light</option>
 			</select>
 		</div>
-	</form>
+	</div>
 {/if}
 
 <style lang="scss">

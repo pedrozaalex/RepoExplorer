@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { log } from 'fp-ts/lib/Console';
 	import { createEventDispatcher, onMount } from 'svelte';
 	import { fade, fly } from 'svelte/transition';
 
@@ -10,16 +11,20 @@
 		dispatch('close');
 	}
 
-	function handleKeyPress(event: KeyboardEvent) {
-		if (event.key === 'Escape') {
+	function keyDownEventListner(e: KeyboardEvent) {
+		if (e.key === 'Escape') {
+			e.preventDefault();
 			close();
 		}
 	}
 
 	onMount(() => {
 		document.body.style.overflow = 'hidden';
+		document.addEventListener('keydown', keyDownEventListner);
+
 		return () => {
 			document.body.style.overflow = 'auto';
+			document.removeEventListener('keydown', keyDownEventListner);
 		};
 	});
 </script>
@@ -28,7 +33,7 @@
 	<div
 		class="modal-overlay"
 		on:click={close}
-		on:keypress={handleKeyPress}
+		on:keypress={() => {}}
 		transition:fade={{ duration: 100 }}
 	/>
 
@@ -69,17 +74,15 @@
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
-		max-width: 45rem;
-		max-height: 80vh;
+		width: 45rem;
+		height: 80vh;
 		background-color: #fff;
 		border-radius: 8px;
 		overflow: hidden;
 	}
 
-	$headerHeight: 4rem;
-
 	.modal-header {
-		height: $headerHeight;
+		height: 10%;
 		padding: 1rem;
 		font-size: 1.5rem;
 		font-weight: 600;
@@ -88,8 +91,9 @@
 	}
 
 	.modal-content {
-		margin: 1rem;
-		max-height: calc(80vh - ($headerHeight + 2rem));
-		overflow: auto;
+		padding: 1rem;
+		height: 90%;
+		width: 100%;
+		overflow: hidden;
 	}
 </style>

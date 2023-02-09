@@ -35,3 +35,9 @@
 	line-height: 1.2em;
 	height: 1.2em * $lines;
 }
+
+@mixin hide-scrollbar {
+	&::-webkit-scrollbar {
+		display: none;
+	}
+}

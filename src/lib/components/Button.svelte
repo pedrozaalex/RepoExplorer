@@ -1,6 +1,6 @@
 <script lang="ts">
 	export let onClick: (() => void) | null = null;
-	export let disabled = false;
+	export let isDisabled = false;
 </script>
 
 <!-- 
@@ -13,7 +13,7 @@
 		- `--background` and `--color` are used to set the background and text color of the button.
 		- `--outline-color` is used to set the border color of the button.
  -->
-<button class="button-root" on:click={onClick} {disabled}>
+<button class="button-root" on:click={onClick} disabled={isDisabled}>
 	<slot name="leftIcon" />
 
 	<div class="button-content">

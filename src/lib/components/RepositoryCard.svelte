@@ -17,7 +17,7 @@
 	import { calculateLastUpdatedFromISO } from '$lib/utils';
 	import autoAnimate from '@formkit/auto-animate';
 	import { fade } from 'svelte/transition';
-	import Icon from './Icon.svelte';
+
 	import RepoLanguages from './RepoLangs.svelte';
 	import Stats from './Stats.svelte';
 
@@ -33,7 +33,9 @@
 <div class="repo" on:mouseenter={displayActions} on:mouseleave={hideActions}>
 	<div class="repo-main">
 		<h2 class="repo-title">
-			<a href={`https://github.com/${owner}`} class="repo-owner">{owner}</a>
+			<a href={`https://github.com/${owner}`} class="repo-owner" target="_blank" rel="noreferrer">
+				{owner}
+			</a>
 			<span class="slash">/</span>
 			<a href={`/repo/${owner}/${name}`} class="repo-name">{name}</a>
 		</h2>
@@ -56,7 +58,7 @@
 					</p>
 				</aside>
 
-				<Stats {stars} {forks} {issues} />
+				<Stats {owner} {name} {stars} {forks} {issues} />
 			</div>
 		</div>
 	</div>

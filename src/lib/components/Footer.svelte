@@ -1,9 +1,12 @@
 <footer>
 	<p>
-		Copyright © 2022 - All right reserved by ACME Industries Ltd
-
-		<a href="https://github.com/pedrozaalex/RepoExplorer" target="_blank" rel="noopener noreferrer">
-			<iconify-icon icon="mdi:github" style="color: white" height="24" />
+		Copyright © 2022 - All right reserved by Midwestern Tech Ltd. <a
+			href="https://github.com/pedrozaalex/RepoExplorer"
+			target="_blank"
+			rel="noopener noreferrer"
+		>
+			Source
+			<iconify-icon icon="mdi:github" style="color: white" height="16" />
 		</a>
 	</p>
 </footer>
@@ -12,6 +15,5 @@
 	a {
 		display: inline-block;
 		vertical-align: middle;
-		margin-left: 0.5rem;
 	}
 </style>
