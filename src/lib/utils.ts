@@ -1,59 +1,63 @@
 import initHighlighter, { highlight } from '@pedrozaalex/highlight-rs';
 import { formatDistance, parseISO } from 'date-fns';
 import { pipe } from 'fp-ts/lib/function';
+import md5 from 'md5';
+// @ts-expect-error "Could not find a declaration file for module 'github-colors'."
+import GitHubLanguageColors from 'github-colors';
 
-export function stringToColour(str: string) {
-	if (str.length === 0) {
-		return 'hsl(0, 0, 100%)';
-	} else {
-		const sanitized = str.replace(/[^A-Za-z]/, '');
-		const letters = sanitized.split('');
-
-		//Determine the hue
-		let hue = Math.floor(((letters[0].toLowerCase().charCodeAt(0) - 96) / 26) * 360);
-		let ord = 0;
-		for (const i in letters) {
-			ord = letters[i].charCodeAt(0);
-			if ((ord >= 65 && ord <= 90) || (ord >= 97 && ord <= 122)) {
-				hue += ord - 64;
-			}
-		}
-
-		hue = (hue + 250) % 360;
-
-		//Determine the saturation
-		const vowels = ['A', 'a', 'E', 'e', 'I', 'i', 'O', 'o', 'U', 'u'];
-		let count_cons = 0;
-
-		//Count the consonants
-		for (const i in letters) {
-			if (vowels.indexOf(letters[i]) == -1) {
-				count_cons++;
-			}
-		}
-
-		//Determine what percentage of the string is consonants and weight to 95% being fully saturated.
-		let saturation = (count_cons / letters.length / 0.95) * 100;
-		if (saturation > 100) saturation = 100;
-
-		//Determine the luminosity
-		const ascenders = ['t', 'd', 'b', 'l', 'f', 'h', 'k'];
-		const descenders = ['q', 'y', 'p', 'g', 'j'];
-		let luminosity = 50;
-		const increment = (1 / letters.length) * 50;
-
-		for (const i in letters) {
-			if (ascenders.indexOf(letters[i]) != -1) {
-				luminosity += increment;
-			} else if (descenders.indexOf(letters[i]) != -1) {
-				luminosity -= increment * 2;
-			}
-		}
-
-		luminosity = luminosity * 0.5;
-
-		return `hsl(${hue}, ${saturation}%, ${luminosity}%)`;
+export function getLanguageHSLColor(language: string) {
+	if (language in GitHubLanguageColors) {
+		return darkenHSL(hexToHSL(GitHubLanguageColors[language].color), 10);
 	}
+
+	return stringToHSLColor(language);
+}
+
+function hexToHSL(H: string) {
+	// Convert hex to RGB first
+	let r: string | number = 0,
+		g: string | number = 0,
+		b: string | number = 0;
+	if (H.length === 4) {
+		r = '0x' + H[1] + H[1];
+		g = '0x' + H[2] + H[2];
+		b = '0x' + H[3] + H[3];
+	} else if (H.length === 7) {
+		r = '0x' + H[1] + H[2];
+		g = '0x' + H[3] + H[4];
+		b = '0x' + H[5] + H[6];
+	}
+	// Then to HSL
+	r = (r as number) / 255;
+	g = (g as number) / 255;
+	b = (b as number) / 255;
+	const cmin = Math.min(r, g, b),
+		cmax = Math.max(r, g, b),
+		delta = cmax - cmin;
+	let h = 0,
+		s = 0,
+		l = 0;
+
+	if (delta === 0) h = 0;
+	else if (cmax === r) h = ((g - b) / delta) % 6;
+	else if (cmax === g) h = (b - r) / delta + 2;
+	else h = (r - g) / delta + 4;
+
+	h = Math.round(h * 60);
+
+	if (h < 0) h += 360;
+
+	l = (cmax + cmin) / 2;
+	s = delta === 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
+	s = +(s * 100).toFixed(1);
+	l = +(l * 100).toFixed(1);
+
+	return 'hsl(' + h + ',' + s + '%,' + l + '%)';
+}
+
+export function stringToHSLColor(str: string) {
+	const hex = '#' + md5(str).slice(3, 9);
+	return hexToHSL(hex);
 }
 
 export function lightenHSL(hsl: string, percent = 60) {
@@ -66,6 +70,10 @@ export function lightenHSL(hsl: string, percent = 60) {
 	const newL = Math.min(100, l + percent);
 
 	return `hsl(${h}, ${s}%, ${newL}%)`;
+}
+
+export function darkenHSL(hsl: string, percent = 60) {
+	return lightenHSL(hsl, -percent);
 }
 
 const getDistanceFromNow = (date: Date) =>

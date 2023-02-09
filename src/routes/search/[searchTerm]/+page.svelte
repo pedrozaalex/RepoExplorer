@@ -12,7 +12,6 @@
 
 	$: page = data.page;
 	$: searchTerm = data.searchTerm;
-	$: console.log('searchTerm', searchTerm);
 	$: searchResult = searchRepos({ page, perPage: PER_PAGE, searchTerm });
 
 	let totalItems = 0;

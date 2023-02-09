@@ -6,9 +6,6 @@
 
 	function search() {
 		const encoded = encodeURIComponent(searchTerm);
-
-		console.log('encoded', encoded);
-
 		goto(`/search/${encoded}`);
 	}
 

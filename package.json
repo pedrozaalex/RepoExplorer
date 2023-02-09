@@ -23,8 +23,10 @@
 		"@tanstack/svelte-query": "^4.22.4",
 		"date-fns": "^2.29.3",
 		"fp-ts": "^2.13.1",
+		"github-colors": "file:./github-colors",
 		"iconify-icon": "^1.0.4",
 		"isomorphic-fetch": "^3.0.0",
+		"md5": "^2.3.0",
 		"octokit": "^2.0.14",
 		"sanitize-html": "^2.9.0",
 		"svelte-markdown": "^0.2.3"
@@ -34,6 +36,7 @@
 		"@playwright/test": "^1.28.1",
 		"@sveltejs/adapter-vercel": "^2.0.1",
 		"@sveltejs/kit": "^1.5.0",
+		"@types/md5": "^2.3.2",
 		"@types/sanitize-html": "^2.8.0",
 		"@typescript-eslint/eslint-plugin": "^5.45.0",
 		"@typescript-eslint/parser": "^5.45.0",
