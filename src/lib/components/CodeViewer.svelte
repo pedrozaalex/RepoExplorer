@@ -58,12 +58,7 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import sanitize from 'sanitize-html';
-	import {
-		extractPreTagStyle,
-		EXT_TO_LANGUAGE,
-		isLineNotEmpty,
-		tryHighlightStringAsHTML
-	} from '../utils';
+	import { extractPreTagStyle, EXT_TO_LANGUAGE, tryHighlightStringAsHTML } from '../utils';
 	import CodeViewerSettings from './CodeViewerSettings.svelte';
 
 	export let code: string;
@@ -90,7 +85,20 @@
 
 	let lineNumbersContainer: HTMLDivElement;
 	function syncLineNumbersContainerScroll(e: Event) {
-		lineNumbersContainer.scrollTop = (e.target as HTMLDivElement).scrollTop;
+		const codeContainer = e.target as HTMLDivElement;
+
+		// Prevents the code container from scrolling past the line numbers container
+		// since they can be of slightly different heights
+		const lineNumberContainerMaxScrollTop =
+			lineNumbersContainer.scrollHeight - lineNumbersContainer.clientHeight;
+
+		const isAtBottom = codeContainer.scrollTop > lineNumberContainerMaxScrollTop;
+
+		if (isAtBottom) {
+			codeContainer.scrollTop = lineNumberContainerMaxScrollTop;
+		} else {
+			lineNumbersContainer.scrollTop = codeContainer.scrollTop;
+		}
 	}
 </script>
 
