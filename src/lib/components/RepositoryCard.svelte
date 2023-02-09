@@ -17,7 +17,7 @@
 	import { calculateLastUpdatedFromISO } from '$lib/utils';
 	import autoAnimate from '@formkit/auto-animate';
 	import { fade } from 'svelte/transition';
-	import Icon from './Icon.svelte';
+
 	import RepoLanguages from './RepoLangs.svelte';
 	import Stats from './Stats.svelte';
 

@@ -1,6 +1,4 @@
 <script lang="ts">
-	import Icon from './Icon.svelte';
-
 	export let stars: number;
 	export let forks: number;
 	export let issues: number;

@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
-	import Icon from './Icon.svelte';
 
 	export let searchTerm = '';
 

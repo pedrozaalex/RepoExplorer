@@ -1,27 +1,32 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition';
 	import { getRepoContents } from '../api/github';
-	import Icon from './Icon.svelte';
+
 	import SourceTreeFile from './SourceTreeFile.svelte';
 
 	export let owner: string;
 	export let name: string;
+	export let path: string | null = null; // path of the opened file, if any
 	export let folder: { name: string; path: string };
 
 	$: fetchTreeResult = getRepoContents({ owner, name, path: folder.path });
-	let expanded = false;
+
+	let isExpanded = false;
+	function toggle() {
+		isExpanded = !isExpanded;
+	}
 </script>
 
 <li class="root" transition:slide={{ duration: 100 }}>
-	<button class="folder" on:click={() => (expanded = !expanded)}>
+	<button class="folder" class:expanded={isExpanded} on:click={toggle}>
 		<iconify-icon
-			icon={expanded ? 'material-symbols:folder-open-rounded' : 'material-symbols:folder'}
+			icon={isExpanded ? 'material-symbols:folder-open-rounded' : 'material-symbols:folder'}
 			height="20"
 		/>
 		{folder.name}
 	</button>
 
-	{#if expanded}
+	{#if isExpanded}
 		{#if $fetchTreeResult.isLoading}
 			<p>Loading...</p>
 		{:else if $fetchTreeResult.error}
@@ -32,11 +37,11 @@
 
 			<ul>
 				{#each folders as folder}
-					<svelte:self {owner} {name} {folder} />
+					<svelte:self {owner} {name} {path} {folder} />
 				{/each}
 
 				{#each files as file}
-					<SourceTreeFile {owner} {name} {file} />
+					<SourceTreeFile {owner} {name} {path} {file} />
 				{/each}
 			</ul>
 		{/if}
@@ -65,11 +70,16 @@
 
 	.folder {
 		font-weight: bold;
+		cursor: pointer;
 
 		&:hover {
-			cursor: pointer;
 			background-color: rgba($color: rgb(186, 170, 255), $alpha: 0.3);
 			text-decoration: underline;
+		}
+
+		&:hover,
+		&.expanded {
+			color: var(--on-primary-color);
 		}
 	}
 </style>

@@ -19,7 +19,7 @@
 		"@fontsource/inter": "^4.5.15",
 		"@fontsource/space-mono": "^4.5.12",
 		"@formkit/auto-animate": "1.0.0-beta.6",
-		"@pedrozaalex/highlight-rs": "^0.1.4",
+		"@pedrozaalex/highlight-rs": "^0.1.5",
 		"@tanstack/svelte-query": "^4.22.4",
 		"date-fns": "^2.29.3",
 		"fp-ts": "^2.13.1",

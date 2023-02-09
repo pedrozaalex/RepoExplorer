@@ -3,11 +3,11 @@
 	import SourceTree from '$components/SourceTree.svelte';
 
 	export let data: PageData;
-	$: ({ owner, name } = data);
+	$: ({ owner, name, openFilePath } = data);
 </script>
 
 <div class="repo-files-page-root">
-	<SourceTree {owner} {name} />
+	<SourceTree {owner} {name} path={openFilePath} />
 </div>
 
 <style lang="scss">

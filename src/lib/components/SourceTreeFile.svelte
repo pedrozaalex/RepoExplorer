@@ -1,42 +1,24 @@
-<script lang="ts" context="module">
-	const collapseFileFns: { [key: string]: () => void } = {};
-
-	function collapseAllFiles() {
-		Object.values(collapseFileFns).forEach((collapseFile) => collapseFile());
-	}
-</script>
-
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
-	import Icon from './Icon.svelte';
+
 	import InspectFileDialog from './InspectFileDialog.svelte';
 
 	export let owner: string;
 	export let name: string;
+	export let path: string | null = null; // path of the opened file, if any
 	export let file: { name: string; path: string };
 
-	let expanded = false;
+	$: isExpanded = file.path === path;
 
 	function openFile() {
-		collapseAllFiles();
-		expanded = true;
+		goto('?path=' + encodeURI(file.path));
 	}
 
 	function closeFile() {
-		expanded = false;
+		goto('?path=');
 	}
-
-	onMount(() => {
-		const componentId = file.path + Date.now();
-		const collapseFile = () => (expanded = false);
-
-		collapseFileFns[componentId] = collapseFile.bind(null);
-
-		return () => {
-			delete collapseFileFns[componentId];
-		};
-	});
 </script>
 
 <li transition:slide={{ duration: 100 }}>
@@ -45,9 +27,7 @@
 		{file.name}
 	</button>
 
-	{#if expanded}
-		<InspectFileDialog {owner} {name} {file} on:close={closeFile} />
-	{/if}
+	<InspectFileDialog {owner} {name} {file} isOpen={isExpanded} on:close={closeFile} />
 </li>
 
 <style lang="scss">
@@ -71,6 +51,7 @@
 			cursor: pointer;
 			background-color: rgba($color: rgb(186, 170, 255), $alpha: 0.3);
 			text-decoration: underline;
+			color: var(--on-primary-color);
 		}
 	}
 </style>

@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import Icon from './Icon.svelte';
 
 	export let page: number;
 	export let totalItems: number;

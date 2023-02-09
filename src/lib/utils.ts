@@ -1,3 +1,4 @@
+import initHighlighter, { highlight } from '@pedrozaalex/highlight-rs';
 import { formatDistance, parseISO } from 'date-fns';
 import { pipe } from 'fp-ts/lib/function';
 
@@ -160,9 +161,37 @@ export function isBinaryData(data: string) {
 export function extractPreTagStyle(html: string): string {
 	const preTagRegex = /<pre.*?style="(.*?)".*?>/;
 	const match = preTagRegex.exec(html);
+
 	if (match) {
 		return match[1];
 	}
 
 	return '';
+}
+
+export function tryHighlightStringAsHTML(code: string, language: string, theme: string) {
+	return new Promise<string>((resolve, reject) => {
+		if (isBinaryData(code)) {
+			reject("Can't display binary data");
+		}
+
+		initHighlighter()
+			.then(() => {
+				resolve(highlight(code, language, theme));
+			})
+			.catch((e) => {
+				console.error('Error occurred during syntax highlighting', e);
+				reject(e);
+			});
+	});
+}
+
+export function isLineNotEmpty(line: string) {
+	// remove all span tags and their attributes from the line
+	return (
+		line
+			.replace(/<span.*?>/g, '')
+			.replace(/<\/span>/g, '')
+			.trim().length !== 0
+	);
 }
