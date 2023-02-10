@@ -65,6 +65,7 @@
 	import sanitize from 'sanitize-html';
 	import { clamp, extractPreTagStyle, EXT_TO_LANGUAGE, tryHighlightStringAsHTML } from '../utils';
 	import CodeViewerSettings from './CodeViewerSettings.svelte';
+	import debounce from 'debounce';
 
 	export let code: string;
 	export let filename: string;
@@ -146,7 +147,7 @@
 
 		<div class="content">
 			<pre
-				on:scroll={syncLineNumbersWithCode}
+				on:scroll={debounce(syncLineNumbersWithCode, 10)}
 				bind:this={codeContainer}>{#each lines as line, i}<code
 						on:mouseenter={makeMouseEnterHandlerForLine(i)}
 						on:mouseleave={mouseLeaveHandler}>{@html line}</code
