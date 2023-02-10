@@ -88,6 +88,8 @@
 		font-weight: 600;
 		border-bottom: 1px solid #eee;
 		margin-right: 4rem;
+		display: flex;
+		align-items: center;
 	}
 
 	.modal-content {

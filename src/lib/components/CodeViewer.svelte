@@ -11,6 +11,11 @@
 		SolarizedLight = 'Solarized (light)'
 	}
 
+	export const MIN_FONT_SIZE = 12;
+	export const MAX_FONT_SIZE = 24;
+	export const MIN_LINE_HEIGHT = 1.4;
+	export const MAX_LINE_HEIGHT = 3;
+
 	function getThemeFromLocalStorage(): CodeViewerTheme {
 		const theme = localStorage.getItem('code-viewer-theme');
 
@@ -58,7 +63,7 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import sanitize from 'sanitize-html';
-	import { extractPreTagStyle, EXT_TO_LANGUAGE, tryHighlightStringAsHTML } from '../utils';
+	import { clamp, extractPreTagStyle, EXT_TO_LANGUAGE, tryHighlightStringAsHTML } from '../utils';
 	import CodeViewerSettings from './CodeViewerSettings.svelte';
 
 	export let code: string;
@@ -73,6 +78,14 @@
 	$: theme = $codeViewerSettingsStore.theme;
 	$: highlightedCode = tryHighlightStringAsHTML(code, language, theme);
 
+	$: fontSize = clamp(parseFloat($codeViewerSettingsStore.fontSize), MIN_FONT_SIZE, MAX_FONT_SIZE);
+	$: lineHeight = clamp(
+		parseFloat($codeViewerSettingsStore.lineHeight),
+		MIN_LINE_HEIGHT,
+		MAX_LINE_HEIGHT
+	);
+	$: totalLineHeight = fontSize * lineHeight;
+
 	let lineBeingHovered: number | undefined;
 	function makeMouseEnterHandlerForLine(lineNumber: number) {
 		return () => {
@@ -84,9 +97,11 @@
 	}
 
 	let lineNumbersContainer: HTMLDivElement;
-	function syncLineNumbersContainerScroll(e: Event) {
-		const codeContainer = e.target as HTMLDivElement;
 
+	// codeContainer is a <code> tag
+	let codeContainer: HTMLPreElement;
+
+	function syncLineNumbersWithCode() {
 		// Prevents the code container from scrolling past the line numbers container
 		// since they can be of slightly different heights
 		const lineNumberContainerMaxScrollTop =
@@ -102,9 +117,7 @@
 	}
 </script>
 
-<div class="settings-overlay">
-	<CodeViewerSettings />
-</div>
+<CodeViewerSettings />
 
 {#await highlightedCode}
 	<p>Highlighting code...</p>
@@ -118,21 +131,23 @@
 	{@const containerStyles = `
 			${extractPreTagStyle(highlighted)}
 			--line-number-container-width: ${lines.length.toString().length + 1}ch;
-			--code-viewer-font-size: ${$codeViewerSettingsStore.fontSize}px;
-			--code-viewer-line-height: ${$codeViewerSettingsStore.lineHeight};
+			--font-size: ${fontSize}px;
+			--total-line-height: ${totalLineHeight}px;
 		`}
 
-	<div class="code-viewer-content-container" style={containerStyles}>
-		<div class="code-viewer-line-numbers-container" bind:this={lineNumbersContainer}>
-			{#each lines as line, i}
-				<div class="code-viewer-line-number" class:accentuated={i === lineBeingHovered}>
+	<div class="content-container" style={containerStyles}>
+		<div class="line-numbers-container" bind:this={lineNumbersContainer}>
+			{#each lines as _, i}
+				<div class="line-number" class:accentuated={i === lineBeingHovered}>
 					{i + 1}
 				</div>
 			{/each}
 		</div>
 
-		<div class="code-viewer-content">
-			<pre on:scroll={syncLineNumbersContainerScroll}>{#each lines as line, i}<code
+		<div class="content">
+			<pre
+				on:scroll={syncLineNumbersWithCode}
+				bind:this={codeContainer}>{#each lines as line, i}<code
 						on:mouseenter={makeMouseEnterHandlerForLine(i)}
 						on:mouseleave={mouseLeaveHandler}>{@html line}</code
 					>{/each}</pre>
@@ -150,13 +165,6 @@
 <style lang="scss">
 	@import '../mixins.scss';
 
-	.settings-overlay {
-		position: fixed;
-		top: 1rem;
-		right: 1rem;
-		z-index: 10;
-	}
-
 	a {
 		text-decoration: underline;
 
@@ -165,7 +173,7 @@
 		}
 	}
 
-	.code-viewer-content-container {
+	.content-container {
 		flex-direction: row;
 		overflow: hidden;
 		position: relative;
@@ -173,19 +181,21 @@
 		width: 100%;
 	}
 
-	.code-viewer-line-numbers-container {
+	.line-numbers-container {
 		overflow-y: auto;
 		height: 100%;
 		width: 100%;
+		pointer-events: none;
 	}
 
-	.code-viewer-line-number {
+	.line-number {
 		position: relative;
 		color: gray;
 		user-select: none;
 		font-family: var(--font-mono);
-		font-size: var(--code-viewer-font-size);
-		height: calc(var(--code-viewer-line-height) * var(--code-viewer-font-size));
+		font-size: var(--font-size);
+		height: var(--total-line-height);
+		padding: 0 0.5rem;
 
 		&.accentuated {
 			font-weight: bold;
@@ -193,13 +203,13 @@
 		}
 	}
 
-	.code-viewer-content {
+	.content {
 		overflow: hidden;
 		height: 100%;
-		width: calc(100% - var(--line-number-container-width));
+		width: calc(100% - var(--line-number-container-width) - 1rem);
 		position: absolute;
 		top: 0;
-		left: var(--line-number-container-width);
+		right: 0;
 
 		pre {
 			overflow: auto;
@@ -209,8 +219,8 @@
 	}
 
 	code {
-		font-size: var(--code-viewer-font-size);
-		height: calc(var(--code-viewer-line-height) * var(--code-viewer-font-size));
+		font-size: var(--font-size);
+		height: var(--total-line-height);
 		font-family: var(--font-mono);
 		display: block;
 	}
