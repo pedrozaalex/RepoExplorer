@@ -203,3 +203,7 @@ export function isLineNotEmpty(line: string) {
 			.trim().length !== 0
 	);
 }
+
+export function clamp(value: number, min: number, max: number) {
+	return Math.min(Math.max(value, min), max);
+}

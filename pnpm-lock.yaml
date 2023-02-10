@@ -10,11 +10,13 @@ specifiers:
   '@sveltejs/adapter-vercel': ^2.0.2
   '@sveltejs/kit': ^1.5.3
   '@tanstack/svelte-query': ^4.24.4
+  '@types/debounce': ^1.2.1
   '@types/md5': ^2.3.2
   '@types/sanitize-html': ^2.8.0
   '@typescript-eslint/eslint-plugin': ^5.51.0
   '@typescript-eslint/parser': ^5.51.0
   date-fns: ^2.29.3
+  debounce: ^1.2.1
   eslint: ^8.33.0
   eslint-config-prettier: ^8.6.0
   eslint-plugin-svelte3: ^4.0.0
@@ -47,6 +49,7 @@ dependencies:
   '@pedrozaalex/highlight-rs': 0.1.18
   '@tanstack/svelte-query': 4.24.4_svelte@3.55.1
   date-fns: 2.29.3
+  debounce: 1.2.1
   fp-ts: 2.13.1
   github-colors: file:github-colors
   iconify-icon: 1.0.5
@@ -61,6 +64,7 @@ devDependencies:
   '@playwright/test': 1.30.0
   '@sveltejs/adapter-vercel': 2.0.2_@sveltejs+kit@1.5.3
   '@sveltejs/kit': 1.5.3_svelte@3.55.1+vite@4.1.1
+  '@types/debounce': 1.2.1
   '@types/md5': 2.3.2
   '@types/sanitize-html': 2.8.0
   '@typescript-eslint/eslint-plugin': 5.51.0_b635kmla6dsb4frxfihkw4m47e
@@ -762,6 +766,10 @@ packages:
     resolution: {integrity: sha512-COUnqfB2+ckwXXSFInsFdOAWQzCCx+a5hq2ruyj+Vjund94RJQd4LG2u9hnvJrTgunKAaax7ancBYlDrNYxA0g==}
     dev: true
 
+  /@types/debounce/1.2.1:
+    resolution: {integrity: sha512-epMsEE85fi4lfmJUH/89/iV/LI+F5CvNIvmgs5g5jYFPfhO2S/ae8WSsLOKWdwtoaZw9Q2IhJ4tQ5tFCcS/4HA==}
+    dev: true
+
   /@types/json-schema/7.0.11:
     resolution: {integrity: sha512-wOuvG1SN4Us4rez+tylwwwCV1psiNVOkJeM3AUWUNWg/jDQY2+HE/444y5gc+jBmRqASOm2Oeh5c1axHobwRKQ==}
     dev: true
@@ -1216,6 +1224,10 @@ packages:
   /date-fns/2.29.3:
     resolution: {integrity: sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==}
     engines: {node: '>=0.11'}
+    dev: false
+
+  /debounce/1.2.1:
+    resolution: {integrity: sha512-XRRe6Glud4rd/ZGQfiV1ruXSfbvfJedlV9Y6zOlP+2K04vBYiJEte6stfFkCP03aMnY5tsipamumUjL14fofug==}
     dev: false
 
   /debug/4.3.4:

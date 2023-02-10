@@ -2,6 +2,10 @@
 	import {
 		codeViewerSettingsStore,
 		CodeViewerTheme,
+		MAX_FONT_SIZE,
+		MAX_LINE_HEIGHT,
+		MIN_FONT_SIZE,
+		MIN_LINE_HEIGHT,
 		setFontSize,
 		setLineHeight,
 		setTheme
@@ -30,60 +34,69 @@
 	}
 </script>
 
-<button
-	on:click|stopPropagation={toggleMenu}
-	class="toggle-button"
-	class:open={isOpen}
-	class:disabled={false}
->
-	<iconify-icon icon="ic:baseline-settings" height="24" />
-</button>
-
 <svelte:window on:click={windowClickHandler} />
 
-{#if isOpen}
-	<div class="menu" on:click|stopPropagation on:keypress={() => {}}>
-		<div class="menu-item">
-			<iconify-icon icon="radix-icons:font-size" height="24" />
-			<input
-				type="range"
-				id="font-size"
-				min="12"
-				max="24"
-				step="1"
-				value={$codeViewerSettingsStore.fontSize}
-				on:change={handleFontSizeChange}
-			/>
+<div class="settings-overlay">
+	<button
+		on:click|stopPropagation={toggleMenu}
+		class="toggle-button"
+		class:open={isOpen}
+		class:disabled={false}
+	>
+		<iconify-icon icon="ic:baseline-settings" height="24" />
+	</button>
+
+	{#if isOpen}
+		<div class="menu" on:click|stopPropagation on:keypress={() => {}}>
+			<div class="menu-item">
+				<iconify-icon icon="radix-icons:font-size" height="24" />
+				<input
+					type="range"
+					id="font-size"
+					min={MIN_FONT_SIZE}
+					max={MAX_FONT_SIZE}
+					step="1"
+					value={$codeViewerSettingsStore.fontSize}
+					on:change={handleFontSizeChange}
+				/>
+			</div>
+			<div class="menu-item">
+				<iconify-icon icon="radix-icons:line-height" height="24" />
+				<input
+					type="range"
+					id="line-height"
+					min={MIN_LINE_HEIGHT}
+					max={MAX_LINE_HEIGHT}
+					step="0.1"
+					value={$codeViewerSettingsStore.lineHeight}
+					on:change={handleLineHeightChange}
+				/>
+			</div>
+			<div class="menu-item">
+				<iconify-icon icon="ic:baseline-color-lens" height="24" />
+				<select id="theme" value={$codeViewerSettingsStore.theme} on:change={handleThemeChange}>
+					<option value={CodeViewerTheme.EightiesDark}>Eighties Dark</option>
+					<option value={CodeViewerTheme.InspiredGitHub}>Inspired GitHub</option>
+					<option value={CodeViewerTheme.MochaDark}>Mocha Dark</option>
+					<option value={CodeViewerTheme.OceanDark}>Ocean Dark</option>
+					<option value={CodeViewerTheme.OceanLight}>Ocean Light</option>
+					<option value={CodeViewerTheme.SolarizedDark}>Solarized Dark</option>
+					<option value={CodeViewerTheme.SolarizedLight}>Solarized Light</option>
+				</select>
+			</div>
 		</div>
-		<div class="menu-item">
-			<iconify-icon icon="radix-icons:line-height" height="24" />
-			<input
-				type="range"
-				id="line-height"
-				min="1.5"
-				max="3"
-				step="0.1"
-				value={$codeViewerSettingsStore.lineHeight}
-				on:change={handleLineHeightChange}
-			/>
-		</div>
-		<div class="menu-item">
-			<iconify-icon icon="ic:baseline-color-lens" height="24" />
-			<select id="theme" value={$codeViewerSettingsStore.theme} on:change={handleThemeChange}>
-				<option value={CodeViewerTheme.EightiesDark}>Eighties Dark</option>
-				<option value={CodeViewerTheme.InspiredGitHub}>Inspired GitHub</option>
-				<option value={CodeViewerTheme.MochaDark}>Mocha Dark</option>
-				<option value={CodeViewerTheme.OceanDark}>Ocean Dark</option>
-				<option value={CodeViewerTheme.OceanLight}>Ocean Light</option>
-				<option value={CodeViewerTheme.SolarizedDark}>Solarized Dark</option>
-				<option value={CodeViewerTheme.SolarizedLight}>Solarized Light</option>
-			</select>
-		</div>
-	</div>
-{/if}
+	{/if}
+</div>
 
 <style lang="scss">
 	@import '../mixins.scss';
+
+	.settings-overlay {
+		position: fixed;
+		top: 1rem;
+		right: 1rem;
+		z-index: 10;
+	}
 
 	.toggle-button {
 		background: var(--primary-color);
