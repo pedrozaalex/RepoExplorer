@@ -209,6 +209,7 @@
 	}
 
 	code {
+		font-size: var(--code-viewer-font-size);
 		height: calc(var(--code-viewer-line-height) * var(--code-viewer-font-size));
 		font-family: var(--font-mono);
 		display: block;
