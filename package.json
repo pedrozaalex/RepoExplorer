@@ -22,6 +22,7 @@
 		"@formkit/auto-animate": "1.0.0-beta.6",
 		"@pedrozaalex/highlight-rs": "^0.1.18",
 		"@tanstack/svelte-query": "^4.24.4",
+		"buffer": "^6.0.3",
 		"date-fns": "^2.29.3",
 		"debounce": "^1.2.1",
 		"fp-ts": "^2.13.1",

@@ -1,9 +1,8 @@
-import initHighlighter from '@pedrozaalex/highlight-rs';
-import * as wasm from '@pedrozaalex/highlight-rs';
+import initHighlighter, * as wasm from '@pedrozaalex/highlight-rs';
 import { formatDistance, parseISO } from 'date-fns';
 import { pipe } from 'fp-ts/lib/function';
-import md5 from 'md5';
 import GitHubLanguageColors from 'github-colors';
+import md5 from 'md5';
 import sanitize from 'sanitize-html';
 
 export function getLanguageHSLColor(language: string) {
@@ -169,8 +168,8 @@ export function isBinaryData(data: string) {
 	return binaryRegex.test(data);
 }
 
-export function extractPreTagStyle(html: string): string {
-	const preTagRegex = /<pre.*?style="(.*?)".*?>/;
+export function extractThemeBackground(html: string): string {
+	const preTagRegex = /<pre.*?style="background-color:(.*?);">/;
 	const match = preTagRegex.exec(html);
 
 	if (match) {
@@ -209,4 +208,31 @@ export function clamp(value: number, min: number, max: number) {
 
 export function sanitizeHighlighterOutput(html: string) {
 	return sanitize(html, { allowedTags: ['span'], allowedAttributes: { span: ['style'] } });
+}
+
+// Simply remove any whitespace from the string
+export function style(strings: TemplateStringsArray, ...values: (string | number)[]) {
+	let output = '';
+	strings.forEach((str, i) => {
+		output += str;
+		if (values[i]) {
+			output += values[i];
+		}
+	});
+	return output.replace(/\s+/g, ' ');
+}
+
+/**
+ * Extracts the text from a line of code outputted by the highlighter
+ * @param line A line of code outputted by the highlighter, it contains <span> tags with inline styles
+ * @returns The line of code without any <span> tags
+ */
+function getCodeLineLength(line: string) {
+	return line.replace(/<span.*?>/g, '').replace(/<\/span>/g, '').length;
+}
+
+export function findLengthOfLargestLine(lines: string[]) {
+	return lines
+		.map(getCodeLineLength) // Calculate the length of each line discarding the <span> tags content
+		.reduce((a, b) => Math.max(a, b), 0);
 }
