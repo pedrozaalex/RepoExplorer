@@ -2,14 +2,11 @@
 	import {
 		codeViewerSettingsStore,
 		CodeViewerTheme,
-		MAX_FONT_SIZE,
-		MAX_LINE_HEIGHT,
-		MIN_FONT_SIZE,
-		MIN_LINE_HEIGHT,
 		setFontSize,
 		setLineHeight,
 		setTheme
-	} from './CodeViewer.svelte';
+	} from '../stores/codeViewerSettingsStore';
+	import { MAX_FONT_SIZE, MAX_LINE_HEIGHT, MIN_FONT_SIZE, MIN_LINE_HEIGHT } from '../constants';
 
 	let isOpen = false;
 
@@ -41,8 +38,7 @@
 		on:click|stopPropagation={toggleMenu}
 		class="toggle-button"
 		class:open={isOpen}
-		class:disabled={false}
-	>
+		class:disabled={false}>
 		<iconify-icon icon="ic:baseline-settings" height="24" />
 	</button>
 
@@ -57,8 +53,7 @@
 					max={MAX_FONT_SIZE}
 					step="1"
 					value={$codeViewerSettingsStore.fontSize}
-					on:change={handleFontSizeChange}
-				/>
+					on:change={handleFontSizeChange} />
 			</div>
 			<div class="menu-item">
 				<iconify-icon icon="radix-icons:line-height" height="24" />
@@ -69,8 +64,7 @@
 					max={MAX_LINE_HEIGHT}
 					step="0.1"
 					value={$codeViewerSettingsStore.lineHeight}
-					on:change={handleLineHeightChange}
-				/>
+					on:change={handleLineHeightChange} />
 			</div>
 			<div class="menu-item">
 				<iconify-icon icon="ic:baseline-color-lens" height="24" />

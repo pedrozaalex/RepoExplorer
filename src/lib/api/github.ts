@@ -261,7 +261,7 @@ export function getRepoContents({ owner, name, path }: GetRepoContentsParams) {
 				switch (typeof data) {
 					case 'object':
 						if (Array.isArray(data)) {
-							return data.map((item) => ({
+							return data.map(item => ({
 								name: item.name,
 								path: item.path,
 								type: item.type,

@@ -3,8 +3,8 @@ import * as wasm from '@pedrozaalex/highlight-rs';
 import { formatDistance, parseISO } from 'date-fns';
 import { pipe } from 'fp-ts/lib/function';
 import md5 from 'md5';
-// @ts-expect-error "Could not find a declaration file for module 'github-colors'."
 import GitHubLanguageColors from 'github-colors';
+import sanitize from 'sanitize-html';
 
 export function getLanguageHSLColor(language: string) {
 	const ghColor = GitHubLanguageColors[language]?.color;
@@ -68,7 +68,7 @@ export function lightenHSL(hsl: string, percent = 40) {
 		.replace('hsl(', '')
 		.replace(')', '')
 		.split(',')
-		.map((x) => parseInt(x));
+		.map(x => parseInt(x));
 
 	const newL = Math.min(100, l + percent);
 
@@ -147,7 +147,7 @@ export const EXT_TO_LANGUAGE = {
 	toml: 'toml',
 	less: 'less',
 	styl: 'stylus',
-	svelte: 'svelte',
+	svelte: 'javascript',
 	elm: 'elm',
 	pug: 'pug',
 	diff: 'diff',
@@ -182,15 +182,14 @@ export function extractPreTagStyle(html: string): string {
 
 export function tryHighlightStringAsHTML(code: string, language: string, theme: string) {
 	return new Promise<string>((resolve, reject) => {
-		if (isBinaryData(code)) {
-			reject("Can't display binary data");
-		}
-
 		initHighlighter()
 			.then(() => {
 				resolve(wasm.highlight(code, language, theme));
 			})
-			.catch(reject);
+			.catch(error => {
+				console.error('An error occurred while highlighting code', error);
+				reject(error);
+			});
 	});
 }
 
@@ -206,4 +205,8 @@ export function isLineNotEmpty(line: string) {
 
 export function clamp(value: number, min: number, max: number) {
 	return Math.min(Math.max(value, min), max);
+}
+
+export function sanitizeHighlighterOutput(html: string) {
+	return sanitize(html, { allowedTags: ['span'], allowedAttributes: { span: ['style'] } });
 }

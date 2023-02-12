@@ -1,83 +1,23 @@
-<script lang="ts" context="module">
-	import { writable } from 'svelte/store';
-
-	export enum CodeViewerTheme {
-		OceanDark = 'base16-ocean.dark',
-		EightiesDark = 'base16-eighties.dark',
-		MochaDark = 'base16-mocha.dark',
-		OceanLight = 'base16-ocean.light',
-		InspiredGitHub = 'InspiredGitHub',
-		SolarizedDark = 'Solarized (dark)',
-		SolarizedLight = 'Solarized (light)'
-	}
-
-	export const MIN_FONT_SIZE = 12;
-	export const MAX_FONT_SIZE = 24;
-	export const MIN_LINE_HEIGHT = 1.4;
-	export const MAX_LINE_HEIGHT = 3;
-
-	function getThemeFromLocalStorage(): CodeViewerTheme {
-		const theme = localStorage.getItem('code-viewer-theme');
-
-		if (theme !== null && Object.values(CodeViewerTheme).includes(theme as CodeViewerTheme)) {
-			return theme as CodeViewerTheme;
-		}
-
-		return CodeViewerTheme.InspiredGitHub;
-	}
-
-	export const codeViewerSettingsStore = writable<{
-		fontSize: string;
-		lineHeight: string;
-		theme: CodeViewerTheme;
-	}>(
-		browser
-			? {
-					fontSize: localStorage.getItem('code-viewer-font-size') ?? '12',
-					lineHeight: localStorage.getItem('code-viewer-line-height') ?? '1',
-					theme: getThemeFromLocalStorage()
-			  }
-			: {
-					fontSize: '12',
-					lineHeight: '1',
-					theme: CodeViewerTheme.OceanDark
-			  }
-	);
-
-	export function setFontSize(fontSize: string) {
-		localStorage.setItem('code-viewer-font-size', fontSize);
-		codeViewerSettingsStore.update((s) => ({ ...s, fontSize }));
-	}
-
-	export function setLineHeight(lineHeight: string) {
-		localStorage.setItem('code-viewer-line-height', lineHeight);
-		codeViewerSettingsStore.update((s) => ({ ...s, lineHeight }));
-	}
-
-	export function setTheme(theme: CodeViewerTheme) {
-		localStorage.setItem('code-viewer-theme', theme);
-		codeViewerSettingsStore.update((s) => ({ ...s, theme }));
-	}
-</script>
-
 <script lang="ts">
-	import { browser } from '$app/environment';
 	import sanitize from 'sanitize-html';
-	import { clamp, extractPreTagStyle, EXT_TO_LANGUAGE, tryHighlightStringAsHTML } from '../utils';
+	import { MAX_FONT_SIZE, MAX_LINE_HEIGHT, MIN_FONT_SIZE, MIN_LINE_HEIGHT } from '../constants';
+	import { codeViewerSettingsStore } from '../stores/codeViewerSettingsStore';
+	import {
+		clamp,
+		extractPreTagStyle,
+		EXT_TO_LANGUAGE,
+		sanitizeHighlighterOutput,
+		tryHighlightStringAsHTML
+	} from '../utils';
 	import CodeViewerSettings from './CodeViewerSettings.svelte';
-	import debounce from 'debounce';
 
 	export let code: string;
 	export let filename: string;
 	export let downloadUrl: string | undefined;
 
 	$: fileExtension = filename.split('.').pop() ?? '';
-	$: language =
-		fileExtension in EXT_TO_LANGUAGE
-			? EXT_TO_LANGUAGE[fileExtension as keyof typeof EXT_TO_LANGUAGE]
-			: 'txt';
+	$: language = EXT_TO_LANGUAGE[fileExtension as keyof typeof EXT_TO_LANGUAGE] ?? 'txt';
 	$: theme = $codeViewerSettingsStore.theme;
-	$: highlightedCode = tryHighlightStringAsHTML(code, language, theme);
 
 	$: fontSize = clamp(parseFloat($codeViewerSettingsStore.fontSize), MIN_FONT_SIZE, MAX_FONT_SIZE);
 	$: lineHeight = clamp(
@@ -98,8 +38,6 @@
 	}
 
 	let lineNumbersContainer: HTMLDivElement;
-
-	// codeContainer is a <code> tag
 	let codeContainer: HTMLPreElement;
 
 	function syncLineNumbersWithCode() {
@@ -120,15 +58,11 @@
 
 <CodeViewerSettings />
 
-{#await highlightedCode}
+{@debug code}
+{#await tryHighlightStringAsHTML(code, language, theme)}
 	<p>Highlighting code...</p>
 {:then highlighted}
-	{@const lines = sanitize(highlighted, {
-		allowedTags: ['span'],
-		allowedAttributes: { span: ['style'] }
-	})
-		.split('\n')
-		.slice(1, -1)}
+	{@const lines = sanitizeHighlighterOutput(highlighted).split('\n').slice(1, -1)}
 	{@const containerStyles = `
 			${extractPreTagStyle(highlighted)}
 			--line-number-container-width: ${lines.length.toString().length + 1}ch;
@@ -147,20 +81,24 @@
 
 		<div class="content">
 			<pre
-				on:scroll={debounce(syncLineNumbersWithCode, 10)}
+				on:scroll={syncLineNumbersWithCode}
 				bind:this={codeContainer}>{#each lines as line, i}<code
 						on:mouseenter={makeMouseEnterHandlerForLine(i)}
 						on:mouseleave={mouseLeaveHandler}>{@html line}</code
 					>{/each}</pre>
 		</div>
 	</div>
-{:catch}
-	<p>
-		Can't display this file.
-		{#if downloadUrl}
-			<a href={downloadUrl} download={filename}>Download</a> it instead.
-		{/if}
-	</p>
+{:catch error}
+	<div class="error">
+		<p>
+			Can't display this file.
+			{#if downloadUrl}
+				<a href={downloadUrl} download={filename}>Download</a> it instead.
+			{/if}
+		</p>
+
+		<p class="error-message">{error.message ?? error}</p>
+	</div>
 {/await}
 
 <style lang="scss">
@@ -187,6 +125,10 @@
 		height: 100%;
 		width: 100%;
 		pointer-events: none;
+
+		&::-webkit-scrollbar {
+			display: none;
+		}
 	}
 
 	.line-number {
@@ -224,5 +166,18 @@
 		height: var(--total-line-height);
 		font-family: var(--font-mono);
 		display: block;
+	}
+
+	.error {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		height: 100%;
+		width: 100%;
+	}
+
+	.error-message {
+		color: red;
 	}
 </style>

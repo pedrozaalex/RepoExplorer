@@ -3,7 +3,15 @@
 	"singleQuote": true,
 	"trailingComma": "none",
 	"printWidth": 100,
+	"arrowParens": "avoid",
+	"jsxSingleQuote": true,
+	"bracketSameLine": true,
+	"bracketSpacing": true,
+	"semi": true,
 	"plugins": ["prettier-plugin-svelte"],
 	"pluginSearchDirs": ["."],
+	"svelteAllowShorthand": true,
+	"svelteBracketNewLine": false,
+	"svelteIndentScriptAndStyle": true,
 	"overrides": [{ "files": "*.svelte", "options": { "parser": "svelte" } }]
 }

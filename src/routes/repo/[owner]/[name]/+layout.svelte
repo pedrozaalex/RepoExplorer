@@ -18,8 +18,7 @@
 			<a
 				href={`/repo/${owner}/${name}/${tab}`}
 				class="tab-selector"
-				class:selected={tab === selected}
-			>
+				class:selected={tab === selected}>
 				{tab}
 			</a>
 		{/each}
