@@ -18,8 +18,7 @@
 		title="Stars"
 		href="https://github.com/{owner}/{name}/stargazers"
 		target="_blank"
-		rel="noopener noreferrer"
-	>
+		rel="noopener noreferrer">
 		<iconify-icon icon="ic:round-star" height="20" />
 		{formatBigNumber(stars)}
 	</a>
@@ -29,8 +28,7 @@
 		title="Forks"
 		href="https://github.com/{owner}/{name}/network/members"
 		target="_blank"
-		rel="noopener noreferrer"
-	>
+		rel="noopener noreferrer">
 		<iconify-icon icon="gg:git-fork" height="20" />
 		{formatBigNumber(forks)}
 	</a>
@@ -40,8 +38,7 @@
 		title="Issues"
 		href="https://github.com/{owner}/{name}/issues"
 		target="_blank"
-		rel="noopener noreferrer"
-	>
+		rel="noopener noreferrer">
 		<iconify-icon icon="mdi:git-issue" style="color: black; font-size: 20px;" />
 		{formatBigNumber(issues)}
 	</a>

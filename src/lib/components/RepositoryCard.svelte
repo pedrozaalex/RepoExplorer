@@ -40,7 +40,9 @@
 			<a href={`/repo/${owner}/${name}`} class="repo-name">{name}</a>
 		</h2>
 
-		<p class="repo-description" title={description}>{description}</p>
+		<p class="repo-description" title={description}>
+			{description}
+		</p>
 
 		<div use:autoAnimate>
 			<RepoLanguages {owner} {name} />

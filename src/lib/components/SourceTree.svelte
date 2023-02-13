@@ -15,8 +15,8 @@
 	{:else if $fetchTreeResult.error}
 		<p>Error: {$fetchTreeResult.error}</p>
 	{:else if $fetchTreeResult.data}
-		{@const folders = $fetchTreeResult.data.filter((file) => file.type === 'dir')}
-		{@const files = $fetchTreeResult.data.filter((file) => file.type === 'file')}
+		{@const folders = $fetchTreeResult.data.filter(file => file.type === 'dir')}
+		{@const files = $fetchTreeResult.data.filter(file => file.type === 'file')}
 
 		<ul>
 			{#each folders as folder}

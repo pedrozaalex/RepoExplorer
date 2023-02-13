@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { getLanguageHSLColor, lightenHSL } from '../utils';
+	import { getColorForLanguage, lightenHSL } from '@pedrozaalex/colors';
 
 	export let lang: string;
 	export let title: string | undefined = undefined;
-	$: bgColor = getLanguageHSLColor(lang);
+	$: bgColor = getColorForLanguage(lang);
 	$: textColor = lightenHSL(bgColor);
 </script>
 

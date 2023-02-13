@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { log } from 'fp-ts/lib/Console';
 	import { createEventDispatcher, onMount } from 'svelte';
 	import { fade, fly } from 'svelte/transition';
 
@@ -34,8 +33,7 @@
 		class="modal-overlay"
 		on:click={close}
 		on:keypress={() => {}}
-		transition:fade={{ duration: 100 }}
-	/>
+		transition:fade={{ duration: 100 }} />
 
 	<div class="modal-body" transition:fly={{ duration: 100, delay: 100, y: 100 }}>
 		{#if header}

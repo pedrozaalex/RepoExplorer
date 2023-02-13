@@ -13,6 +13,7 @@ import { isString } from 'fp-ts/lib/string';
 import { get } from 'svelte/store';
 import type { StandardRepo } from '../components/RepositoryCard.svelte';
 import { authStore } from '../stores/authStore';
+import { Buffer } from 'buffer';
 
 function getOctokitInstance() {
 	const { octokit } = get(authStore);
@@ -261,7 +262,7 @@ export function getRepoContents({ owner, name, path }: GetRepoContentsParams) {
 				switch (typeof data) {
 					case 'object':
 						if (Array.isArray(data)) {
-							return data.map((item) => ({
+							return data.map(item => ({
 								name: item.name,
 								path: item.path,
 								type: item.type,
@@ -274,7 +275,8 @@ export function getRepoContents({ owner, name, path }: GetRepoContentsParams) {
 								name: data.name,
 								path: data.path,
 								type: data.type,
-								content: data.type === 'file' ? window.atob(data.content) : undefined,
+								content:
+									data.type === 'file' ? Buffer.from(data.content, 'base64').toString() : undefined,
 								downloadUrl: data.download_url ?? undefined
 							}
 						];

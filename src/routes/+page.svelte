@@ -35,8 +35,7 @@
 					slot="rightIcon"
 					icon="material-symbols:arrow-forward-rounded"
 					style="color: white"
-					height="24"
-				/>
+					height="24" />
 			</Button>
 		</a>
 	{/if}
