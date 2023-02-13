@@ -3,7 +3,7 @@ import type { UserConfig } from 'vite';
 import wasmPack from 'vite-plugin-wasm-pack';
 
 const config: UserConfig = {
-	plugins: [sveltekit(), wasmPack([], ['@pedrozaalex/highlight-rs'])],
+	plugins: [sveltekit(), wasmPack([], ['pyranine'])],
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}']
 	},

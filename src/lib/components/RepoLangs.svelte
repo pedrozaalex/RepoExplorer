@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { getRepoLanguagues } from '$lib/api/github';
-	import { getLanguageHSLColor, lightenHSL } from '../utils';
 	import Error from './Error.svelte';
 	import LangChip from './LangChip.svelte';
 	import SkeletonLoader from './SkeletonLoader.svelte';
