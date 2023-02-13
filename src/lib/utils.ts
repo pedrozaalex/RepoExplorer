@@ -156,8 +156,10 @@ function getCodeLineLength(line: string) {
 	return line.replace(/<span.*?>/g, '').replace(/<\/span>/g, '').length;
 }
 
-export function findLengthOfLargestLine(lines: string[]) {
-	return lines
-		.map(getCodeLineLength) // Calculate the length of each line discarding the <span> tags content
-		.reduce((a, b) => Math.max(a, b), 0);
+export function findLengthOfLargestLine(lines: string[], padding = 10) {
+	return (
+		lines
+			.map(getCodeLineLength) // Calculate the length of each line discarding the <span> tags content
+			.reduce((a, b) => Math.max(a, b), 0) + padding
+	); // Find the largest line and add the padding
 }

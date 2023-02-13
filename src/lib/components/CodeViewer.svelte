@@ -4,11 +4,9 @@
 	import {
 		clamp,
 		extractThemeBackground,
-		EXT_TO_LANGUAGE,
-		sanitizeHighlighterOutput,
-		tryHighlightStringAsHTML,
+		EXT_TO_LANGUAGE, findLengthOfLargestLine, sanitizeHighlighterOutput,
 		style,
-		findLengthOfLargestLine
+		tryHighlightStringAsHTML
 	} from '../utils';
 	import CodeViewerSettings from './CodeViewerSettings.svelte';
 
@@ -36,6 +34,7 @@
 {:then highlighted}
 	{@const lines = sanitizeHighlighterOutput(highlighted).split('\n').slice(1, -1)}
 	{@const containerStyles = style`
+			background-color: ${extractThemeBackground(highlighted)};
 			--code-background-color: ${extractThemeBackground(highlighted)};
 			--line-number-container-width: ${lines.length.toString().length}ch;
 			--max-line-width: ${findLengthOfLargestLine(lines)}ch;
@@ -78,7 +77,6 @@
 		position: relative;
 
 		pre {
-			background-color: var(--code-background-color);
 			height: var(--total-code-height);
 			display: flex;
 			flex-direction: column;
@@ -101,8 +99,8 @@
 			display: inline-block;
 			text-align: right;
 			color: #999;
-			width: var(--line-number-container-width);
-			margin-right: 2rem;
+			width: calc(var(--line-number-container-width) + 2ch);
+			padding-right: 1rem;
 			background-color: var(--code-background-color);
 
 			// make the line numbers stick to the left side of the container
@@ -111,10 +109,10 @@
 		}
 
 		&:hover {
-			background-color: #f5f5f5;
+			background-color: #e1e1e1;
 
 			&::before {
-				background-color: #f5f5f5;
+				background-color: #e1e1e1;
 				font-weight: bolder;
 			}
 		}
