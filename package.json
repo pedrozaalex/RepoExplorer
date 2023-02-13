@@ -19,7 +19,6 @@
 		"@fontsource/space-mono": "^4.5.12",
 		"@formkit/auto-animate": "1.0.0-beta.6",
 		"@pedrozaalex/colors": "^1.0.4",
-		"@pedrozaalex/github-colors": "^1.0.0",
 		"@tanstack/svelte-query": "^4.24.6",
 		"buffer": "^6.0.3",
 		"date-fns": "^2.29.3",
@@ -28,7 +27,7 @@
 		"iconify-icon": "^1.0.5",
 		"isomorphic-fetch": "^3.0.0",
 		"octokit": "^2.0.14",
-		"pyranine": "^0.1.1",
+		"pyranine": "^1.0.1",
 		"sanitize-html": "^2.9.0",
 		"svelte-markdown": "^0.2.3"
 	},

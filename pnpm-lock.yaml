@@ -6,7 +6,6 @@ specifiers:
   '@formkit/auto-animate': 1.0.0-beta.6
   '@octokit/types': ^9.0.0
   '@pedrozaalex/colors': ^1.0.4
-  '@pedrozaalex/github-colors': ^1.0.0
   '@playwright/test': ^1.30.0
   '@sveltejs/adapter-vercel': ^2.0.2
   '@sveltejs/kit': ^1.5.6
@@ -28,7 +27,7 @@ specifiers:
   octokit: ^2.0.14
   prettier: ^2.8.4
   prettier-plugin-svelte: ^2.9.0
-  pyranine: ^0.1.1
+  pyranine: ^1.0.1
   sanitize-html: ^2.9.0
   sass: ^1.58.0
   svelte: ^3.55.1
@@ -47,7 +46,6 @@ dependencies:
   '@fontsource/space-mono': 4.5.12
   '@formkit/auto-animate': 1.0.0-beta.6
   '@pedrozaalex/colors': 1.0.4
-  '@pedrozaalex/github-colors': 1.0.0
   '@tanstack/svelte-query': 4.24.6_svelte@3.55.1
   buffer: 6.0.3
   date-fns: 2.29.3
@@ -56,7 +54,7 @@ dependencies:
   iconify-icon: 1.0.5
   isomorphic-fetch: 3.0.0
   octokit: 2.0.14
-  pyranine: 0.1.1
+  pyranine: 1.0.1
   sanitize-html: 2.9.0
   svelte-markdown: 0.2.3_svelte@3.55.1
 
@@ -650,10 +648,6 @@ packages:
     resolution: {integrity: sha512-D+yyX+/w/uBk8+pCti1DUk+BCTWbfFexxmFkKpkSXkyJK756BikO+HzlSlQOcwRwNFtaABGgAxPQGxJbat642g==}
     dependencies:
       md5: 2.3.0
-    dev: false
-
-  /@pedrozaalex/github-colors/1.0.0:
-    resolution: {integrity: sha512-UsPNaEeL+BRmw1eW0DhwmqWpy14M4/FFcyXXoJblZ678hH59BjxGa1cxi5WdnDWINPFeOxft8xi6uyimng5ePg==}
     dev: false
 
   /@playwright/test/1.30.0:
@@ -2269,8 +2263,8 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /pyranine/0.1.1:
-    resolution: {integrity: sha512-FvdK+nqtq6q3QOrW0LmeEBVnYqDBg7GZjnxSA4amJ8Fv3aR4Z1ju6RFj7ixuMrfNWDVfYRN7bmdD32cUloLIzg==}
+  /pyranine/1.0.1:
+    resolution: {integrity: sha512-rYIlDH6EKalz8xN3zZNsyqaGFyAuUpSeeVjfExJSgQ1jv4PFYHkuvsTSQwCqiq5bXOYR/WoTN6to5zMwAGFqNQ==}
     dev: false
 
   /queue-microtask/1.2.3:

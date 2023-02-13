@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { log } from 'fp-ts/lib/Console';
 	import { createEventDispatcher, onMount } from 'svelte';
 	import { fade, fly } from 'svelte/transition';
 
