@@ -12,11 +12,12 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
-		"format": "prettier --plugin-search-dir . --write ."
+		"format": "prettier --plugin-search-dir . --write .",
+		"knip": "knip"
 	},
 	"dependencies": {
 		"@fontsource/inter": "^4.5.15",
-		"@fontsource/space-mono": "^4.5.12",
+		"@fontsource/jetbrains-mono": "^4.5.12",
 		"@formkit/auto-animate": "1.0.0-beta.6",
 		"@pedrozaalex/colors": "^1.0.4",
 		"@tanstack/svelte-query": "^4.24.6",

@@ -2,7 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@fontsource/inter': ^4.5.15
-  '@fontsource/space-mono': ^4.5.12
+  '@fontsource/jetbrains-mono': ^4.5.12
   '@formkit/auto-animate': 1.0.0-beta.6
   '@octokit/types': ^9.0.0
   '@pedrozaalex/colors': ^1.0.4
@@ -43,7 +43,7 @@ specifiers:
 
 dependencies:
   '@fontsource/inter': 4.5.15
-  '@fontsource/space-mono': 4.5.12
+  '@fontsource/jetbrains-mono': 4.5.12
   '@formkit/auto-animate': 1.0.0-beta.6
   '@pedrozaalex/colors': 1.0.4
   '@tanstack/svelte-query': 4.24.6_svelte@3.55.1
@@ -305,8 +305,8 @@ packages:
     resolution: {integrity: sha512-FzleM9AxZQK2nqsTDtBiY0PMEVWvnKnuu2i09+p6DHvrHsuucoV2j0tmw+kAT3L4hvsLdAIDv6MdGehsPIdT+Q==}
     dev: false
 
-  /@fontsource/space-mono/4.5.12:
-    resolution: {integrity: sha512-/ljrJgSIB/C0jUCn07r/V/KpkdHF9bnK2fD0raGSVkgQjFqQ6Q3LndVeBiUCJlIi6ROh7rHDkpFzn+nNmRgRlQ==}
+  /@fontsource/jetbrains-mono/4.5.12:
+    resolution: {integrity: sha512-LJF1ala1/u+wXZmESFqIk08FA9yGX4/uAAleCHmXUMgEjvNAYFHUQQ7eK5hQQoBOwh99cU5suTrqYqEkgzwzPA==}
     dev: false
 
   /@formkit/auto-animate/1.0.0-beta.6:

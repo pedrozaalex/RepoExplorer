@@ -1,8 +1,9 @@
 import { browser } from '$app/environment';
-import { VERCEL_URL } from '$env/static/public';
-import { ensureHasProtocol } from '$lib/utils';
+import { page } from '$app/stores';
+import { PUBLIC_GITHUB_CLIENT_ID } from '$env/static/public';
 import type { Endpoints } from '@octokit/types';
 import { createQuery } from '@tanstack/svelte-query';
+import { Buffer } from 'buffer';
 import { number } from 'fp-ts';
 import { filter, head, map, sort } from 'fp-ts/lib/Array';
 import { pipe } from 'fp-ts/lib/function';
@@ -13,7 +14,6 @@ import { isString } from 'fp-ts/lib/string';
 import { get } from 'svelte/store';
 import type { StandardRepo } from '../components/RepositoryCard.svelte';
 import { authStore } from '../stores/authStore';
-import { Buffer } from 'buffer';
 
 function getOctokitInstance() {
 	const { octokit } = get(authStore);
@@ -23,9 +23,10 @@ function getOctokitInstance() {
 	return octokit;
 }
 
-export function getOauthAuthorizeURL(clientId: string) {
-	const url = ensureHasProtocol(VERCEL_URL);
-	return `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${url}/login/github/callback`;
+export function getOauthAuthorizeURL() {
+	const url = browser ? get(page).url.origin : '';
+
+	return `https://github.com/login/oauth/authorize?client_id=${PUBLIC_GITHUB_CLIENT_ID}&redirect_uri=${url}/login/github/callback`;
 }
 
 export async function getAccessToken(params: {
@@ -239,8 +240,8 @@ type StandardRepoContents = {
 	name: string;
 	path: string;
 	type: 'file' | 'dir' | 'symlink' | 'submodule';
-	content?: string;
 	downloadUrl?: string;
+	getContent?: () => string | undefined;
 };
 type GetRepoContentsResponse = Promise<StandardRepoContents[]>;
 
@@ -275,9 +276,12 @@ export function getRepoContents({ owner, name, path }: GetRepoContentsParams) {
 								name: data.name,
 								path: data.path,
 								type: data.type,
-								content:
-									data.type === 'file' ? Buffer.from(data.content, 'base64').toString() : undefined,
-								downloadUrl: data.download_url ?? undefined
+								downloadUrl: data.download_url ?? undefined,
+								getContent() {
+									return data.type === 'file'
+										? Buffer.from(data.content, data.encoding as BufferEncoding).toString()
+										: undefined;
+								}
 							}
 						];
 					default:
@@ -286,6 +290,37 @@ export function getRepoContents({ owner, name, path }: GetRepoContentsParams) {
 			} catch (error) {
 				console.error('Error getting contents', error);
 				return [];
+			}
+		}
+	});
+}
+
+export function getFileContents({ owner, name, path }: GetRepoContentsParams) {
+	return createQuery({
+		queryKey: ['file', owner, name, path],
+		queryFn: async (): Promise<string | null> => {
+			if (!browser) return null;
+
+			const octokit = getOctokitInstance();
+
+			try {
+				const { data } = await octokit.rest.repos.getContent({
+					owner,
+					repo: name,
+					path
+				});
+
+				if (Array.isArray(data) || data.type !== 'file')
+					throw new Error(`Tried to get file content of ${path}, but it's not a file`);
+
+				const encoding = Buffer.isEncoding(data.encoding as BufferEncoding)
+					? (data.encoding as BufferEncoding)
+					: 'utf8';
+
+				return Buffer.from(data.content, encoding).toString();
+			} catch (error) {
+				console.error('Error getting file content', error);
+				return null;
 			}
 		}
 	});
