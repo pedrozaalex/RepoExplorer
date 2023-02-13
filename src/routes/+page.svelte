@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Button from '$components/Button.svelte';
-	import { VERCEL_GITHUB_CLIENT_ID as clientId } from '$env/static/public';
 	import { authStore } from '$lib/stores/authStore';
 	import { getOauthAuthorizeURL } from '$lib/api/github';
 	import bigOctopus from '$images/big-octopus.png';
@@ -27,7 +26,7 @@
 			<Button>Start Exploring</Button>
 		</a>
 	{:else}
-		<a href={getOauthAuthorizeURL(clientId)}>
+		<a href={getOauthAuthorizeURL()}>
 			<Button --background="black" --color="white">
 				<iconify-icon slot="leftIcon" icon="mdi:github" style="color: white" height="24" />
 				Continue with GitHub

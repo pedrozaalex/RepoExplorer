@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { VERCEL_GITHUB_CLIENT_ID as clientId } from '$env/static/public';
 	import Button from '$components/Button.svelte';
 	import { authStore } from '$lib/stores/authStore';
 	import SkeletonLoader from './SkeletonLoader.svelte';
@@ -38,12 +37,12 @@
 				{/if}
 			</div>
 		{:catch}
-			<a href={getOauthAuthorizeURL(clientId)}>
+			<a href={getOauthAuthorizeURL()}>
 				<Button>Sign in</Button>
 			</a>
 		{/await}
 	{:else}
-		<a href={getOauthAuthorizeURL(clientId)}>
+		<a href={getOauthAuthorizeURL()}>
 			<Button>Sign in</Button>
 		</a>
 	{/if}

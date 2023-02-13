@@ -152,7 +152,7 @@ export function style(strings: TemplateStringsArray, ...values: (string | number
  * @param line A line of code outputted by the highlighter, it contains <span> tags with inline styles
  * @returns The line of code without any <span> tags
  */
-function getCodeLineLength(line: string) {
+export function getCodeLineLength(line: string) {
 	return line.replace(/<span.*?>/g, '').replace(/<\/span>/g, '').length;
 }
 
