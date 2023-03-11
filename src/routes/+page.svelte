@@ -2,7 +2,7 @@
 	import Button from '$components/Button.svelte';
 	import { authStore } from '$lib/stores/authStore';
 	import { getOauthAuthorizeURL } from '$lib/api/github';
-	import bigOctopus from '$images/big-octopus.png';
+	import bigOctopus from '$images/big-octopus.webp';
 </script>
 
 <div class="homepage-root">
