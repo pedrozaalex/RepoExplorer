@@ -4,7 +4,9 @@
 	import {
 		clamp,
 		extractThemeBackground,
-		EXT_TO_LANGUAGE, findLengthOfLargestLine, sanitizeHighlighterOutput,
+		EXT_TO_LANGUAGE,
+		findLengthOfLargestLine,
+		sanitizeHighlighterOutput,
 		style,
 		tryHighlightStringAsHTML
 	} from '../utils';
@@ -91,6 +93,7 @@
 		font-family: var(--font-mono);
 		height: var(--total-line-height);
 		width: var(--max-line-width);
+		min-width: 100%;
 
 		counter-increment: line;
 

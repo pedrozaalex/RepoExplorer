@@ -15,8 +15,8 @@ jobs:
         node-version: [18.12.0]
 
     env:
-      VERCEL_URL: https://example.com
-      VERCEL_GITHUB_CLIENT_ID: 1234
+      PUBLIC_URL: https://example.com
+      PUBLIC_GITHUB_CLIENT_ID: 1234
       GITHUB_CLIENT_SECRET: 1234
 
     steps:

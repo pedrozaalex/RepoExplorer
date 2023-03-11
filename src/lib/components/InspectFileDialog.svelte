@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import { getRepoContents } from '../api/github';
+	import { getFileContents } from '../api/github';
 	import CodeViewer from './CodeViewer.svelte';
+	import DisplayQuery from './DisplayQuery.svelte';
 	import Modal from './Modal.svelte';
 
 	const dispatch = createEventDispatcher();
@@ -15,19 +16,33 @@
 	export let file: { name: string; path: string; downloadUrl?: string | undefined };
 	export let isOpen: boolean;
 
-	const fetchContentsResult = getRepoContents({ owner, name, path: file.path });
+	$: filename = file.name;
+	$: downloadUrl = file.downloadUrl;
+
+	const fetchContentsResult = getFileContents({ owner, name, path: file.path });
 </script>
 
 {#if isOpen}
 	<Modal on:close={close} header={file.name}>
-		{#if $fetchContentsResult.isLoading}
-			<p>Loading file contents...</p>
-		{:else if $fetchContentsResult.error}
-			<p>Error: {$fetchContentsResult.error}</p>
-		{:else if $fetchContentsResult.data}
-			{@const code = $fetchContentsResult.data[0].content ?? ''}
+		<DisplayQuery query={fetchContentsResult}>
+			{@const code = $fetchContentsResult.data}
 
-			<CodeViewer {code} filename={file.name} downloadUrl={file.downloadUrl} />
-		{/if}
+			{#if code}
+				<CodeViewer {code} {filename} {downloadUrl} />
+			{:else}
+				<div class="centered">
+					<p>File is empty</p>
+				</div>
+			{/if}
+		</DisplayQuery>
 	</Modal>
 {/if}
+
+<style lang="scss">
+	.centered {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 100%;
+	}
+</style>
