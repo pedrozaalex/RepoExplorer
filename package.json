@@ -27,6 +27,7 @@
 		"fp-ts": "^2.13.1",
 		"iconify-icon": "^1.0.5",
 		"isomorphic-fetch": "^3.0.0",
+		"node-stdlib-browser": "^1.2.0",
 		"octokit": "^2.0.14",
 		"pyranine": "^1.0.1",
 		"sanitize-html": "^2.9.0",
@@ -55,6 +56,7 @@
 		"tslib": "^2.5.0",
 		"typescript": "^4.9.5",
 		"vite": "^4.1.1",
+		"vite-plugin-node-stdlib-browser": "^0.2.1",
 		"vite-plugin-wasm-pack": "^0.1.12",
 		"vitest": "^0.25.8"
 	}
