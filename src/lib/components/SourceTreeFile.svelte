@@ -1,7 +1,5 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition';
-	import { onMount } from 'svelte';
-
 	import InspectFileDialog from './InspectFileDialog.svelte';
 
 	export let owner: string;
