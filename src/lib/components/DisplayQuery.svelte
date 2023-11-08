@@ -5,19 +5,19 @@
 </script>
 
 {#if $query.isLoading}
-  {#if $$slots.loading}
-    <slot name="loading" />
-  {:else}
-    <p>Loading...</p>
-  {/if}
+	{#if $$slots.loading}
+		<slot name="loading" />
+	{:else}
+		<p>Loading...</p>
+	{/if}
 {/if}
 
 {#if $query.isError}
-  {#if $$slots.error}
-    <slot name="error" />
-  {:else}
-    <p>Error: {$query.error}</p>
-  {/if}
+	{#if $$slots.error}
+		<slot name="error" />
+	{:else}
+		<p>Error: {$query.error}</p>
+	{/if}
 {/if}
 
 {#if $query.isSuccess}
