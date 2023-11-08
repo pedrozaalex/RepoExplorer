@@ -43,7 +43,7 @@
 	</button>
 
 	{#if isOpen}
-		<div class="menu" on:click|stopPropagation on:keypress={() => {}}>
+		<div class="menu" on:click|stopPropagation>
 			<div class="menu-item">
 				<iconify-icon icon="radix-icons:font-size" height="24" />
 				<input
