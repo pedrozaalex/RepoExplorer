@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="9bf3c16e-c130-4dd6-9895-f333008d8b05" name="Changes" comment=":fire: Remove stats page from Repository view as it's currently empty" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager">
+    <option name="groupingKeys">
+      <option value="repository" />
+    </option>
+  </component>
+  <component name="FormatOnSaveOptions">
+    <option name="myAllFileTypesSelected" value="true" />
+    <option name="mySelectedFileTypes">
+      <set />
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="13ba8a2d53db6a50efc4e087f157ee836b224a94" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="HARD" />
+  </component>
+  <component name="JsBowerSettings">
+    <bower-package value="" />
+    <bower.json value="" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="2XqrxwHyeeNGyKvbJtjl7AiiaMW" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/Users/alex/Projects/RepoExplorer",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "pnpm",
+    "prettierjs.PrettierConfiguration.Package": "/Users/alex/Projects/RepoExplorer/node_modules/prettier",
+    "settings.editor.selected.configurable": "preferences.sourceCode",
+    "ts.external.directory.path": "/Users/alex/Projects/RepoExplorer/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="Push.Settings">
+    <force-push-targets>
+      <force-push-target remote-path="origin" branch="develop" />
+    </force-push-targets>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9bf3c16e-c130-4dd6-9895-f333008d8b05" name="Changes" comment="" />
+      <created>1699367700782</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1699367700782</updated>
+      <workItem from="1699367701806" duration="8499000" />
+      <workItem from="1699452086632" duration="3750000" />
+      <workItem from="1699455851143" duration="233000" />
+    </task>
+    <task id="LOCAL-00001" summary="Use type assertion for JSON import">
+      <option name="closed" value="true" />
+      <created>1699394503970</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1699394503970</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Ignore .idea stuff">
+      <option name="closed" value="true" />
+      <created>1699394573644</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1699394573644</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Bump version">
+      <option name="closed" value="true" />
+      <created>1699394625539</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1699394625539</updated>
+    </task>
+    <task id="LOCAL-00004" summary=":wrench: commit IDEA files">
+      <option name="closed" value="true" />
+      <created>1699450271803</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1699450271803</updated>
+    </task>
+    <task id="LOCAL-00005" summary=":arrow_up: Upgrade deps">
+      <option name="closed" value="true" />
+      <created>1699450303999</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1699450303999</updated>
+    </task>
+    <task id="LOCAL-00006" summary=":wrench: Update .prettierrc">
+      <option name="closed" value="true" />
+      <created>1699450321841</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1699450321841</updated>
+    </task>
+    <task id="LOCAL-00007" summary=":fire: Remove redundant catch">
+      <option name="closed" value="true" />
+      <created>1699451431440</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1699451431440</updated>
+    </task>
+    <task id="LOCAL-00008" summary=":truck: Move github logic to own module">
+      <option name="closed" value="true" />
+      <created>1699451462410</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1699451462410</updated>
+    </task>
+    <task id="LOCAL-00009" summary=":fire: Remove unused polyfill">
+      <option name="closed" value="true" />
+      <created>1699452415041</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1699452415041</updated>
+    </task>
+    <task id="LOCAL-00010" summary=":bricks: Stop running on edge due to octokit incompatibility">
+      <option name="closed" value="true" />
+      <created>1699452603338</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1699452603338</updated>
+    </task>
+    <task id="LOCAL-00011" summary=":wrench: Regenerate lockfile">
+      <option name="closed" value="true" />
+      <created>1699452948342</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1699452948342</updated>
+    </task>
+    <task id="LOCAL-00012" summary=":wrench: Regenerate lockfile">
+      <option name="closed" value="true" />
+      <created>1699453205143</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1699453205143</updated>
+    </task>
+    <task id="LOCAL-00013" summary=":arrow_up: Upgrade pnpm in CI">
+      <option name="closed" value="true" />
+      <created>1699453340512</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1699453340512</updated>
+    </task>
+    <task id="LOCAL-00014" summary=":art: Run prettier">
+      <option name="closed" value="true" />
+      <created>1699453493397</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1699453493397</updated>
+    </task>
+    <task id="LOCAL-00015" summary=":rotating_light: Fix ESLint warnings">
+      <option name="closed" value="true" />
+      <created>1699453772306</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1699453772306</updated>
+    </task>
+    <task id="LOCAL-00016" summary=":construction_worker: Run tests on self-hosted runner">
+      <option name="closed" value="true" />
+      <created>1699454195570</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1699454195570</updated>
+    </task>
+    <task id="LOCAL-00017" summary=":construction_worker: Install playwright deps before testing">
+      <option name="closed" value="true" />
+      <created>1699454475600</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1699454475600</updated>
+    </task>
+    <task id="LOCAL-00018" summary=":construction_worker: Install playwright deps before testing">
+      <option name="closed" value="true" />
+      <created>1699454570196</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1699454570196</updated>
+    </task>
+    <task id="LOCAL-00019" summary=":white_check_mark: Fix tests">
+      <option name="closed" value="true" />
+      <created>1699454945073</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1699454945073</updated>
+    </task>
+    <task id="LOCAL-00020" summary=":fire: Remove stats page from Repository view as it's currently empty">
+      <option name="closed" value="true" />
+      <created>1699455572752</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1699455572752</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Use type assertion for JSON import" />
+    <MESSAGE value="Ignore .idea stuff" />
+    <MESSAGE value="Bump version" />
+    <MESSAGE value=":wrench: commit IDEA files" />
+    <MESSAGE value=":arrow_up: Upgrade deps" />
+    <MESSAGE value=":wrench: Update .prettierrc" />
+    <MESSAGE value=":fire: Remove redundant catch" />
+    <MESSAGE value=":truck: Move github logic to own module" />
+    <MESSAGE value=":fire: Remove unused polyfill" />
+    <MESSAGE value=":bricks: Stop running on edge due to octokit incompatibility" />
+    <MESSAGE value=":wrench: Regenerate lockfile" />
+    <MESSAGE value=":arrow_up: Upgrade pnpm in CI" />
+    <MESSAGE value=":art: Run prettier" />
+    <MESSAGE value=":rotating_light: Fix ESLint warnings" />
+    <MESSAGE value=":construction_worker: Run tests on self-hosted runner" />
+    <MESSAGE value=":construction_worker: Install playwright deps before testing" />
+    <MESSAGE value=":white_check_mark: Fix tests" />
+    <MESSAGE value=":fire: Remove stats page from Repository view as it's currently empty" />
+    <option name="LAST_COMMIT_MESSAGE" value=":fire: Remove stats page from Repository view as it's currently empty" />
+  </component>
+</project>
