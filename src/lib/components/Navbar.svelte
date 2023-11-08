@@ -36,10 +36,6 @@
 					</div>
 				{/if}
 			</div>
-		{:catch}
-			<a href={getOauthAuthorizeURL()}>
-				<Button>Sign in</Button>
-			</a>
 		{/await}
 	{:else}
 		<a href={getOauthAuthorizeURL()}>
