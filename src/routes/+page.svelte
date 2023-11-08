@@ -10,7 +10,7 @@
 		<aside>
 			<h1 class="hero-title">
 				<span>Welcome to</span>
-				Repo Explorer
+				GitGlimpse
 			</h1>
 
 			<p class="hero-subtitle">

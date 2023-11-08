@@ -23,7 +23,7 @@
 </script>
 
 <svelte:head>
-	<title>Repo Explorer</title>
+	<title>GitGlimpse</title>
 </svelte:head>
 
 <QueryClientProvider client={queryClient}>

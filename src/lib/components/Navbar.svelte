@@ -17,7 +17,7 @@
 	<h1>
 		<a href="/">
 			<img src={tinyOctopus} alt="cute octopus" height="36" />
-			Repo Explorer
+			GitGlimpse
 		</a>
 	</h1>
 
