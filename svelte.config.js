@@ -9,7 +9,7 @@ const config = {
 
 	kit: {
 		adapter: adapter({
-			runtime: 'edge'
+			runtime: 'nodejs18.x'
 		}),
 		alias: {
 			$images: './src/lib/assets/images',
