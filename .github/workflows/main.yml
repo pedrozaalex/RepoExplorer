@@ -2,17 +2,17 @@ name: Tests
 
 on:
   push:
-    branches: ['main']
+    branches: [ 'main' ]
   pull_request:
-    branches: ['main']
+    branches: [ 'main' ]
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     strategy:
       matrix:
-        node-version: [18.12.0]
+        node-version: [ 18.12.0 ]
 
     env:
       PUBLIC_URL: https://example.com
