@@ -1,6 +1,5 @@
 import { browser } from '$app/environment';
 import { page } from '$app/stores';
-import { PUBLIC_GITHUB_CLIENT_ID } from '$env/static/public';
 import type { Endpoints } from '@octokit/types';
 import { createQuery } from '@tanstack/svelte-query';
 import { Buffer } from 'buffer';
@@ -12,8 +11,21 @@ import { contramap, reverse } from 'fp-ts/lib/Ord';
 import { toEntries } from 'fp-ts/lib/Record';
 import { isString } from 'fp-ts/lib/string';
 import { get } from 'svelte/store';
-import type { StandardRepo } from '../components/RepositoryCard.svelte';
 import { authStore } from '../stores/authStore';
+import { PUBLIC_GITHUB_CLIENT_ID } from '$env/static/public';
+
+export type StandardRepo = {
+	description: string;
+	forks: number;
+	issues: number;
+	license: string;
+	name: string;
+	owner: string;
+	stars: number;
+	updatedAt: string;
+	url: string;
+	website: string | null;
+};
 
 function getOctokitInstance() {
 	const { octokit } = get(authStore);

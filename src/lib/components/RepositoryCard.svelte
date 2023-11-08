@@ -1,25 +1,10 @@
-<script lang="ts" context="module">
-	export type StandardRepo = {
-		description: string;
-		forks: number;
-		issues: number;
-		license: string;
-		name: string;
-		owner: string;
-		stars: number;
-		updatedAt: string;
-		url: string;
-		website: string | null;
-	};
-</script>
-
 <script lang="ts">
 	import { calculateLastUpdatedFromISO } from '$lib/utils';
 	import autoAnimate from '@formkit/auto-animate';
 	import { fade } from 'svelte/transition';
-
 	import RepoLanguages from './RepoLangs.svelte';
 	import Stats from './Stats.svelte';
+	import type { StandardRepo } from '$lib/api/github';
 
 	export let data: StandardRepo;
 	$: ({ description, forks, issues, license, name, owner, stars, updatedAt, url, website } = data);
